@@ -31,7 +31,6 @@ namespace UnityEditorTools.FolderIcons
 
         static IconManager()
         {
-
             EditorApplication.delayCall += Main;
         }
 
@@ -45,6 +44,7 @@ namespace UnityEditorTools.FolderIcons
             InitHeaderContents();
             ExchangeFolderIconData(persistentData.guidTextureList, tempFolderIconDict, true);
             ExchangeIconSetData(persistentData.iconSetDataList, tempIconSetDict, true);
+
 
             if (tempFolderIconDict.Count > 0)
             {
