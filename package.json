@@ -1,0 +1,11 @@
+{
+  "name": "com.codedestroyer.foldericons",
+  "version": "1.0.0",
+  "displayName": "Folder Icons",
+  "description": "This package lets you to edit default folder icons",
+  "unity": "2023.3",
+  "author": {
+    "name": "CodeDestroyer",
+    "email": "metamorfikd@gmail.com"
+  }
+}

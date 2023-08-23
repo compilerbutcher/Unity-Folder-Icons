@@ -1,0 +1,157 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9ef9099a45d32944b521f81832839ad, type: 3}
+  m_Name: FolderIconsData
+  m_EditorClassIdentifier: 
+  colorFolderNumber: 0
+  guidTextureList: []
+  headerContents:
+    buttonBackgroundTexture: {fileID: 2800000, guid: 133d9ad517af08341ac563e9f2bc02a1,
+      type: 3}
+    buttonHoverTexture: {fileID: 2800000, guid: ea1e61373a20fd74080940c39512cd39,
+      type: 3}
+    headerIconGUIStyle:
+      m_Name: 
+      m_Normal:
+        m_Background: {fileID: 2800000, guid: 133d9ad517af08341ac563e9f2bc02a1, type: 3}
+        m_ScaledBackgrounds: []
+        m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+      m_Hover:
+        m_Background: {fileID: 2800000, guid: ea1e61373a20fd74080940c39512cd39, type: 3}
+        m_ScaledBackgrounds: []
+        m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+      m_Active:
+        m_Background: {fileID: 0}
+        m_ScaledBackgrounds: []
+        m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+      m_Focused:
+        m_Background: {fileID: 0}
+        m_ScaledBackgrounds: []
+        m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+      m_OnNormal:
+        m_Background: {fileID: 0}
+        m_ScaledBackgrounds: []
+        m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+      m_OnHover:
+        m_Background: {fileID: 0}
+        m_ScaledBackgrounds: []
+        m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+      m_OnActive:
+        m_Background: {fileID: 0}
+        m_ScaledBackgrounds: []
+        m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+      m_OnFocused:
+        m_Background: {fileID: 0}
+        m_ScaledBackgrounds: []
+        m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+      m_Border:
+        m_Left: 0
+        m_Right: 0
+        m_Top: 0
+        m_Bottom: 0
+      m_Margin:
+        m_Left: 0
+        m_Right: 0
+        m_Top: 0
+        m_Bottom: 0
+      m_Padding:
+        m_Left: 0
+        m_Right: 0
+        m_Top: 0
+        m_Bottom: 0
+      m_Overflow:
+        m_Left: 0
+        m_Right: 0
+        m_Top: 0
+        m_Bottom: 0
+      m_Font: {fileID: 0}
+      m_FontSize: 0
+      m_FontStyle: 0
+      m_Alignment: 0
+      m_WordWrap: 0
+      m_RichText: 1
+      m_TextClipping: 0
+      m_ImagePosition: 0
+      m_ContentOffset: {x: 0, y: 0}
+      m_FixedWidth: 0
+      m_FixedHeight: 0
+      m_StretchWidth: 1
+      m_StretchHeight: 0
+    resetButtonGUIContent:
+      m_Text: Reset
+      m_Image: {fileID: 0}
+      m_Tooltip: 
+    openButton:
+      m_Text: Open
+      m_Image: {fileID: 0}
+      m_Tooltip: 
+  isHeaderContentsCreated: 1
+  iconSetDataList:
+  - iconSetName: Default
+    iconSetData: []
+  - iconSetName: Medieval
+    iconSetData:
+    - folderName: Art
+      icon: {fileID: 2800000, guid: c60b83f53063a3349a9a00bc99c24396, type: 3}
+    - folderName: Prefab
+      icon: {fileID: 2800000, guid: b5208b7f5c74b5a409eeb8be7974a2fe, type: 3}
+    - folderName: Document
+      icon: {fileID: 2800000, guid: aff419cd005b3b44cbb551c024040af8, type: 3}
+    - folderName: Textures
+      icon: {fileID: 2800000, guid: 6cdd6259096e65d4baed1d87715cfd2a, type: 3}
+    - folderName: Scripts
+      icon: {fileID: 2800000, guid: fee0c52fe1280a148bd859ea756972f3, type: 3}
+    - folderName: Fonts
+      icon: {fileID: 2800000, guid: e1b1c4d6a248e3443924047df871e131, type: 3}
+    - folderName: Settings
+      icon: {fileID: 2800000, guid: 12dc9df21fca3964c8f76207df520904, type: 3}
+    - folderName: Navigation
+      icon: {fileID: 2800000, guid: b785a57dd45d6ad4ebbeea27bc47caf5, type: 3}
+    - folderName: Packages
+      icon: {fileID: 2800000, guid: 04cee8cc1eee9ae4498cf754d6c8f76e, type: 3}
+    - folderName: Models
+      icon: {fileID: 2800000, guid: 04c75d6c14c07b846bd9882c5d0733e5, type: 3}
+    - folderName: Music
+      icon: {fileID: 2800000, guid: 251bf28a980ef0043b9f3af8de533f38, type: 3}
+    - folderName: Environment
+      icon: {fileID: 2800000, guid: a09cd29632a3f66498bc81bf21195551, type: 3}
+  - iconSetName: Hyperion
+    iconSetData:
+    - folderName: Art
+      icon: {fileID: 2800000, guid: 0c894b4279216e04dafeca6176142a04, type: 3}
+    - folderName: Prefab
+      icon: {fileID: 2800000, guid: 71bbf39ff317d4c4dab80dcb1beca62d, type: 3}
+    - folderName: Document
+      icon: {fileID: 2800000, guid: b1c6ea6cdba83eb44973a2347f6d329a, type: 3}
+    - folderName: Textures
+      icon: {fileID: 2800000, guid: bbc30b2a00a8b324e9e7832cb01f035a, type: 3}
+    - folderName: Scripts
+      icon: {fileID: 2800000, guid: 8238f34b6495c4e4eb5e57af9a54001d, type: 3}
+    - folderName: Fonts
+      icon: {fileID: 2800000, guid: 4bab40f799391f84b9b9f030083f02d2, type: 3}
+    - folderName: Settings
+      icon: {fileID: 2800000, guid: 22b8fd800ded1a545b625f7c959a0677, type: 3}
+    - folderName: Navigation
+      icon: {fileID: 2800000, guid: 6d645dd54edf716439f2a337aad1f9e7, type: 3}
+    - folderName: Packages
+      icon: {fileID: 2800000, guid: 8d9851a59f1dc0245b71323a83e02718, type: 3}
+    - folderName: Models
+      icon: {fileID: 2800000, guid: 04c75d6c14c07b846bd9882c5d0733e5, type: 3}
+    - folderName: Music
+      icon: {fileID: 2800000, guid: 4f9afed5e4d45ec4ba931850f57c7891, type: 3}
+    - folderName: Environment
+      icon: {fileID: 2800000, guid: 5c066d521cb1b524e8b2ab5ea5ea3e8b, type: 3}
+    - folderName: VFX
+      icon: {fileID: 2800000, guid: 94a34c234be0f6141a9b7a611a3b3262, type: 3}
+    - folderName: vfx
+      icon: {fileID: 2800000, guid: 94a34c234be0f6141a9b7a611a3b3262, type: 3}
+  currentIconSetIndex: 0
