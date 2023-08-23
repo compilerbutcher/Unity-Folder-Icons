@@ -31,7 +31,6 @@ namespace UnityEditorTools.FolderIcons
 
         static IconManager()
         {
-            DynamicConstants.UpdateVariables();
 
             EditorApplication.delayCall += Main;
         }
@@ -40,12 +39,12 @@ namespace UnityEditorTools.FolderIcons
         // We have to make sure use delayCall with asset operations otherwise, asset operations will sometimes fail or make weird behaviour
         private static void Main()
         {
+            DynamicConstants.UpdateVariables();
+
             AssetOperations();
             InitHeaderContents();
             ExchangeFolderIconData(persistentData.guidTextureList, tempFolderIconDict, true);
             ExchangeIconSetData(persistentData.iconSetDataList, tempIconSetDict, true);
-
-
 
             if (tempFolderIconDict.Count > 0)
             {
