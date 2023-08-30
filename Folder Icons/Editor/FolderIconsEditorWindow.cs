@@ -4,17 +4,16 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using System.IO;
-using UnityEngine.Assertions.Must;
+
+
 
 namespace UnityEditorTools.FolderIcons
 {
     public class FolderIconsEditorWindow : EditorWindow
     {
-        private static string[] iconSetNames;
-        private int selectedOption = 0;
+        private static int selectedOption = 0;
         private SerializedObject serializedObject;
         private SerializedProperty iconSetsProperty;
-        [SerializeField] private List<IconSetData> iconSets;
 
         private GUIStyle iconSettingsGUIStyle;
         private GUIStyle headerGUIStyle;
@@ -30,46 +29,18 @@ namespace UnityEditorTools.FolderIcons
             GetWindow<FolderIconsEditorWindow>();
         }
 
-
         private void OnEnable()
         {
-
-            selectedOption = IconManager.persistentData.currentIconSetIndex;
-
-            isIconSetADefaultIconSet = IsDefaultIconSet();
-
-            iconSettingsGUIStyle = new GUIStyle();
-            iconSettingsGUIStyle.fontSize = 13;
-            iconSettingsGUIStyle.fontStyle = FontStyle.Normal;
-            iconSettingsGUIStyle.normal.textColor = Color.gray;
-
-            headerGUIStyle = new GUIStyle();
-            headerGUIStyle.fontSize = 25;
-            headerGUIStyle.fontStyle = FontStyle.Bold;
-            headerGUIStyle.normal.textColor = Color.white;
-
-
-            if (IconManager.persistentData.iconSetDataList.Count == 0) return;
-
-            serializedObject = new SerializedObject(IconManager.persistentData);
-            int listIndex = IconManager.persistentData.currentIconSetIndex;
-            iconSetsProperty = serializedObject.FindProperty("iconSetDataList").GetArrayElementAtIndex(listIndex);
-
-
-
-            iconSetNames = new string[IconManager.persistentData.iconSetDataList.Count];
-
-            for (int i = 0; i < IconManager.persistentData.iconSetDataList.Count; i++)
-            {
-                iconSetNames[i] = IconManager.persistentData.iconSetDataList[i].iconSetName;
-            }
-
-
-
-            UpdateSerializedProperty(serializedObject, IconManager.persistentData.currentIconSetIndex);
+            HandleOnEnable();
         }
+      
+
         private void OnGUI()    
         {
+
+            HandleOnEnable();
+
+            if (IconManager.persistentData == null || serializedObject == null) return;
             if (IconManager.persistentData.iconSetDataList.Count > 0) serializedObject.Update();
 
 
@@ -81,7 +52,6 @@ namespace UnityEditorTools.FolderIcons
             EditorGUILayout.LabelField("Icon Sets", headerGUIStyle, GUILayout.ExpandWidth(false), GUILayout.Width(100));
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
-
 
 
             EditorGUILayout.Space(20);
@@ -117,8 +87,8 @@ namespace UnityEditorTools.FolderIcons
 
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            LoadIconSets();
-            SaveIconSets();
+            LoadIconSetButton();
+            SaveIconSetButton();
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
 
@@ -136,8 +106,8 @@ namespace UnityEditorTools.FolderIcons
 
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            LoadIcons();
-            SaveIcons();
+            LoadIconsButton();
+            SaveIconsButton();
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
 
@@ -146,7 +116,7 @@ namespace UnityEditorTools.FolderIcons
 
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            ResetAllIcons();
+            ResetAllIconsButton();
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
 
@@ -154,57 +124,69 @@ namespace UnityEditorTools.FolderIcons
             EditorGUILayout.EndScrollView();
             if (IconManager.persistentData.iconSetDataList.Count > 0) serializedObject.ApplyModifiedProperties();
 
-            if (iconSetsProperty.FindPropertyRelative("iconSetData").arraySize != previousIconSetSize)
+            if (previousIconSetSize != IconManager.persistentData.currentIconSetIndex)
             {
-                UpdateIconSets();
-                previousIconSetSize = iconSetsProperty.FindPropertyRelative("iconSetData").arraySize;
+                UpdateAllFolderIcons();
+                previousIconSetSize = IconManager.persistentData.currentIconSetIndex;
+            }
+
+            if (GUI.changed)
+            {
+                IconManager.ExchangeIconSetData(IconManager.persistentData.iconSetDataList, IconManager.tempIconSetDict, DataExchangeType.ListToDict);
             }
         }
+
 
         #region Icon Set Region
         private void TextField()
         {
             newIconSetNameText = EditorGUILayout.TextField(newIconSetNameText);
         }
-
         private void AddButton()
         {
             if (GUILayout.Button("Add Icon Set"))
             {
-                if (!iconSetNames.Contains(newIconSetNameText) && newIconSetNameText != null && newIconSetNameText.Trim() != "")
+                if (!IconManager.iconSetNames.Contains(newIconSetNameText) && newIconSetNameText != null && newIconSetNameText.Trim() != "")
                 {
-                    ArrayUtility.Add(ref iconSetNames, newIconSetNameText);
+                    ArrayUtility.Add(ref IconManager.iconSetNames, newIconSetNameText);
+
                     IconSetDataListWrapper iconSetData = new IconSetDataListWrapper();
+
                     iconSetData.iconSetName = newIconSetNameText;
                     iconSetData.iconSetData = new List<IconSetData>();
+
                     IconManager.persistentData.iconSetDataList.Add(iconSetData);
-                    EditorUtility.SetDirty(IconManager.persistentData);
+
+                    if (IconManager.persistentData != null) EditorUtility.SetDirty(IconManager.persistentData);
+
                     newIconSetNameText = "";
-                    UpdateIconSets();
+
+                    UpdateAllFolderIcons();
+
                     selectedOption = IconManager.persistentData.iconSetDataList.Count - 1;
-                    UpdateSerializedProperty(serializedObject, selectedOption);
-                    this.Repaint();
+                    UpdateSerializedPropertyOfIconSetList(serializedObject, selectedOption);
+
+                    Repaint();
 
                     isIconSetADefaultIconSet = false;
 
                 }
             }   
         }
-
         private void RemoveButton()
         {
             if (GUILayout.Button("Remove Icon Set"))
             {
 
-                if (selectedOption != 0 && selectedOption != 1 && selectedOption != 2)
+                if (selectedOption != 0 && selectedOption != 1)
                 {
 
-                    ArrayUtility.Remove(ref iconSetNames, iconSetNames[selectedOption]);
+                    ArrayUtility.Remove(ref IconManager.iconSetNames, IconManager.iconSetNames[selectedOption]);
 
                     IconManager.persistentData.iconSetDataList.RemoveAt(selectedOption);
                     IconManager.persistentData.currentIconSetIndex = 0;
                     EditorUtility.SetDirty(IconManager.persistentData);
-                    UpdateSerializedProperty(serializedObject, IconManager.persistentData.currentIconSetIndex);
+                    UpdateSerializedPropertyOfIconSetList(serializedObject, IconManager.persistentData.currentIconSetIndex);
                     selectedOption = 0;
 
                 }
@@ -219,109 +201,71 @@ namespace UnityEditorTools.FolderIcons
         private void DropdownButton()
         {
             EditorGUI.BeginChangeCheck();
-            selectedOption = EditorGUILayout.Popup(selectedOption, iconSetNames);
+            selectedOption = EditorGUILayout.Popup(selectedOption, IconManager.iconSetNames);
             if (EditorGUI.EndChangeCheck())
             {
-                UpdateIconSets();
+                UpdateAllFolderIcons();
             }
         }
-
         private void IconSetLabelAndPropertField()
         {
             EditorGUI.BeginDisabledGroup(isIconSetADefaultIconSet);
             serializedObject.Update();
-            EditorGUILayout.PropertyField(iconSetsProperty);
+            if (IconManager.persistentData.iconSetDataList.Count > 0)
+                EditorGUILayout.PropertyField(iconSetsProperty);
+            serializedObject.ApplyModifiedProperties();
+
             EditorGUI.EndDisabledGroup();
         }
 
-        private void LoadIconSets()
+        private void LoadIconSetButton()
         {
             if (GUILayout.Button("Load Icon Sets!"))
             {
 
                 string selectedFile = EditorUtility.OpenFilePanel("Select a .json file to load!", "", "json");
 
-                List<MainIconSetData> jsonDataList;
-                JsonHelper.LoadJson<MainIconSetData>(selectedFile, out jsonDataList);
-
-
-                for (int loadedJsonDataIndex = 0; loadedJsonDataIndex < jsonDataList.Count; loadedJsonDataIndex++)
-                {
-                    MainIconSetData data = jsonDataList[loadedJsonDataIndex];
-
-                    IconSetDataListWrapper newIconSetDataListWrapper = new IconSetDataListWrapper();
-                    newIconSetDataListWrapper.iconSetData = new List<IconSetData>();
-                    newIconSetDataListWrapper.iconSetName = data.iconSetName;
-
-                    IconSetData newIconSetData;
-
-                    for (int iconSetIndex = 0; iconSetIndex < data.iconSetData.Count; iconSetIndex++)
-                    {
-                        newIconSetData = new();
-                        string folderName = data.iconSetData[iconSetIndex].folderName;
-                        string iconName = data.iconSetData[iconSetIndex].iconName;
-                        string base64Texture = data.iconSetData[iconSetIndex].iconBase64;
-
-
-                        string fullPackagePath = DynamicConstants.absolutePackagePath + Constants.iconsFolderName + Constants.loadedIconSetsName;
-                        string unityRelativePackagePath = Constants.packageIconsPath + Constants.iconsFolderName + Constants.loadedIconSetsName;
-
-                        TextureFunctions.Base64ToTexture2D(base64Texture, fullPackagePath + $"/{iconName}.png");
-                        TextureFunctions.ImportTexture(unityRelativePackagePath + $"/{iconName}.png");
-
-
-                        newIconSetData.folderName = folderName;
-                        newIconSetData.icon = AssetDatabase.LoadAssetAtPath<Texture2D>(unityRelativePackagePath + $"/{iconName}.png");
-                        newIconSetData.icon.name = iconName;
-
-                        newIconSetDataListWrapper.iconSetData.Add(newIconSetData);
-                    }
-
-
-                    IconManager.persistentData.iconSetDataList.Add(newIconSetDataListWrapper);
-                    if (IconManager.persistentData != null) EditorUtility.SetDirty(IconManager.persistentData);
-
-                }
+                IconManager.LoadIconSetsFromJson(selectedFile);
 
             }
+
+            IconManager.iconSetNames = new string[IconManager.persistentData.iconSetDataList.Count];
+
+            for (int i = 0; i < IconManager.persistentData.iconSetDataList.Count; i++)
+            {
+                IconManager.iconSetNames[i] = IconManager.persistentData.iconSetDataList[i].iconSetName;
+            }
         }
-        private void SaveIconSets()
+        private void SaveIconSetButton()
         {
             if (GUILayout.Button("Save Icon Sets!"))
             {
                 string selectedFile = EditorUtility.SaveFilePanel("Select a folder to save!", "", "Icon Set Data.json", "json");
 
-                List<MainIconSetData> packedIconSetData = new List<MainIconSetData>();
-
-                for (int i = 3; i < IconManager.tempIconSetDict.Count; i++)
-                {
-                    KeyValuePair<string, List<IconSetData>> keyValue = IconManager.tempIconSetDict.ElementAt(i);
-
-
-                    MainIconSetData newMainIconSetData = new();
-                    newMainIconSetData.iconSetName = keyValue.Key;
-                    newMainIconSetData.iconSetData = new List<Base64IconSetData>();
-
-                    for (int IconSetDataIndex = 0; IconSetDataIndex < keyValue.Value.Count; IconSetDataIndex++)
-                    {
-                        Base64IconSetData newIconSetData = new Base64IconSetData();
-                        newIconSetData.folderName = keyValue.Value[IconSetDataIndex].folderName;
-                        newIconSetData.iconName = keyValue.Value[IconSetDataIndex].icon.name;
-                        newIconSetData.iconBase64 = Convert.ToBase64String(ImageConversion.EncodeToPNG(keyValue.Value[IconSetDataIndex].icon));
-
-                        newMainIconSetData.iconSetData.Add(newIconSetData);
-                    }
-                    packedIconSetData.Add(newMainIconSetData);
-                }
-
-                JsonHelper.SaveJson<MainIconSetData>(selectedFile, packedIconSetData);
+                IconManager.SaveIconSetsFromJson(selectedFile);
+             
             }
         }
+        private static void LoadIconsButton()
+        {
+            if (GUILayout.Button("Load Icons!"))
+            {
+                string selectedFile = EditorUtility.OpenFilePanel("Select a .json file to load!", "", "json");
 
+                IconManager.LoadIconsFromJson(selectedFile);
+            }
 
+        }
+        private static void SaveIconsButton()
+        {
+            if (GUILayout.Button("Save Icons!"))
+            {
+                string selectedFile = EditorUtility.SaveFilePanel("Select a folder to save!", "", "Folder Icons Data.json", "json");
 
-
-        private void ResetAllIcons()
+                IconManager.SaveIconsToJson(selectedFile);
+            }
+        }
+        private void ResetAllIconsButton()
         {
 
             if (GUILayout.Button("Reset All Icons!", GUILayout.ExpandWidth(false), GUILayout.Width(100)))
@@ -332,6 +276,9 @@ namespace UnityEditorTools.FolderIcons
                 {
                     try
                     {
+                        selectedOption = 0;
+                        IconManager.persistentData.colorFolderNumber = 0;
+
                         IconManager.persistentData.guidTextureList.Clear();
                         EditorUtility.SetDirty(IconManager.persistentData);
                         IconManager.tempFolderIconDict.Clear();
@@ -353,152 +300,33 @@ namespace UnityEditorTools.FolderIcons
 
 
 
-
-
-
-
-
-
-
-        // -------------------------------------------------------------------------------------------------------------------------------
-
-        private static void LoadIcons()
+        [MenuItem("Tools/haha")]
+        private static void Re()
         {
-            if (GUILayout.Button("Load Icons!"))
-            {
-                string selectedFile = EditorUtility.OpenFilePanel("Select a .json file to load!", "", "json");
-
-                string folderName = "";
-                Color color;
-                string emptyFolderBase64String;
-                string folderTextureBase64String;
-                string customTextureBase64String;
-
-                List<JsonTextureData> jsonDataList;
-                JsonHelper.LoadJson<JsonTextureData>(selectedFile, out jsonDataList);
-
-                for (int loadedJsonDataIndex = 0; loadedJsonDataIndex < jsonDataList.Count; loadedJsonDataIndex++)
-                {
-                    JsonTextureData data = jsonDataList[loadedJsonDataIndex];
-
-
-                    folderName = data.folderName;
-                    color = new Color(data.color.x, data.color.y, data.color.z, data.color.w);
-
-
-                    emptyFolderBase64String = data.emptyFolderTextureBase64;
-                    folderTextureBase64String = data.folderTextureBase64;
-                    customTextureBase64String = data.customTextureBase64;
-
-
-                    string emptyFolderTextureFullPath = $"{DynamicConstants.absolutePackagePath}\\{Constants.iconsFolderName}\\{Constants.loadedIconsFolderName}\\{data.emptyFolderTextureName}.png";
-                    string folderTextureFullPath = $"{DynamicConstants.absolutePackagePath}\\{Constants.iconsFolderName}\\{Constants.loadedIconsFolderName}\\{data.folderTextureName}.png";
-                    string customFolderTextureFullPath = $"{DynamicConstants.absolutePackagePath}\\{Constants.iconsFolderName}\\{Constants.loadedIconsFolderName}\\{data.customTextureName}.png";
-
-                    TextureFunctions.Base64ToTexture2D(emptyFolderBase64String, emptyFolderTextureFullPath);
-                    TextureFunctions.Base64ToTexture2D(folderTextureBase64String, folderTextureFullPath);
-                    TextureFunctions.Base64ToTexture2D(customTextureBase64String, customFolderTextureFullPath);
-
-                    string emptyFolderTexturePath = Constants.packageIconsPath + Constants.iconsFolderName + Constants.loadedIconsFolderName + $"/{data.emptyFolderTextureName}.png";
-                    string folderTexturePath = Constants.packageIconsPath + Constants.iconsFolderName + Constants.loadedIconsFolderName + $"/{data.folderTextureName}.png";
-                    string customFolderTexturePath = Constants.packageIconsPath + Constants.iconsFolderName + Constants.loadedIconsFolderName + $"/{data.customTextureName}.png";
-
-                    if (emptyFolderBase64String.Length > 0)
-                        TextureFunctions.ImportTexture(emptyFolderTexturePath);
-                    if (folderTextureBase64String.Length > 0)
-                        TextureFunctions.ImportTexture(folderTexturePath);
-                    if (customTextureBase64String.Length > 0)
-                        TextureFunctions.ImportTexture(customFolderTexturePath);
-
-
-                    string newlyCreatedFolderGUID = AssetDatabase.CreateFolder("Assets", data.folderName);
-
-                    Color currentColor = new Color(data.color.x, data.color.y, data.color.z, data.color.w);
-                    Texture2D emptyFolder = AssetDatabase.LoadAssetAtPath<Texture2D>(emptyFolderTexturePath);
-                    Texture2D colorFolder = AssetDatabase.LoadAssetAtPath<Texture2D>(folderTexturePath);
-                    Texture2D customFolder = AssetDatabase.LoadAssetAtPath<Texture2D>(customFolderTexturePath);
-                    UtilityFunctions.CreateAndSaveDataToDict(newlyCreatedFolderGUID, IconManager.tempFolderIconDict, currentColor, emptyFolder, colorFolder, customFolder);
-                }
-
-
-                EditorApplication.projectWindowItemOnGUI = null;
-                EditorApplication.projectWindowItemOnGUI += UtilityFunctions.DrawFolders;
-                EditorApplication.RepaintProjectWindow();
-                UtilityFunctions.CheckAllFoldersCurrentEmptiness(ref IconManager.folderEmptyDict);
-            }
-
+            selectedOption = 0;
+            IconManager.persistentData.iconSetDataList.Clear();
+            EditorUtility.SetDirty(IconManager.persistentData);
         }
-        private static void SaveIcons()
+
+        #region haa
+        private bool AreFirstAndSecondDefaultIconSet()
         {
-            if (GUILayout.Button("Save Icons!"))
+            if (selectedOption == 0 || selectedOption == 1)
             {
-                string selectedFile = EditorUtility.SaveFilePanel("Select a folder to save!", "", "Folder Icons Data.json", "json");
-
-
-                List<JsonTextureData> packedJsonList = new List<JsonTextureData>();
-                foreach (KeyValuePair<string, TextureData> keyValue in IconManager.tempFolderIconDict)
-                {
-                    string emptyFolderBase64String = "";
-                    string folderTextureBase64String = "";
-                    string customTextureBase64String = "";
-
-
-                    // Guid
-                    string folderName = Path.GetFileNameWithoutExtension(AssetDatabase.GUIDToAssetPath(keyValue.Key));
-
-
-                    if (keyValue.Value.emptyFolderTexture != null)
-                    {
-                        emptyFolderBase64String = Convert.ToBase64String(ImageConversion.EncodeToPNG(keyValue.Value.emptyFolderTexture));
-                    }
-                    if (keyValue.Value.folderTexture != null)
-                    {
-                        folderTextureBase64String = Convert.ToBase64String(ImageConversion.EncodeToPNG(keyValue.Value.folderTexture));
-                    }
-                    if (keyValue.Value.customTexture != null)
-                    {
-                        customTextureBase64String = Convert.ToBase64String(ImageConversion.EncodeToPNG(keyValue.Value.customTexture));
-                    }
-
-                    JsonTextureData packedJsonData = new JsonTextureData();
-
-                    if (keyValue.Value.emptyFolderTexture != null)
-                    {
-                        packedJsonData.emptyFolderTextureName = keyValue.Value.emptyFolderTexture.name;
-                        packedJsonData.folderTextureName = keyValue.Value.folderTexture.name;
-                    }
-                    if (keyValue.Value.customTexture != null)
-                        packedJsonData.customTextureName = keyValue.Value.customTexture.name;
-
-
-
-
-                    packedJsonData.folderName = folderName;
-                    packedJsonData.color = new Vector4(keyValue.Value.color.r, keyValue.Value.color.g, keyValue.Value.color.b, keyValue.Value.color.a);
-
-                    packedJsonData.emptyFolderTextureBase64 = emptyFolderBase64String;
-                    packedJsonData.folderTextureBase64 = folderTextureBase64String;
-                    packedJsonData.customTextureBase64 = customTextureBase64String;
-
-                    packedJsonList.Add(packedJsonData);
-                }
-
-                JsonHelper.SaveJson<JsonTextureData>(selectedFile, packedJsonList);
-                AssetDatabase.Refresh();
-
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
-        // -------------------------------------------------------------------------------------------------------------------------------
-
-
-
-
-        private void UpdateSerializedProperty(SerializedObject serializedObject, int currentListIndex)
+        private void UpdateSerializedPropertyOfIconSetList(SerializedObject serializedObject, int currentListIndex)
         {
 
+            if (IconManager.persistentData.iconSetDataList.Count == 0) return;
+            if (IconManager.persistentData.iconSetDataList[currentListIndex].iconSetData.Count == 0) return;
 
             serializedObject.Update();
-
             iconSetsProperty = serializedObject.FindProperty("iconSetDataList").GetArrayElementAtIndex(currentListIndex);
             SerializedProperty iconSetDataProperty = iconSetsProperty.FindPropertyRelative("iconSetData");
 
@@ -522,21 +350,53 @@ namespace UnityEditorTools.FolderIcons
 
             serializedObject.ApplyModifiedProperties();
         }
-
-
-        private bool IsDefaultIconSet()
+        private void HandleOnEnable()
         {
-            if (selectedOption == 0 || selectedOption == 1 || selectedOption == 2)
+            if (IconManager.persistentData == null)
             {
-                return true;
+                return;
             }
-            else
+            else if (serializedObject == null)
             {
-                return false;
+                serializedObject = new SerializedObject(IconManager.persistentData);
+
+
+                if (IconManager.persistentData.iconSetDataList.Count > 0)
+                {
+                    int listIndex = IconManager.persistentData.currentIconSetIndex;
+                    iconSetsProperty = serializedObject.FindProperty("iconSetDataList").GetArrayElementAtIndex(listIndex);
+                }
+                else
+                {
+                    iconSetsProperty = serializedObject.FindProperty("iconSetDataList");
+                }
+
+
+
+                selectedOption = IconManager.persistentData.currentIconSetIndex;
+
+                isIconSetADefaultIconSet = AreFirstAndSecondDefaultIconSet();
+
+                iconSettingsGUIStyle = new GUIStyle();
+                iconSettingsGUIStyle.fontSize = 13;
+                iconSettingsGUIStyle.fontStyle = FontStyle.Normal;
+                iconSettingsGUIStyle.normal.textColor = Color.gray;
+
+                headerGUIStyle = new GUIStyle();
+                headerGUIStyle.fontSize = 25;
+                headerGUIStyle.fontStyle = FontStyle.Bold;
+                headerGUIStyle.normal.textColor = Color.white;
+
+
+                if (IconManager.persistentData.iconSetDataList.Count == 0) return;
+
+
+                UpdateSerializedPropertyOfIconSetList(serializedObject, IconManager.persistentData.currentIconSetIndex);
+
+                Repaint();
             }
         }
-
-        private void UpdateIconSets()
+        private void UpdateAllFolderIcons()
         {
             if (IconManager.persistentData.iconSetDataList.Count == 0) return;
 
@@ -545,20 +405,20 @@ namespace UnityEditorTools.FolderIcons
             EditorUtility.SetDirty(IconManager.persistentData);
             if (selectedOption == 0)
             {
-                isIconSetADefaultIconSet = IsDefaultIconSet();
+                isIconSetADefaultIconSet = AreFirstAndSecondDefaultIconSet();
 
                 EditorApplication.projectWindowItemOnGUI = null;
                 EditorApplication.RepaintProjectWindow();
 
                 IconManager.tempFolderIconDict.Clear();
-                UpdateSerializedProperty(serializedObject, IconManager.persistentData.currentIconSetIndex);
+                UpdateSerializedPropertyOfIconSetList(serializedObject, IconManager.persistentData.currentIconSetIndex);
 
                 return;
             }
-            isIconSetADefaultIconSet = IsDefaultIconSet();
+            isIconSetADefaultIconSet = AreFirstAndSecondDefaultIconSet();
 
 
-            UpdateSerializedProperty(serializedObject, IconManager.persistentData.currentIconSetIndex);
+            UpdateSerializedPropertyOfIconSetList(serializedObject, IconManager.persistentData.currentIconSetIndex);
 
 
 
@@ -603,7 +463,6 @@ namespace UnityEditorTools.FolderIcons
 
 
             EditorApplication.projectWindowItemOnGUI = null;
-            EditorApplication.RepaintProjectWindow();
             EditorApplication.projectWindowItemOnGUI += UtilityFunctions.DrawFolders;
             EditorApplication.RepaintProjectWindow();
 
@@ -611,7 +470,7 @@ namespace UnityEditorTools.FolderIcons
             IconManager.persistentData.currentIconSetIndex = selectedOption;
             EditorUtility.SetDirty(IconManager.persistentData);
         }
-
+        #endregion
 
 
     }

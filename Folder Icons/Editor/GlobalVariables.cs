@@ -7,11 +7,14 @@ namespace UnityEditorTools.FolderIcons
     public static class Constants
     {
         // PersistentData path
-        internal const string PersistentDataName = "/Data/FolderIconsData.asset";
+        internal const string PersistentDataName = "/FolderIconsData.asset";
+        internal const string defaultIconSetName = "/Default Icon Sets.json";
+
 
         // Main package path
         internal const string packageIconsPath = "Packages/com.codedestroyer.foldericons/Folder Icons";
 
+        internal const string dataName = "/Data";
         internal const string iconsFolderName = "/Icons";
         internal const string defaultIconsName = "/Default Icons";
         internal const string colorFolderStorageName = "/Folder With Color Icons";
@@ -89,11 +92,10 @@ namespace UnityEditorTools.FolderIcons
         internal static Texture2D defaultFolderIcon;
 
 
-        internal static void UpdateVariables()
+        internal static void UpdateDynamicConstants()
         {
             // Paths
-
-            persistentDataPath = Constants.packageIconsPath + Constants.PersistentDataName;
+            persistentDataPath = Constants.packageIconsPath + Constants.dataName + Constants.PersistentDataName;
             defaultIconsPath = Constants.packageIconsPath + Constants.iconsFolderName + Constants.defaultIconsName;
 
             darkEmptyFolderPath = defaultIconsPath + Constants.darkEmptyFolderName;

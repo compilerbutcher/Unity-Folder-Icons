@@ -108,7 +108,7 @@ namespace UnityEditorTools.FolderIcons
 
             if (IconManager.projectCurrentFolderTexture != null)
             {
-                UtilityFunctions.CreateFolderWithColor(currentAssetGUID, IconManager.tempFolderIconDict);
+                PopupWindowContentFunctions.HandleCreateAndDeleteFoldersOnClose(currentAssetGUID, IconManager.tempFolderIconDict);
             }
 
             else if (IconManager.projectCurrentCustomTexture != null)
@@ -139,7 +139,7 @@ namespace UnityEditorTools.FolderIcons
             EditorApplication.projectWindowItemOnGUI += UtilityFunctions.DrawFolders;
             EditorApplication.RepaintProjectWindow();
 
-            IconManager.ExchangeFolderIconData(IconManager.persistentData.guidTextureList, IconManager.tempFolderIconDict, false);
+            IconManager.ExchangeFolderIconData(IconManager.persistentData.guidTextureList, IconManager.tempFolderIconDict, DataExchangeType.DictToList);
             if (IconManager.persistentData != null) EditorUtility.SetDirty(IconManager.persistentData);
         }
 

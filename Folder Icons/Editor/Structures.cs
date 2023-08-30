@@ -7,6 +7,13 @@ using System.Collections.Generic;
 
 namespace UnityEditorTools.FolderIcons
 {
+    internal enum DataExchangeType
+    {
+        ListToDict,
+        DictToList
+    }
+
+
     [Serializable]
     internal struct TextureData
     {
