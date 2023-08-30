@@ -15,14 +15,13 @@ MonoBehaviour:
   colorFolderNumber: 0
   guidTextureList: []
   headerContents:
-    buttonBackgroundTexture: {fileID: 2800000, guid: 133d9ad517af08341ac563e9f2bc02a1,
-      type: 3}
+    buttonBackgroundTexture: {fileID: 0}
     buttonHoverTexture: {fileID: 2800000, guid: ea1e61373a20fd74080940c39512cd39,
       type: 3}
     headerIconGUIStyle:
       m_Name: 
       m_Normal:
-        m_Background: {fileID: 2800000, guid: 133d9ad517af08341ac563e9f2bc02a1, type: 3}
+        m_Background: {fileID: 0}
         m_ScaledBackgrounds: []
         m_TextColor: {r: 0, g: 0, b: 0, a: 1}
       m_Hover:
@@ -101,57 +100,57 @@ MonoBehaviour:
   - iconSetName: Medieval
     iconSetData:
     - folderName: Art
-      icon: {fileID: 2800000, guid: c60b83f53063a3349a9a00bc99c24396, type: 3}
+      icon: {fileID: 2800000, guid: 0aec46eb4ad8a7e49bab0d1cbfef2e5b, type: 3}
     - folderName: Prefab
-      icon: {fileID: 2800000, guid: b5208b7f5c74b5a409eeb8be7974a2fe, type: 3}
-    - folderName: Document
-      icon: {fileID: 2800000, guid: aff419cd005b3b44cbb551c024040af8, type: 3}
+      icon: {fileID: 2800000, guid: ecda70dcef30d804297a5ea8c83eb80e, type: 3}
+    - folderName: Documents
+      icon: {fileID: 2800000, guid: 03dc188cf2f0e6440af9141992c67326, type: 3}
     - folderName: Textures
-      icon: {fileID: 2800000, guid: 6cdd6259096e65d4baed1d87715cfd2a, type: 3}
+      icon: {fileID: 2800000, guid: 769d0347a27421c49a1da0307214bced, type: 3}
     - folderName: Scripts
-      icon: {fileID: 2800000, guid: fee0c52fe1280a148bd859ea756972f3, type: 3}
+      icon: {fileID: 2800000, guid: 688ce779071c5ee40af811622cff205d, type: 3}
     - folderName: Fonts
-      icon: {fileID: 2800000, guid: e1b1c4d6a248e3443924047df871e131, type: 3}
+      icon: {fileID: 2800000, guid: 1c8dbb3dc55b8f84daa3eaf6ae57a7f1, type: 3}
     - folderName: Settings
-      icon: {fileID: 2800000, guid: 12dc9df21fca3964c8f76207df520904, type: 3}
+      icon: {fileID: 2800000, guid: f8c588ce87fb2e1419ccd350efcbe59c, type: 3}
     - folderName: Navigation
-      icon: {fileID: 2800000, guid: b785a57dd45d6ad4ebbeea27bc47caf5, type: 3}
+      icon: {fileID: 2800000, guid: a5dc7385ab389b64caaf325bcf0a935e, type: 3}
     - folderName: Packages
-      icon: {fileID: 2800000, guid: 04cee8cc1eee9ae4498cf754d6c8f76e, type: 3}
+      icon: {fileID: 2800000, guid: a0fce11c9f6a72d419e644721af086ee, type: 3}
     - folderName: Models
-      icon: {fileID: 2800000, guid: 04c75d6c14c07b846bd9882c5d0733e5, type: 3}
-    - folderName: Music
-      icon: {fileID: 2800000, guid: 251bf28a980ef0043b9f3af8de533f38, type: 3}
+      icon: {fileID: 2800000, guid: f00d42b9eee4628409cc37eb13734236, type: 3}
+    - folderName: Musics
+      icon: {fileID: 2800000, guid: 8c5ec03efc2d69e44875133064b0aace, type: 3}
     - folderName: Environment
-      icon: {fileID: 2800000, guid: a09cd29632a3f66498bc81bf21195551, type: 3}
+      icon: {fileID: 2800000, guid: 47e23e8536666474ba1af4fb630163c6, type: 3}
   - iconSetName: Hyperion
     iconSetData:
     - folderName: Art
-      icon: {fileID: 2800000, guid: 0c894b4279216e04dafeca6176142a04, type: 3}
+      icon: {fileID: 2800000, guid: a9eb2c939f4f5194e9ffca34bc447422, type: 3}
     - folderName: Prefab
-      icon: {fileID: 2800000, guid: 71bbf39ff317d4c4dab80dcb1beca62d, type: 3}
+      icon: {fileID: 2800000, guid: a25c0a3f179873e41bceb18e43349ced, type: 3}
     - folderName: Document
-      icon: {fileID: 2800000, guid: b1c6ea6cdba83eb44973a2347f6d329a, type: 3}
+      icon: {fileID: 2800000, guid: ea54c257e14974d4aa2636eb781fe479, type: 3}
     - folderName: Textures
-      icon: {fileID: 2800000, guid: bbc30b2a00a8b324e9e7832cb01f035a, type: 3}
+      icon: {fileID: 2800000, guid: f3cb34614b37aaf49bc5127827e8bcab, type: 3}
     - folderName: Scripts
-      icon: {fileID: 2800000, guid: 8238f34b6495c4e4eb5e57af9a54001d, type: 3}
+      icon: {fileID: 2800000, guid: 0920512f9990c2a4c8b2881d93ab8624, type: 3}
     - folderName: Fonts
-      icon: {fileID: 2800000, guid: 4bab40f799391f84b9b9f030083f02d2, type: 3}
+      icon: {fileID: 2800000, guid: 67da9d23a675d1e4ba7446588d88426b, type: 3}
     - folderName: Settings
-      icon: {fileID: 2800000, guid: 22b8fd800ded1a545b625f7c959a0677, type: 3}
+      icon: {fileID: 2800000, guid: 47bfe92289ed4dd4386e5c98977ae651, type: 3}
     - folderName: Navigation
-      icon: {fileID: 2800000, guid: 6d645dd54edf716439f2a337aad1f9e7, type: 3}
+      icon: {fileID: 2800000, guid: 819659628624bd74083bba51531809b6, type: 3}
     - folderName: Packages
-      icon: {fileID: 2800000, guid: 8d9851a59f1dc0245b71323a83e02718, type: 3}
+      icon: {fileID: 2800000, guid: 97a3bb27c194d3b43bafb7b4f99b4165, type: 3}
     - folderName: Models
-      icon: {fileID: 2800000, guid: 04c75d6c14c07b846bd9882c5d0733e5, type: 3}
+      icon: {fileID: 2800000, guid: f00d42b9eee4628409cc37eb13734236, type: 3}
     - folderName: Music
-      icon: {fileID: 2800000, guid: 4f9afed5e4d45ec4ba931850f57c7891, type: 3}
+      icon: {fileID: 2800000, guid: 57960f1610f20ac4a81c4570da570d5a, type: 3}
     - folderName: Environment
-      icon: {fileID: 2800000, guid: 5c066d521cb1b524e8b2ab5ea5ea3e8b, type: 3}
+      icon: {fileID: 2800000, guid: 4a1cc888ced163d41b65f47451e5dee2, type: 3}
     - folderName: VFX
-      icon: {fileID: 2800000, guid: 94a34c234be0f6141a9b7a611a3b3262, type: 3}
+      icon: {fileID: 2800000, guid: 7960d689104a8e649a1794de5fbaaf4b, type: 3}
     - folderName: vfx
-      icon: {fileID: 2800000, guid: 94a34c234be0f6141a9b7a611a3b3262, type: 3}
-  currentIconSetIndex: 0
+      icon: {fileID: 2800000, guid: 7960d689104a8e649a1794de5fbaaf4b, type: 3}
+  currentIconSetIndex: 1
