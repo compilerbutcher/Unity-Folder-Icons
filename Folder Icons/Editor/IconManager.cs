@@ -3,7 +3,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
-using System.Security.Permissions;
 using System;
 
 namespace UnityEditorTools.FolderIcons
@@ -102,20 +101,6 @@ namespace UnityEditorTools.FolderIcons
             }
 
 
-
-
-            if (persistentData.iconSetDataList.Count == 0)
-            {
-                LoadIconSetsFromJson(DynamicConstants.absolutePackagePath + Constants.dataName + Constants.defaultIconSetName);
-            }
-            else
-            {
-                if (persistentData.iconSetDataList[0].iconSetName != "Default" && persistentData.iconSetDataList[1].iconSetName != "Medieval")
-                {
-                    LoadIconSetsFromJson(DynamicConstants.absolutePackagePath + Constants.dataName + Constants.defaultIconSetName);
-                }
-            }
-
             iconSetNames = new string[persistentData.iconSetDataList.Count];
 
             for (int i = 0; i < persistentData.iconSetDataList.Count; i++)
@@ -131,33 +116,11 @@ namespace UnityEditorTools.FolderIcons
             ExchangeFolderIconData(persistentData.guidTextureList, tempFolderIconDict, DataExchangeType.DictToList);
             ExchangeIconSetData(persistentData.iconSetDataList, tempIconSetDict, DataExchangeType.DictToList);
             if (persistentData != null) EditorUtility.SetDirty(persistentData);
-            for (int i = 0; i < persistentData.iconSetDataList.Count; i++)
-            {
-                File.WriteAllText("C:\\Users\\CodeParadise\\Desktop\\A.txt", tempIconSetDict.ElementAt(i).Key);
-            }
         }
 
 
 
-        // Exchange icon set data
-        internal static void ExchangeIconSetData(List<IconSetDataListWrapper> list, Dictionary<string, Dictionary<string, Texture2D>> dict, DataExchangeType dataExchangeType)
-        {
-            // Move all data from persistent list to temporary dictionary
-            switch (dataExchangeType)
-            {
-                case DataExchangeType.ListToDict:
-                    ListToDict(ref list, ref dict);
-                    break;
 
-
-                // Move all data from temporary dictionary to persistent list
-                case DataExchangeType.DictToList:
-                    DictToList(ref list, ref dict);
-                    break;
-
-            }
-
-        }
 
         private static void ListToDict(ref List<IconSetDataListWrapper> list, ref Dictionary<string, Dictionary<string, Texture2D>> dict)
         {
@@ -180,20 +143,6 @@ namespace UnityEditorTools.FolderIcons
             }
 
         }
-
-        private static void ListToDictOneElement(ref List<IconSetDataListWrapper> list, ref Dictionary<string, Texture2D> dict)
-        {
-            if (list.Count == 0) return;
-
-            IconSetDataListWrapper iconSetData = list[^1];
-
-            //if (!dict.ContainsKey(iconSetData))
-            //{
-
-            //}
-            
-        }
-
         private static void DictToList(ref List<IconSetDataListWrapper> list, ref Dictionary<string, Dictionary<string, Texture2D>> dict)
         {
             if (dict.Count == 0) return;
@@ -218,6 +167,25 @@ namespace UnityEditorTools.FolderIcons
                     list.Add(wrapper);
                 }
             }
+        }
+        // Exchange icon set data
+        internal static void ExchangeIconSetData(List<IconSetDataListWrapper> list, Dictionary<string, Dictionary<string, Texture2D>> dict, DataExchangeType dataExchangeType)
+        {
+            // Move all data from persistent list to temporary dictionary
+            switch (dataExchangeType)
+            {
+                case DataExchangeType.ListToDict:
+                    ListToDict(ref list, ref dict);
+                    break;
+
+
+                // Move all data from temporary dictionary to persistent list
+                case DataExchangeType.DictToList:
+                    DictToList(ref list, ref dict);
+                    break;
+
+            }
+
         }
         // Exchange folder texture data
         internal static void ExchangeFolderIconData(List<GUIDTextureData> list, Dictionary<string, TextureData> dict, DataExchangeType dataExchangeType)
@@ -260,7 +228,6 @@ namespace UnityEditorTools.FolderIcons
             }
 
         }
-
 
 
         internal static void LoadIconSetsFromJson(string selectedFile)
