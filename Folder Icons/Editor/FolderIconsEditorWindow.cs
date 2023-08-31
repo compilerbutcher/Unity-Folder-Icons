@@ -300,14 +300,6 @@ namespace UnityEditorTools.FolderIcons
 
 
 
-        [MenuItem("Tools/haha")]
-        private static void Re()
-        {
-            selectedOption = 0;
-            IconManager.persistentData.iconSetDataList.Clear();
-            EditorUtility.SetDirty(IconManager.persistentData);
-        }
-
         #region haa
         private bool AreFirstAndSecondDefaultIconSet()
         {
@@ -324,7 +316,7 @@ namespace UnityEditorTools.FolderIcons
         {
 
             if (IconManager.persistentData.iconSetDataList.Count == 0) return;
-            if (IconManager.persistentData.iconSetDataList[currentListIndex].iconSetData.Count == 0) return;
+            //if (IconManager.persistentData.iconSetDataList[currentListIndex].iconSetData.Count == 0) return;
 
             serializedObject.Update();
             iconSetsProperty = serializedObject.FindProperty("iconSetDataList").GetArrayElementAtIndex(currentListIndex);
