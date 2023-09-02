@@ -96,23 +96,25 @@ namespace UnityEditorTools.FolderIcons
         {
             // Paths
             persistentDataPath = Constants.packageIconsPath + Constants.dataName + Constants.PersistentDataName;
-            defaultIconsPath = Constants.packageIconsPath + Constants.iconsFolderName + Constants.defaultIconsName;
 
+            defaultIconsPath = Constants.packageIconsPath + Constants.iconsFolderName + Constants.defaultIconsName;
+            folderStoragePath = Constants.packageIconsPath + Constants.iconsFolderName + Constants.colorFolderStorageName;
+            absolutePackagePath = Path.GetFullPath(Constants.packageIconsPath);
+
+
+
+            // Raw Texture Paths
             darkEmptyFolderPath = defaultIconsPath + Constants.darkEmptyFolderName;
             darkFolderPath = defaultIconsPath + Constants.darkFolderName;
             lightEmptyFolderPath = defaultIconsPath + Constants.lightEmptyFolderName;
             lightFolderPath = defaultIconsPath + Constants.lightFolderName;
-
             defaultButtonPath = defaultIconsPath + Constants.defaultButtonName;
             hoverButtonPath = defaultIconsPath + Constants.hoverButtonName;
-
             defaultButtonAbsolutePath = Path.GetFullPath(defaultButtonPath);
             hoverButtonAbsolutePath = Path.GetFullPath(hoverButtonPath);
-
             dynamicDefaultEmptyFolderPath = EditorGUIUtility.isProSkin ? darkEmptyFolderPath : lightEmptyFolderPath;
             dynamicDefaultFolderPath = EditorGUIUtility.isProSkin ? darkFolderPath : lightFolderPath;
-            folderStoragePath = Constants.packageIconsPath + Constants.iconsFolderName + Constants.colorFolderStorageName;
-            absolutePackagePath = Path.GetFullPath(Constants.packageIconsPath);
+
 
 
 

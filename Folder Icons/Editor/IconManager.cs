@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System;
+using Codice.Utils;
 
 namespace UnityEditorTools.FolderIcons
 {
@@ -63,6 +64,18 @@ namespace UnityEditorTools.FolderIcons
             //}
         }
 
+        [MenuItem("Tools/TestAssets")]
+        static void A()
+        {
+            //foreach (var i in tempFolderIconDict)
+            //{
+            //    Debug.Log(AssetDatabase.GUIDToAssetPath(i.Key));
+            //}
+            Texture2D emptyTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(DynamicConstants.folderStoragePath + $"/Empty{IconManager.persistentData.colorFolderNumber}.png");
+            Debug.Log(DynamicConstants.folderStoragePath + $"/Empty{IconManager.persistentData.colorFolderNumber}.png");
+        }
+
+
         private static void InitHeaderContents()
         {
             if (!persistentData.isHeaderContentsCreated)
@@ -95,8 +108,12 @@ namespace UnityEditorTools.FolderIcons
             if (persistentData == null)
             {
                 persistentData = ScriptableObject.CreateInstance<PersistentData>();
-                AssetDatabase.CreateAsset(persistentData, DynamicConstants.persistentDataPath);
+                AssetDatabase.CreateAsset(persistentData, "Assets/FolderIconsData.asset");
                 AssetDatabase.SaveAssets();
+
+                if (!File.Exists(Constants.packageIconsPath + Constants.dataName + Constants.PersistentDataName))
+                    File.Move(Application.dataPath + "/FolderIconsData.asset", Constants.packageIconsPath + Constants.dataName + Constants.PersistentDataName);
+                
                 AssetDatabase.Refresh();
             }
 
