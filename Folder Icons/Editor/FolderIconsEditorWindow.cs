@@ -286,6 +286,9 @@ namespace UnityEditorTools.FolderIcons
                         EditorApplication.projectWindowItemOnGUI = null;
                         EditorApplication.RepaintProjectWindow();
                         Debug.Log("All Icons Are Reset!");
+
+                        IconManager.isMarkedAsResetIcons = true;
+
                     }
                     catch (Exception e)
                     {

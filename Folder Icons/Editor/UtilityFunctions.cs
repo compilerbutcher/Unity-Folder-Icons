@@ -117,6 +117,10 @@ namespace UnityEditorTools.FolderIcons
         // Create default folder with custom color and delete existing ones if it exists (Do not use this in any update function)
         internal static void HandleCreateAndDeleteFoldersOnClose(string selectedAssetGUID, Dictionary<string, TextureData> tempDict)
         {
+            string tempCache = Application.temporaryCachePath + "/ColorfulFolderIcons";
+            if (!File.Exists(tempCache))
+                Directory.CreateDirectory(tempCache);
+
             string emptyFolderAssetsPath = $"Assets/Empty{IconManager.persistentData.colorFolderNumber}.png";
             string emptyFolderAssetsFullPath = $"{Application.dataPath}\\Empty{IconManager.persistentData.colorFolderNumber}.png";
             string emptyFolderAssetsFullPathMeta = $"{Application.dataPath}\\Empty{IconManager.persistentData.colorFolderNumber}.png.meta";
@@ -129,13 +133,11 @@ namespace UnityEditorTools.FolderIcons
 
 
 
-            // Empty folder path
             string emptyFolderPackagePath = $"{DynamicConstants.folderStoragePath}/Empty{IconManager.persistentData.colorFolderNumber}.png";
             string emptyFolderFullPackagePath = $"{DynamicConstants.absolutePackagePath}{Constants.iconsFolderName}{Constants.colorFolderStorageName}/Empty{IconManager.persistentData.colorFolderNumber}.png";
             string emptyFolderFullPackagePathMeta = $"{DynamicConstants.absolutePackagePath}{Constants.iconsFolderName}{Constants.colorFolderStorageName}/Empty{IconManager.persistentData.colorFolderNumber}.png.meta";
 
 
-            // Default folder path
             string folderAssetPath = $"{DynamicConstants.folderStoragePath}{IconManager.persistentData.colorFolderNumber}.png";
             string folderFullPackagePath = $"{Path.GetFullPath(DynamicConstants.folderStoragePath)}/{IconManager.persistentData.colorFolderNumber}.png";
             string folderFullPackagePathMeta = $"{Path.GetFullPath(DynamicConstants.folderStoragePath)}/{IconManager.persistentData.colorFolderNumber}.png.meta";
@@ -143,19 +145,28 @@ namespace UnityEditorTools.FolderIcons
             // Creating folder texture color with selected color
             if (!tempDict.ContainsKey(selectedAssetGUID))
             {
-                CreateAndLoadDefaultFolderWithColor(selectedAssetGUID, emptyFolderAssetsPath, emptyFolderAssetsFullPath, folderAssetsPath, folderAssetsFullPath);
-                File.Move(emptyFolderAssetsFullPath, emptyFolderFullPackagePath);
-                File.Move(emptyFolderAssetsFullPathMeta, emptyFolderFullPackagePathMeta);
+                if (!File.Exists(tempCache + $"/Empty{selectedAssetGUID}.png") &&
+                    !File.Exists(tempCache + $"/Empty{selectedAssetGUID}.png.meta") &&
+                    !File.Exists(tempCache + $"/{selectedAssetGUID}.png") &&
+                    !File.Exists(tempCache + $"/{selectedAssetGUID}.png.meta"))
+                {
 
-                File.Move(folderAssetsFullPath, folderFullPackagePath);
-                File.Move(folderAssetsFullPathMeta, folderFullPackagePathMeta);
-                AssetDatabase.Refresh();
+                    CreateAndLoadDefaultFolderWithColor(selectedAssetGUID, emptyFolderAssetsPath, emptyFolderAssetsFullPath, folderAssetsPath, folderAssetsFullPath);
+                    UtilityFunctions.CreateAndSaveDataToDict(selectedAssetGUID, IconManager.tempFolderIconDict, IconManager.projectCurrentColor, IconManager.projectCurrentEmptyFolderTexture, IconManager.projectCurrentFolderTexture, null);
 
-                Texture2D emptyLoadedFolder = AssetDatabase.LoadAssetAtPath<Texture2D>(DynamicConstants.folderStoragePath + $"/Empty{IconManager.persistentData.colorFolderNumber}.png");
-                Texture2D loadedFolder = AssetDatabase.LoadAssetAtPath<Texture2D>(DynamicConstants.folderStoragePath + $"/{IconManager.persistentData.colorFolderNumber}.png");
-                UtilityFunctions.CreateAndSaveDataToDict(selectedAssetGUID, IconManager.tempFolderIconDict, IconManager.projectCurrentColor, emptyLoadedFolder, loadedFolder, null);
+                    FileUtil.MoveFileOrDirectory(emptyFolderAssetsPath, tempCache + $"/Empty{selectedAssetGUID}.png");
+                    FileUtil.MoveFileOrDirectory(emptyFolderAssetsPath + ".meta", tempCache + $"/Empty{selectedAssetGUID}.png.meta");
 
-                AssetDatabase.Refresh();
+                    FileUtil.MoveFileOrDirectory(folderAssetsPath, tempCache + $"/{selectedAssetGUID}.png");
+                    FileUtil.MoveFileOrDirectory(folderAssetsPath + ".meta", tempCache + $"/{selectedAssetGUID}.png.meta");
+
+
+                    AssetDatabase.Refresh();
+                }
+                else
+                {
+                    UtilityFunctions.CreateAndSaveDataToDict(selectedAssetGUID, IconManager.tempFolderIconDict, IconManager.projectCurrentColor, IconManager.projectCurrentEmptyFolderTexture, IconManager.projectCurrentFolderTexture, null);
+                }
                 IconManager.persistentData.colorFolderNumber++;
 
             }
@@ -163,46 +174,28 @@ namespace UnityEditorTools.FolderIcons
             else
             {
 
-                if (IconManager.tempFolderIconDict[selectedAssetGUID].emptyFolderTexture != null &&
-                    IconManager.tempFolderIconDict[selectedAssetGUID].folderTexture != null)
+                if (!File.Exists(tempCache + $"/Empty{selectedAssetGUID}.png") &&
+                    !File.Exists(tempCache + $"/Empty{selectedAssetGUID}.png.meta") &&
+                    !File.Exists(tempCache + $"/{selectedAssetGUID}.png") &&
+                    !File.Exists(tempCache + $"/{selectedAssetGUID}.png.meta"))
                 {
-                    string emptyFolderName = IconManager.tempFolderIconDict[selectedAssetGUID].emptyFolderTexture.name;
-                    string folderName = IconManager.tempFolderIconDict[selectedAssetGUID].folderTexture.name;
+                    CreateAndLoadDefaultFolderWithColor(selectedAssetGUID, emptyFolderAssetsPath, emptyFolderAssetsFullPath, folderAssetsPath, folderAssetsFullPath);
+                    UtilityFunctions.CreateAndSaveDataToDict(selectedAssetGUID, IconManager.tempFolderIconDict, IconManager.projectCurrentColor, IconManager.projectCurrentEmptyFolderTexture, IconManager.projectCurrentFolderTexture, null);
 
-                    if (File.Exists($"{DynamicConstants.absolutePackagePath}{Constants.iconsFolderName}{Constants.colorFolderStorageName}\\{emptyFolderName}.png")
-                        && File.Exists($"{DynamicConstants.absolutePackagePath}{Constants.iconsFolderName}{Constants.colorFolderStorageName}\\{emptyFolderName}.png.meta")
-                        && File.Exists($"{DynamicConstants.absolutePackagePath}{Constants.iconsFolderName}{Constants.colorFolderStorageName}\\{folderName}.png")
-                        && File.Exists($"{DynamicConstants.absolutePackagePath}{Constants.iconsFolderName}{Constants.colorFolderStorageName}\\{folderName}.png.meta"))
-                    {
-                        File.Delete($"{DynamicConstants.absolutePackagePath}{Constants.iconsFolderName}{Constants.colorFolderStorageName}\\{emptyFolderName}.png");
-                        File.Delete($"{DynamicConstants.absolutePackagePath}{Constants.iconsFolderName}{Constants.colorFolderStorageName}\\{emptyFolderName}.png.meta");
+                    FileUtil.MoveFileOrDirectory(emptyFolderAssetsPath, tempCache + $"/Empty{selectedAssetGUID}.png");
+                    FileUtil.MoveFileOrDirectory(emptyFolderAssetsPath + ".meta", tempCache + $"/Empty{selectedAssetGUID}.png.meta");
+
+                    FileUtil.MoveFileOrDirectory(folderAssetsPath, tempCache + $"/{selectedAssetGUID}.png");
+                    FileUtil.MoveFileOrDirectory(folderAssetsPath + ".meta", tempCache + $"/{selectedAssetGUID}.png.meta");
 
 
-                        File.Delete($"{DynamicConstants.absolutePackagePath}{Constants.iconsFolderName}{Constants.colorFolderStorageName}\\{folderName}.png");
-                        File.Delete($"{DynamicConstants.absolutePackagePath}{Constants.iconsFolderName}{Constants.colorFolderStorageName}\\{folderName}.png.meta");
-                    }
+                    AssetDatabase.Refresh();
                 }
-
-                CreateAndLoadDefaultFolderWithColor(selectedAssetGUID, emptyFolderAssetsPath, emptyFolderAssetsFullPath, folderAssetsPath, folderAssetsFullPath);
-
-                    File.Move(emptyFolderAssetsFullPath, emptyFolderFullPackagePath);
-                    File.Move(emptyFolderAssetsFullPathMeta, emptyFolderFullPackagePathMeta);
-
-                    File.Move(folderAssetsFullPath, folderFullPackagePath);
-                    File.Move(folderAssetsFullPathMeta, folderFullPackagePathMeta);
-
-                    AssetDatabase.Refresh();
-
-                    Texture2D emptyTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(DynamicConstants.folderStoragePath + $"/Empty{IconManager.persistentData.colorFolderNumber}.png");
-                    Texture2D loadedFolder = AssetDatabase.LoadAssetAtPath<Texture2D>(DynamicConstants.folderStoragePath + $"/{IconManager.persistentData.colorFolderNumber}.png");
-
-
-                    UtilityFunctions.CreateAndSaveDataToDict(selectedAssetGUID, IconManager.tempFolderIconDict, IconManager.projectCurrentColor, emptyTexture, loadedFolder, null);
-
-
-                    AssetDatabase.Refresh();
-
-                    IconManager.persistentData.colorFolderNumber++;
+                else
+                {
+                    UtilityFunctions.CreateAndSaveDataToDict(selectedAssetGUID, IconManager.tempFolderIconDict, IconManager.projectCurrentColor, IconManager.projectCurrentEmptyFolderTexture, IconManager.projectCurrentFolderTexture, null);
+                }
+                IconManager.persistentData.colorFolderNumber++;
 
 
 
@@ -233,7 +226,7 @@ namespace UnityEditorTools.FolderIcons
                 }
             }
 
-            UtilityFunctions.CreateAndSaveDataToDict(selectedAssetGUID, dict, IconManager.projectCurrentColor, null, null, customTextureToSave);
+            UtilityFunctions.CreateAndSaveDataToDict(selectedAssetGUID, dict, Color.clear, null, null, customTextureToSave);
 
             AssetDatabase.Refresh();
         }

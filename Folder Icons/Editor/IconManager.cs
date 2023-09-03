@@ -27,7 +27,7 @@ namespace UnityEditorTools.FolderIcons
         internal static Dictionary<string, bool> folderEmptyDict;
         internal static string[] iconSetNames;
 
-
+        internal static bool isMarkedAsResetIcons;
 
 
 
@@ -130,12 +130,75 @@ namespace UnityEditorTools.FolderIcons
         // We need to save all dictionary elements to persistentData.guidTextureList to persist data between unity sessions
         internal static void SaveDataToCollections()
         {
+            if (isMarkedAsResetIcons)
+            {
+                string[] allImmutableFolderIconsPath = Directory.GetFiles(DynamicConstants.folderStoragePath);
+
+                for (int i = 0; i < allImmutableFolderIconsPath.Length; i++)
+                {
+                    string currentPath = allImmutableFolderIconsPath[i];
+
+                    if (Path.GetFileNameWithoutExtension(currentPath) != "keep this folder" && Path.GetFileNameWithoutExtension(currentPath) != "keep this folder.gitkeep")
+                    {
+                        File.Delete(currentPath);
+                    }
+                }
+                isMarkedAsResetIcons = false;
+            }
+
+            UpdateMainImmutablePackage();
+
             ExchangeFolderIconData(persistentData.guidTextureList, tempFolderIconDict, DataExchangeType.DictToList);
             ExchangeIconSetData(persistentData.iconSetDataList, tempIconSetDict, DataExchangeType.DictToList);
             if (persistentData != null) EditorUtility.SetDirty(persistentData);
         }
 
+        private static void UpdateMainImmutablePackage()
+        {
+            string[] temporaryIconsPathArray = Directory.GetFiles(Application.temporaryCachePath + "/ColorfulFolderIcons");
+            for (int i = 0; i < temporaryIconsPathArray.Length; i++)
+            {
+                string currentTempFilePath = temporaryIconsPathArray[i];
 
+                string targetPackagePath = $"{DynamicConstants.folderStoragePath}\\{Path.GetFileName(currentTempFilePath)}";
+                if (!File.Exists(targetPackagePath))
+                    FileUtil.MoveFileOrDirectory(currentTempFilePath, targetPackagePath);
+                else
+                {
+                    File.Delete(targetPackagePath);
+                    FileUtil.MoveFileOrDirectory(currentTempFilePath, targetPackagePath);
+                }
+            }
+
+            AssetDatabase.Refresh(ImportAssetOptions.DontDownloadFromCacheServer);
+
+
+
+            string[] getFiles = Directory.GetFiles(DynamicConstants.folderStoragePath);
+
+            Dictionary<string, TextureData> textureDataList = new Dictionary<string, TextureData>();
+
+
+            foreach (var i in tempFolderIconDict)
+            {
+                string folderTexturePath = getFiles.First(x => Path.GetFileNameWithoutExtension(x) == i.Key);
+                string emptyFolderTexturePath = getFiles.First(x => Path.GetFileNameWithoutExtension(x)[5..] == i.Key);
+
+                Texture2D folderTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(folderTexturePath);
+                Texture2D emptyFolderTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(emptyFolderTexturePath);
+
+                TextureData createdTextureData = new TextureData();
+
+                createdTextureData.color = folderTexture.GetPixel(0, 0);
+                createdTextureData.emptyFolderTexture = emptyFolderTexture;
+                createdTextureData.folderTexture = folderTexture;
+                createdTextureData.customTexture = null;
+
+                textureDataList.Add(i.Key, createdTextureData);
+            }
+            tempFolderIconDict.Clear();
+            tempFolderIconDict = textureDataList;
+        }
 
 
 

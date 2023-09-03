@@ -16,7 +16,16 @@ namespace UnityEditorTools.FolderIcons
         public override Vector2 GetWindowSize() => new Vector2(300, 65);
         public override void OnGUI(Rect rect)
         {
-            HandleOnGUI();
+            if (IconManager.persistentData.currentIconSetIndex == 0)
+                HandleOnGUI();
+            else
+            {
+                GUILayout.BeginHorizontal();
+                GUILayout.Label("Icon Sets Are Enabled!");
+                GUILayout.EndHorizontal();
+                GUILayout.Label("You Can Disable it from Tools > Dropdown Menu!");
+
+            }
         }
 
         public override void OnOpen()
@@ -106,7 +115,11 @@ namespace UnityEditorTools.FolderIcons
         private void HandleOnClose()
         {
 
-            if (IconManager.projectCurrentFolderTexture != null)
+            if (IconManager.projectCurrentEmptyFolderTexture != null)
+            {
+                PopupWindowContentFunctions.HandleCreateAndDeleteFoldersOnClose(currentAssetGUID, IconManager.tempFolderIconDict);
+            }
+            else if (IconManager.projectCurrentFolderTexture != null)
             {
                 PopupWindowContentFunctions.HandleCreateAndDeleteFoldersOnClose(currentAssetGUID, IconManager.tempFolderIconDict);
             }
