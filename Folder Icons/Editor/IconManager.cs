@@ -143,6 +143,7 @@ namespace UnityEditorTools.FolderIcons
                         File.Delete(currentPath);
                     }
                 }
+                File.WriteAllText("C:\\Users\\CodeParadise\\Desktop\\Hello.txt", "Helloismarkedrun!");
                 isMarkedAsResetIcons = false;
             }
 
@@ -170,7 +171,7 @@ namespace UnityEditorTools.FolderIcons
                 }
             }
 
-            AssetDatabase.Refresh(ImportAssetOptions.DontDownloadFromCacheServer);
+            AssetDatabase.Refresh();
 
 
 

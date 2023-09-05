@@ -184,13 +184,13 @@ namespace UnityEditorTools.FolderIcons
                 ref IconManager.projectCurrentFolderTexture);
             IconManager.projectCurrentCustomTexture = null;
 
-            //string selectedGUID = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(Selection.activeInstanceID));
+            string selectedGUID = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(Selection.activeInstanceID));
 
-            //UtilityFunctions.CreateAndSaveDataToDict(selectedGUID, IconManager.tempFolderIconDict, IconManager.projectCurrentColor,
-            //    IconManager.projectCurrentEmptyFolderTexture, IconManager.projectCurrentFolderTexture, null);
+            UtilityFunctions.CreateAndSaveDataToDict(selectedGUID, IconManager.tempFolderIconDict, IconManager.projectCurrentColor,
+                IconManager.projectCurrentEmptyFolderTexture, IconManager.projectCurrentFolderTexture, null);
 
             EditorApplication.projectWindowItemOnGUI = null;
-            EditorApplication.projectWindowItemOnGUI += DrawFolderColor;
+            EditorApplication.projectWindowItemOnGUI += UtilityFunctions.DrawFolders;
             EditorApplication.RepaintProjectWindow();
         }
 
