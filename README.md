@@ -7,10 +7,13 @@
 
 <p align="center">
 Folder-Icons can be installed through git link with unity package manager
- 
-```
+
+<div align="center">
+
+ ```
 https://github.com/compilerbutcher/Folder-Icons.git
 ```
+</div>
 
 </p>
 
