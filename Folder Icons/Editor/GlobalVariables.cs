@@ -12,7 +12,7 @@ namespace UnityEditorTools.FolderIcons
 
 
         // Main package path
-        internal const string packageIconsPath = "Packages/com.codedestroyer.foldericons/Folder Icons";
+        internal const string packageIconsPath = "Packages/com.compilerbutcher.foldericons/Folder Icons";
 
         internal const string dataName = "/Data";
         internal const string iconsFolderName = "/Icons";
