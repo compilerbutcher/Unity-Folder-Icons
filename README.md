@@ -10,5 +10,5 @@ Folder Icons
  Installation
 </h2>
 <div align="center">
-<img src="https://github.com/compilerbutcher/Folder-Icons/assets/97310008/78175bd9-3725-455c-b449-4df8d504779a.png">
+<img src="https://github.com/compilerbutcher/Folder-Icons/assets/97310008/c2e32db2-e1ba-4c49-8476-cc98aa536c37.png">
 </div>
