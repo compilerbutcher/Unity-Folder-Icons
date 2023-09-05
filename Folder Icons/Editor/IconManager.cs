@@ -199,6 +199,7 @@ namespace UnityEditorTools.FolderIcons
             }
             tempFolderIconDict.Clear();
             tempFolderIconDict = textureDataList;
+            AssetDatabase.Refresh();
         }
 
 
