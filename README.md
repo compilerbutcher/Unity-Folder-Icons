@@ -6,7 +6,7 @@
 <h2 align="center">Installation</h2>
 
  
-Folder-Icons can be installed through git link with unity package manager
+<p align="center">Folder-Icons can be installed through git link with unity package manager</p>
 
 <div align="center">
 
