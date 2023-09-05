@@ -10,7 +10,9 @@ Folder Icons
  Installation
 </h2>
 
-```https://github.com/compilerbutcher/Folder-Icons.git```
+```
+https://github.com/compilerbutcher/Folder-Icons.git
+```
 <div align="center">
 <img src="https://github.com/compilerbutcher/Folder-Icons/assets/97310008/c2e32db2-e1ba-4c49-8476-cc98aa536c37.png">
 </div>
