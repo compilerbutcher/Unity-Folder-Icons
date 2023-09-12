@@ -17,10 +17,20 @@ namespace UnityEditorTools.FolderIcons
         internal const string dataName = "/Data";
         internal const string iconsFolderName = "/Icons";
         internal const string defaultIconsName = "/Default Icons";
+        internal const string iconSetsName = "/Icon Sets";
+
+        // Editor runtime generated
+        internal const string persistentIconsFolderName = "/Main Icons Folder";
         internal const string colorFolderStorageName = "/Folder With Color Icons";
         internal const string loadedIconsFolderName = "/Loaded Icons";
         internal const string loadedIconSetsName = "/Loaded Icon Sets";
-        internal const string iconSetsName = "/Icon Sets";
+
+
+        internal const string pluginsName = "Plugins";
+        internal const string mainFolderIconName = "Main Icon Folder";
+        internal const string emptyFolderIconsName = "Empty Folder Icons";
+        internal const string folderIconsName = "Folder Icons";
+
 
 
         // Default icon names
@@ -71,12 +81,22 @@ namespace UnityEditorTools.FolderIcons
         internal static string hoverButtonPath;
         internal static string defaultButtonAbsolutePath;
         internal static string hoverButtonAbsolutePath;
-
-
         internal static string dynamicDefaultEmptyFolderPath;
         internal static string dynamicDefaultFolderPath;
+
+
+
         internal static string absolutePackagePath;
-        internal static string folderStoragePath;
+
+
+        internal static string pluginsPath;
+        internal static string mainFolderPath;
+        internal static string emptyIconFolderPath;
+        internal static string iconFolderPath;
+
+
+
+
         internal static string defaultIconsPath;
 
 
@@ -91,15 +111,21 @@ namespace UnityEditorTools.FolderIcons
         internal static Texture2D emptyDefaultFolderIcon;
         internal static Texture2D defaultFolderIcon;
 
-
         internal static void UpdateDynamicConstants()
         {
             // Paths
             persistentDataPath = Constants.packageIconsPath + Constants.dataName + Constants.PersistentDataName;
 
+
             defaultIconsPath = Constants.packageIconsPath + Constants.iconsFolderName + Constants.defaultIconsName;
-            folderStoragePath = Constants.packageIconsPath + Constants.iconsFolderName + Constants.colorFolderStorageName;
+
+            pluginsPath = $"Assets/{Constants.pluginsName}";
+            mainFolderPath = $"{pluginsPath}/{Constants.mainFolderIconName}";
+            emptyIconFolderPath = $"{mainFolderPath}/{Constants.emptyFolderIconsName}";
+            iconFolderPath = $"{mainFolderPath}/{Constants.folderIconsName}";
+
             absolutePackagePath = Path.GetFullPath(Constants.packageIconsPath);
+
 
 
 
@@ -112,8 +138,10 @@ namespace UnityEditorTools.FolderIcons
             hoverButtonPath = defaultIconsPath + Constants.hoverButtonName;
             defaultButtonAbsolutePath = Path.GetFullPath(defaultButtonPath);
             hoverButtonAbsolutePath = Path.GetFullPath(hoverButtonPath);
+
             dynamicDefaultEmptyFolderPath = EditorGUIUtility.isProSkin ? darkEmptyFolderPath : lightEmptyFolderPath;
             dynamicDefaultFolderPath = EditorGUIUtility.isProSkin ? darkFolderPath : lightFolderPath;
+
 
 
 

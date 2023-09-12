@@ -2,6 +2,8 @@ using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
+using UnityEngine.Profiling;
 
 namespace UnityEditorTools.FolderIcons
 {
@@ -67,37 +69,37 @@ namespace UnityEditorTools.FolderIcons
         }
 
         // Draw folder icon in the inspector header as a clickable PopupWindow
-        internal static void DrawFolderHeaderIcon(string currentPath, string selectedAssetGUID, Dictionary<string, TextureData> tempDict, GUIStyle headerIconGUIStyle, FolderPopupWindowContent folderIconPopup)
+        internal static void DrawFolderHeaderIcon(string currentPath, string selectedAssetGUID, GUIStyle headerIconGUIStyle, FolderPopupWindowContent folderIconPopup)
         {
             Rect lastRect = GUILayoutUtility.GetLastRect();
             Rect r = new Rect(lastRect.x + 0f, lastRect.y, lastRect.width - 0f, lastRect.height);
             Rect rect = new Rect(r.x + 6f, r.y + 6f, 32f, 32f);
 
-
-            if (tempDict.ContainsKey(selectedAssetGUID))
+            
+            if (IconManager.persistentData.guidTextureList.Any(x => x.guid == selectedAssetGUID))
             {
-                
-                if (tempDict[selectedAssetGUID].folderTexture != null)
+                GUIDTextureData guidTextureData = IconManager.persistentData.guidTextureList.Find(x => x.guid == selectedAssetGUID);
+                if (guidTextureData.textureData.folderTexture != null)
                 {
                     IconManager.folderEmptyDict.TryGetValue(currentPath, out bool outputBool);
                     if (outputBool)
                     {
-                        if (GUI.Button(rect, tempDict[selectedAssetGUID].folderTexture, headerIconGUIStyle))
+                        if (GUI.Button(rect, guidTextureData.textureData.folderTexture, headerIconGUIStyle))
                         {
                             PopupWindow.Show(rect, folderIconPopup);
                         }
                     }
                     else
                     {
-                        if (GUI.Button(rect, tempDict[selectedAssetGUID].emptyFolderTexture, headerIconGUIStyle))
+                        if (GUI.Button(rect, guidTextureData.textureData.emptyFolderTexture, headerIconGUIStyle))
                         {
                             PopupWindow.Show(rect, folderIconPopup);
                         }
                     }
                 }
-                else if (tempDict[selectedAssetGUID].customTexture != null)
+                else if (guidTextureData.textureData.customTexture != null)
                 {
-                    if (GUI.Button(rect, tempDict[selectedAssetGUID].customTexture, headerIconGUIStyle))
+                    if (GUI.Button(rect, guidTextureData.textureData.customTexture, headerIconGUIStyle))
                     {
                         PopupWindow.Show(rect, folderIconPopup);
                     }
@@ -126,7 +128,7 @@ namespace UnityEditorTools.FolderIcons
 
 
         // Draw inspector header title
-        internal static void DrawHeaderTitle(Object target, StringBuilder headerStBuilder, string assetTypeName)
+        internal static void DrawHeaderTitle(Object target)
         {
             Rect lastRect = GUILayoutUtility.GetLastRect();
             Rect r = new Rect(lastRect.x + 0f, lastRect.y, lastRect.width - 0f, lastRect.height);
@@ -144,7 +146,8 @@ namespace UnityEditorTools.FolderIcons
 
             rect3.yMin -= 2f;
             rect3.yMax += 2f;
-            GUI.Label(rect3, $"{target.name} ({assetTypeName})", EditorStyles.largeLabel);
+
+            GUI.Label(rect3, $"{target.name} (Default Asset)", EditorStyles.largeLabel);
         }
 
         internal static void DrawHeaderThreeDot(GUIContent resetButtonGUIContent)

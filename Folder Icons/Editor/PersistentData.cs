@@ -15,7 +15,7 @@ namespace UnityEditorTools.FolderIcons
 
         // Inspector header contents
         [SerializeField, HideInInspector] internal HeaderContents headerContents;
-        [SerializeField, HideInInspector] internal bool isHeaderContentsCreated;
+        [SerializeField] internal bool isHeaderContentsCreated;
 
 
         // Icon sets

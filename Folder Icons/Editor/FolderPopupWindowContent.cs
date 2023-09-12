@@ -3,6 +3,7 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace UnityEditorTools.FolderIcons
 {
@@ -10,8 +11,8 @@ namespace UnityEditorTools.FolderIcons
     internal class FolderPopupWindowContent : PopupWindowContent
     {
 
-        protected string currentAssetPath;
-        protected string currentAssetGUID;
+        private string currentAssetPath;
+        private static string currentAssetGUID;
 
         public override Vector2 GetWindowSize() => new Vector2(300, 65);
         public override void OnGUI(Rect rect)
@@ -84,7 +85,7 @@ namespace UnityEditorTools.FolderIcons
                 EditorUtility.SetDirty(IconManager.persistentData);
 
 
-                IconManager.tempFolderIconDict.Remove(currentAssetGUID);
+                //IconManager.tempFolderIconDict.Remove(currentAssetGUID);
 
                 EditorApplication.projectWindowItemOnGUI = null;
                 EditorApplication.projectWindowItemOnGUI += UtilityFunctions.DrawFolders;
@@ -102,30 +103,37 @@ namespace UnityEditorTools.FolderIcons
         {
             currentAssetPath = AssetDatabase.GetAssetPath(Selection.activeInstanceID);
             currentAssetGUID = AssetDatabase.AssetPathToGUID(currentAssetPath);
-            
 
-            if (IconManager.tempFolderIconDict.ContainsKey(currentAssetGUID))
+
+            GUIDTextureData guidTextureData = IconManager.persistentData.guidTextureList.Find(x => x.guid == currentAssetGUID);
+
+            if (guidTextureData.guid != null)
             {
-                TextureData textureData = IconManager.tempFolderIconDict[currentAssetGUID];
-
-                IconManager.projectCurrentColor = textureData.color;
-                IconManager.projectCurrentCustomTexture = textureData.customTexture;
+                IconManager.projectCurrentColor = guidTextureData.textureData.color;
+                IconManager.projectCurrentCustomTexture = guidTextureData.textureData.customTexture;
             }
+
+            //if (IconManager.tempFolderIconDict.ContainsKey(currentAssetGUID))
+            //{
+            //    TextureData textureData = IconManager.tempFolderIconDict[currentAssetGUID];
+
+
+            //}
         }
         private void HandleOnClose()
         {
 
             if (IconManager.projectCurrentEmptyFolderTexture != null)
             {
-                PopupWindowContentFunctions.HandleCreateAndDeleteFoldersOnClose(currentAssetGUID, IconManager.tempFolderIconDict);
+                PopupWindowContentFunctions.HandleCreateAndDeleteFoldersOnClose(currentAssetGUID);
             }
             else if (IconManager.projectCurrentFolderTexture != null)
             {
-                PopupWindowContentFunctions.HandleCreateAndDeleteFoldersOnClose(currentAssetGUID, IconManager.tempFolderIconDict);
+                PopupWindowContentFunctions.HandleCreateAndDeleteFoldersOnClose(currentAssetGUID);
             }
             else if (IconManager.projectCurrentCustomTexture != null)
             {
-                PopupWindowContentFunctions.HandleCreateCustomTexture(currentAssetGUID, IconManager.tempFolderIconDict, IconManager.projectCurrentCustomTexture);
+                PopupWindowContentFunctions.HandleCreateCustomTexture(currentAssetGUID);
             }
 
 
@@ -138,18 +146,9 @@ namespace UnityEditorTools.FolderIcons
             EditorApplication.projectWindowItemOnGUI += UtilityFunctions.DrawFolders;
             EditorApplication.RepaintProjectWindow();
 
-            IconManager.ExchangeFolderIconData(IconManager.persistentData.guidTextureList, IconManager.tempFolderIconDict, DataExchangeType.DictToList);
+            //IconManager.ExchangeFolderIconData(IconManager.persistentData.guidTextureList, IconManager.tempFolderIconDict, DataExchangeType.DictToList);
             if (IconManager.persistentData != null) EditorUtility.SetDirty(IconManager.persistentData);
         }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -164,11 +163,16 @@ namespace UnityEditorTools.FolderIcons
 
             if (AssetDatabase.IsValidFolder(folderPath))
             {
-                IconManager.folderEmptyDict.TryGetValue(folderPath, out bool outputBool);
-                if (outputBool)
-                    UtilityFunctions.DrawTextures(guid, selectionRect, IconManager.projectCurrentFolderTexture);
+                IconManager.folderEmptyDict.TryGetValue(folderPath, out bool isFolderFilled);
+                if (isFolderFilled)
+                {
+                    UtilityFunctions.DrawTextures(selectionRect, IconManager.projectCurrentFolderTexture);
+                }
                 else
-                    UtilityFunctions.DrawTextures(guid, selectionRect, IconManager.projectCurrentEmptyFolderTexture);
+                {
+                    UtilityFunctions.DrawTextures(selectionRect, IconManager.projectCurrentEmptyFolderTexture);
+                }
+
             }
             else
             {
@@ -177,21 +181,106 @@ namespace UnityEditorTools.FolderIcons
         }
 
 
+
+        private static void PrivateCreateDefaultFolderWithColor(Color currentColor, ref Texture2D emptyFolderTexture, ref Texture2D defaultFolderTexture)
+        {
+            string folderPath = AssetDatabase.GetAssetPath(Selection.activeInstanceID);
+            if (AssetDatabase.IsValidFolder(folderPath))
+            {
+                IconManager.folderEmptyDict.TryGetValue(folderPath, out bool isFolderFilled);
+                if (isFolderFilled)
+                {
+                    defaultFolderTexture = new Texture2D(DynamicConstants.defaultFolderIcon.width, DynamicConstants.defaultFolderIcon.height);
+
+                    for (int x = 0; x < DynamicConstants.defaultFolderIcon.width; x++)
+                    {
+                        for (int y = 0; y < DynamicConstants.defaultFolderIcon.height; y++)
+                        {
+                            // Set default folder
+                            Color defaultOldColor = DynamicConstants.defaultFolderIcon.GetPixel(x, y);
+                            Color defaultNewCol = currentColor;
+
+                            defaultNewCol.a = defaultOldColor.a;
+                            defaultFolderTexture.SetPixel(x, y, defaultNewCol);
+                        }
+                    }
+
+                    defaultFolderTexture.Apply();
+
+                }
+                else
+                {
+
+                    emptyFolderTexture = new Texture2D(DynamicConstants.emptyDefaultFolderIcon.width, DynamicConstants.emptyDefaultFolderIcon.height);
+                    for (int x = 0; x < DynamicConstants.defaultFolderIcon.width; x++)
+                    {
+                        for (int y = 0; y < DynamicConstants.defaultFolderIcon.height; y++)
+                        {
+                            // Set empty folder 
+                            Color emptyOldColor = DynamicConstants.emptyDefaultFolderIcon.GetPixel(x, y);
+                            Color emptyNewCol = currentColor;
+
+                            emptyNewCol.a = emptyOldColor.a;
+                            emptyFolderTexture.SetPixel(x, y, emptyNewCol);
+                        }
+                    }
+
+                    emptyFolderTexture.Apply();
+                }
+
+            }
+        }
+
+
         // For temp
         internal static void ChangeFolderColor()
         {
-            TextureFunctions.CreateDefaultFolderWithColor(IconManager.projectCurrentColor, ref IconManager.projectCurrentEmptyFolderTexture,
+
+            PrivateCreateDefaultFolderWithColor(IconManager.projectCurrentColor, ref IconManager.projectCurrentEmptyFolderTexture,
                 ref IconManager.projectCurrentFolderTexture);
             IconManager.projectCurrentCustomTexture = null;
-
-            string selectedGUID = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(Selection.activeInstanceID));
-
-            UtilityFunctions.CreateAndSaveDataToDict(selectedGUID, IconManager.tempFolderIconDict, IconManager.projectCurrentColor,
-                IconManager.projectCurrentEmptyFolderTexture, IconManager.projectCurrentFolderTexture, null);
-
             EditorApplication.projectWindowItemOnGUI = null;
-            EditorApplication.projectWindowItemOnGUI += UtilityFunctions.DrawFolders;
+            EditorApplication.projectWindowItemOnGUI += DrawFolderColor;
             EditorApplication.RepaintProjectWindow();
+            //string selectedGUID = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(Selection.activeInstanceID));
+
+            //UtilityFunctions.CreateAndSaveDataToDict(selectedGUID, IconManager.tempFolderIconDict, IconManager.projectCurrentColor,
+            //    IconManager.projectCurrentEmptyFolderTexture, IconManager.projectCurrentFolderTexture, null);
+
+            //int index = IconManager.persistentData.guidTextureList.FindIndex(x => x.guid == selectedGUID);
+            //if (index != -1)
+            //{
+            //    GUIDTextureData guidTextureData = new GUIDTextureData();
+            //    TextureData textureData = new TextureData();
+            //    textureData.color = IconManager.projectCurrentColor;
+            //    textureData.emptyFolderTexture = IconManager.projectCurrentEmptyFolderTexture;
+            //    textureData.folderTexture = IconManager.projectCurrentFolderTexture;
+            //    textureData.customTexture = IconManager.projectCurrentCustomTexture;
+
+            //    guidTextureData = new GUIDTextureData();
+            //    guidTextureData.guid = selectedGUID;
+            //    guidTextureData.textureData = textureData;
+
+            //    IconManager.persistentData.guidTextureList[index] = guidTextureData;
+            //}
+            //else
+            //{
+            //    GUIDTextureData guidTextureData = new GUIDTextureData();
+            //    TextureData textureData = new TextureData();
+            //    textureData.color = IconManager.projectCurrentColor;
+            //    textureData.emptyFolderTexture = IconManager.projectCurrentEmptyFolderTexture;
+            //    textureData.folderTexture = IconManager.projectCurrentFolderTexture;
+            //    textureData.customTexture = IconManager.projectCurrentCustomTexture;
+
+            //    guidTextureData = new GUIDTextureData();
+            //    guidTextureData.guid = selectedGUID;
+            //    guidTextureData.textureData = textureData;
+
+            //    IconManager.persistentData.guidTextureList.Add(guidTextureData);
+            //}
+
+
+
         }
 
 
@@ -201,7 +290,7 @@ namespace UnityEditorTools.FolderIcons
         internal static void DrawFolderTexture(string guid, Rect selectionRect)
         {
             if (guid != AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(Selection.activeInstanceID))) return;
-            UtilityFunctions.DrawTextures(guid, selectionRect, IconManager.projectCurrentCustomTexture);
+            UtilityFunctions.DrawTextures(selectionRect, IconManager.projectCurrentCustomTexture);
         }
         internal static void ChangeFolderTexture()
         {

@@ -1,5 +1,4 @@
 using System;
-using System.Text;
 using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
@@ -7,11 +6,11 @@ using System.Collections.Generic;
 
 namespace UnityEditorTools.FolderIcons
 {
-    internal enum DataExchangeType
-    {
-        ListToDict,
-        DictToList
-    }
+    //internal enum DataExchangeType
+    //{
+    //    ListToDict,
+    //    DictToList
+    //}
 
 
     [Serializable]
@@ -78,11 +77,18 @@ namespace UnityEditorTools.FolderIcons
         [SerializeField] internal Texture2D buttonBackgroundTexture;
         [SerializeField] internal Texture2D buttonHoverTexture;
         [SerializeField] internal GUIStyle headerIconGUIStyle;
-        [SerializeField] internal StringBuilder headerStBuilder;
         [SerializeField] internal GenericMenu threeDotGenericMenu;
         [SerializeField] internal GUIContent resetButtonGUIContent;
         [SerializeField] internal GUIContent openButton;
     }
+
+
+
+
+
+
+
+
 
 
     [Serializable]
@@ -100,10 +106,6 @@ namespace UnityEditorTools.FolderIcons
         [SerializeField] internal string customTextureBase64;
 
     }
-
-
-
-
 
 
     [Serializable]

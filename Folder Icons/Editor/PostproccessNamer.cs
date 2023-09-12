@@ -1,4 +1,5 @@
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -17,16 +18,13 @@ namespace UnityEditorTools.FolderIcons
                     {
                         string currentImportPath = importedAssets[i];
 
-                        if (AssetDatabase.IsValidFolder(currentImportPath))
+                        UtilityFunctions.UpdateFolderEmptyDict(currentImportPath, ref IconManager.folderEmptyDict);
+
+                        UpdateIconsForIconSets(currentImportPath);
+
+                        if (IconManager.folderEmptyDict.Count > 0)
                         {
-                            UtilityFunctions.UpdateFolderEmptyDict(currentImportPath, ref IconManager.folderEmptyDict);
-
-                            UpdateIconsForIconSets(currentImportPath);
-
-                            if (IconManager.folderEmptyDict.Count > 0)
-                            {
-                                ReDrawFolders();
-                            }
+                            ReDrawFolders();
                         }
                     }
                     catch
@@ -43,7 +41,7 @@ namespace UnityEditorTools.FolderIcons
                     {
                         string currentImportPath = deletedAssets[i];
 
-                        IconManager.tempFolderIconDict.Remove(AssetDatabase.AssetPathToGUID(currentImportPath));
+                        //IconManager.tempFolderIconDict.Remove(AssetDatabase.AssetPathToGUID(currentImportPath));
                         IconManager.persistentData.guidTextureList.RemoveAll(x => x.guid == AssetDatabase.AssetPathToGUID(currentImportPath));
                         EditorUtility.SetDirty(IconManager.persistentData);
 
@@ -66,24 +64,18 @@ namespace UnityEditorTools.FolderIcons
                     string movedFromAssetPath = movedFromAssetPaths[i];
 
 
-                    if (AssetDatabase.IsValidFolder(movedAssetPath))
+                    UtilityFunctions.UpdateFolderEmptyDict(movedAssetPath, ref IconManager.folderEmptyDict);
+                    UpdateIconsForIconSets(movedAssetPath);
+                    if (IconManager.folderEmptyDict.Count > 0)
                     {
-                        UtilityFunctions.UpdateFolderEmptyDict(movedAssetPath, ref IconManager.folderEmptyDict);
-                        UpdateIconsForIconSets(movedAssetPath);
-                        if (IconManager.folderEmptyDict.Count > 0)
-                        {
-                            ReDrawFolders();
-                        }
-
+                        ReDrawFolders();
                     }
-                    if (AssetDatabase.IsValidFolder(movedFromAssetPath))
-                    {
-                        UtilityFunctions.UpdateFolderEmptyDict(movedFromAssetPath, ref IconManager.folderEmptyDict);
 
-                        if (IconManager.folderEmptyDict.Count > 0)
-                        {
-                            ReDrawFolders();
-                        }
+                    UtilityFunctions.UpdateFolderEmptyDict(movedFromAssetPath, ref IconManager.folderEmptyDict);
+
+                    if (IconManager.folderEmptyDict.Count > 0)
+                    {
+                        ReDrawFolders();
                     }
                 }
             }
@@ -101,9 +93,10 @@ namespace UnityEditorTools.FolderIcons
                 
             if (IconManager.persistentData.iconSetDataList.Count > IconManager.persistentData.currentIconSetIndex)
             {
-                string iconSetName = IconManager.iconSetNames[IconManager.persistentData.currentIconSetIndex];
+                int iconSetIndex = IconManager.persistentData.currentIconSetIndex;
 
-                bool isThisNameExistInIconSetDict = IconManager.tempIconSetDict[iconSetName].ContainsKey(Path.GetFileNameWithoutExtension(assetPath));
+                bool isThisNameExistInIconSetDict = IconManager.persistentData.iconSetDataList[iconSetIndex].iconSetData.
+                    Any(iconSetData => iconSetData.folderName == Path.GetFileNameWithoutExtension(assetPath));
 
                 string currentGUID = AssetDatabase.AssetPathToGUID(assetPath);
 
@@ -111,10 +104,8 @@ namespace UnityEditorTools.FolderIcons
 
                 if (isThisNameExistInIconSetDict)
                 {
-                    Texture2D icon = IconManager.tempIconSetDict[iconSetName][Path.GetFileNameWithoutExtension(assetPath)];
-
-                    UtilityFunctions.CreateAndSaveDataToDict(currentGUID, IconManager.tempFolderIconDict, Color.clear, null, null, icon);
-
+                    Texture2D icon = IconManager.persistentData.iconSetDataList[iconSetIndex].iconSetData.
+                        Find(x => x.folderName == Path.GetFileNameWithoutExtension(assetPath)).icon;
 
                     if (!IconManager.persistentData.guidTextureList.Contains(currentGUIDTextureData))
                     {
@@ -150,7 +141,6 @@ namespace UnityEditorTools.FolderIcons
                 }
                 else
                 {
-                    IconManager.tempFolderIconDict.Remove(currentGUID);
                     IconManager.persistentData.guidTextureList.Remove(currentGUIDTextureData);
                     if (IconManager.persistentData != null) EditorUtility.SetDirty(IconManager.persistentData);
 
@@ -158,7 +148,6 @@ namespace UnityEditorTools.FolderIcons
                 }
 
             }
-
         }
 
         private static void ReDrawFolders()

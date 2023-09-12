@@ -1,5 +1,6 @@
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 namespace UnityEditorTools.FolderIcons
 {
@@ -8,8 +9,8 @@ namespace UnityEditorTools.FolderIcons
     internal class FolderAsset : Editor
     {
 
-        internal static string currentPath;
-        internal static string selectedAssetGUID;
+        internal string currentPath;
+        internal string selectedAssetGUID;
         
         private void OnEnable()
         {
@@ -18,13 +19,12 @@ namespace UnityEditorTools.FolderIcons
         }
 
 
-        // This is exist in base class
         public override bool RequiresConstantRepaint()
         {
             return true;
         }
 
-        // Since we can't just only change inspector header icon, we need to make header from zero to hero öhmm, i mean zero to full
+        // Since we can't just only change inspector header icon, we need to make header from zero to hero ohmm, i mean zero to full
         // Fun Fact: there is no documentation about Protected Override void OnHeaderGUI, thanks unity, again
         protected override void OnHeaderGUI()
         {
@@ -43,11 +43,13 @@ namespace UnityEditorTools.FolderIcons
                 GUILayout.EndHorizontal();
                 GUILayout.EndVertical();
                 GUILayout.EndHorizontal();
-
-                HeaderFunctions.DrawFolderHeaderIcon(currentPath, selectedAssetGUID, IconManager.tempFolderIconDict, IconManager.persistentData.headerContents.headerIconGUIStyle,
+                HeaderFunctions.DrawFolderHeaderIcon(currentPath, selectedAssetGUID, IconManager.persistentData.headerContents.headerIconGUIStyle,
                 IconManager.persistentData.headerContents.folderPopupWindowContent);
+                Profiler.BeginSample("Dict");
 
-                HeaderFunctions.DrawHeaderTitle(target, IconManager.persistentData.headerContents.headerStBuilder, "Default Asset");
+                HeaderFunctions.DrawHeaderTitle(target);
+                Profiler.EndSample();
+
                 HeaderFunctions.DrawHeaderThreeDot(IconManager.persistentData.headerContents.resetButtonGUIContent);
             }
         }

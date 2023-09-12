@@ -5,8 +5,6 @@ using System;
 using System.Linq;
 using System.IO;
 
-
-
 namespace UnityEditorTools.FolderIcons
 {
     public class FolderIconsEditorWindow : EditorWindow
@@ -132,12 +130,12 @@ namespace UnityEditorTools.FolderIcons
 
             if (GUI.changed)
             {
-                IconManager.ExchangeIconSetData(IconManager.persistentData.iconSetDataList, IconManager.tempIconSetDict, DataExchangeType.ListToDict);
+                //IconManager.ExchangeIconSetData(IconManager.persistentData.iconSetDataList, IconManager.tempIconSetDict, DataExchangeType.ListToDict);
             }
         }
 
 
-        #region Icon Set Region
+        #region GUI Functions
         private void TextField()
         {
             newIconSetNameText = EditorGUILayout.TextField(newIconSetNameText);
@@ -270,7 +268,7 @@ namespace UnityEditorTools.FolderIcons
 
             if (GUILayout.Button("Reset All Icons!", GUILayout.ExpandWidth(false), GUILayout.Width(100)))
             {
-                bool warningReset = EditorUtility.DisplayDialog("WARNING!", "This will delete all of current folder icon setup!", "Continue!", "Cancel!");
+                bool warningReset = EditorUtility.DisplayDialog("WARNING!", "THIS WILL DELETE ALL CURRENT ICONS AND ICON SETS!", "Continue!", "Cancel!");
 
                 if (warningReset)
                 {
@@ -279,20 +277,29 @@ namespace UnityEditorTools.FolderIcons
                         selectedOption = 0;
                         IconManager.persistentData.colorFolderNumber = 0;
 
-                        IconManager.persistentData.guidTextureList.Clear();
-                        EditorUtility.SetDirty(IconManager.persistentData);
-                        IconManager.tempFolderIconDict.Clear();
+                        string[] emptyFolderPaths = Directory.GetFiles(DynamicConstants.emptyIconFolderPath);
+                        string[] folderPaths = Directory.GetFiles(DynamicConstants.iconFolderPath);
+
+                        for (int i = 0; i < emptyFolderPaths.Length; i++)
+                        {
+                            string emptyPath = emptyFolderPaths[i];
+                            string folderPath = folderPaths[i];
+
+                            File.Delete(emptyPath);
+                            File.Delete(folderPath);
+                        }
+
+                        if (IconManager.persistentData != null) IconManager.persistentData.guidTextureList.Clear();
+                        if (IconManager.persistentData != null) EditorUtility.SetDirty(IconManager.persistentData);
+                        AssetDatabase.Refresh();
 
                         EditorApplication.projectWindowItemOnGUI = null;
                         EditorApplication.RepaintProjectWindow();
                         Debug.Log("All Icons Are Reset!");
-
-                        IconManager.isMarkedAsResetIcons = true;
-
                     }
                     catch (Exception e)
                     {
-                        Debug.Log(e.Message);
+                        Debug.LogException(e);
                     }
 
                 }
@@ -302,8 +309,7 @@ namespace UnityEditorTools.FolderIcons
         #endregion
 
 
-
-        #region haa
+        #region General Region
         private bool AreFirstAndSecondDefaultIconSet()
         {
             if (selectedOption == 0 || selectedOption == 1)
@@ -395,9 +401,8 @@ namespace UnityEditorTools.FolderIcons
         {
             if (IconManager.persistentData.iconSetDataList.Count == 0) return;
 
-
             IconManager.persistentData.currentIconSetIndex = selectedOption;
-            EditorUtility.SetDirty(IconManager.persistentData);
+            if (IconManager.persistentData != null) EditorUtility.SetDirty(IconManager.persistentData);
             if (selectedOption == 0)
             {
                 isIconSetADefaultIconSet = AreFirstAndSecondDefaultIconSet();
@@ -405,20 +410,22 @@ namespace UnityEditorTools.FolderIcons
                 EditorApplication.projectWindowItemOnGUI = null;
                 EditorApplication.RepaintProjectWindow();
 
-                IconManager.tempFolderIconDict.Clear();
                 UpdateSerializedPropertyOfIconSetList(serializedObject, IconManager.persistentData.currentIconSetIndex);
 
                 return;
             }
-            isIconSetADefaultIconSet = AreFirstAndSecondDefaultIconSet();
 
+            IconManager.persistentData.guidTextureList.Clear();
+            if (IconManager.persistentData != null) EditorUtility.SetDirty(IconManager.persistentData);
+
+            isIconSetADefaultIconSet = AreFirstAndSecondDefaultIconSet();
 
             UpdateSerializedPropertyOfIconSetList(serializedObject, IconManager.persistentData.currentIconSetIndex);
 
 
 
 
-            // Search for all assets (no filter)
+
             string[] guids = AssetDatabase.FindAssets("");
             List<string> assetGUIDList = new List<string>();
             List<string> assetNameList = new List<string>();
@@ -437,7 +444,6 @@ namespace UnityEditorTools.FolderIcons
 
 
             serializedObject.Update();
-            IconManager.tempFolderIconDict.Clear();
             for (int assetNameIndex = 0; assetNameIndex < assetNameList.Count; assetNameIndex++)
             {
                 for (int iconSetIndex = 0; iconSetIndex < iconSetsProperty.FindPropertyRelative("iconSetData").arraySize; iconSetIndex++)
@@ -446,12 +452,21 @@ namespace UnityEditorTools.FolderIcons
                     if (assetNameList[assetNameIndex] == iconSetsProperty.FindPropertyRelative("iconSetData").GetArrayElementAtIndex(iconSetIndex).
                         FindPropertyRelative("folderName").stringValue)
                     {
-                        if (!IconManager.tempFolderIconDict.ContainsKey(assetGUIDList[assetNameIndex]))
+                        if (IconManager.persistentData.guidTextureList.Any(x => x.guid != assetGUIDList[assetNameIndex]))
                         {
-                            UtilityFunctions.CreateAndSaveDataToDict(assetGUIDList[assetNameIndex], IconManager.tempFolderIconDict, Color.clear,
-                                null, null, iconSetsProperty.FindPropertyRelative("iconSetData").GetArrayElementAtIndex(iconSetIndex).
-                                FindPropertyRelative("icon").objectReferenceValue as Texture2D);
-                        }
+                            TextureData textureData = new TextureData();
+                            textureData.color = Color.clear;
+                            textureData.customTexture = iconSetsProperty.FindPropertyRelative("iconSetData").GetArrayElementAtIndex(iconSetIndex).
+                                FindPropertyRelative("icon").objectReferenceValue as Texture2D;
+
+                            GUIDTextureData guidTextureData = new GUIDTextureData();
+                            guidTextureData.guid = assetGUIDList[assetNameIndex];
+                            guidTextureData.textureData = textureData;
+
+                            IconManager.persistentData.guidTextureList.Add(guidTextureData);
+
+                            if (IconManager.persistentData != null) EditorUtility.SetDirty(IconManager.persistentData);
+                        }    
                     }
                 }
             }
@@ -464,6 +479,7 @@ namespace UnityEditorTools.FolderIcons
 
             IconManager.persistentData.currentIconSetIndex = selectedOption;
             EditorUtility.SetDirty(IconManager.persistentData);
+
         }
         #endregion
 

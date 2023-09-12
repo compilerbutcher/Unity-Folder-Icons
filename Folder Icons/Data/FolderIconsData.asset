@@ -15,10 +15,8 @@ MonoBehaviour:
   colorFolderNumber: 0
   guidTextureList: []
   headerContents:
-    buttonBackgroundTexture: {fileID: 2800000, guid: 133d9ad517af08341ac563e9f2bc02a1,
-      type: 3}
-    buttonHoverTexture: {fileID: 2800000, guid: ea1e61373a20fd74080940c39512cd39,
-      type: 3}
+    buttonBackgroundTexture: {fileID: 2800000, guid: 133d9ad517af08341ac563e9f2bc02a1, type: 3}
+    buttonHoverTexture: {fileID: 2800000, guid: ea1e61373a20fd74080940c39512cd39, type: 3}
     headerIconGUIStyle:
       m_Name: 
       m_Normal:
@@ -124,4 +122,10 @@ MonoBehaviour:
       icon: {fileID: 2800000, guid: 251bf28a980ef0043b9f3af8de533f38, type: 3}
     - folderName: Environment
       icon: {fileID: 2800000, guid: a09cd29632a3f66498bc81bf21195551, type: 3}
+  - iconSetName: SF
+    iconSetData:
+    - folderName: 1
+      icon: {fileID: 10309, guid: 0000000000000000f000000000000000, type: 0}
+    - folderName: 2
+      icon: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
   currentIconSetIndex: 0
