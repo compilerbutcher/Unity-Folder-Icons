@@ -6,31 +6,30 @@ namespace UnityEditorTools.FolderIcons
 {
     public static class Constants
     {
-        // PersistentData path
+        // Package paths from "Packages/com.compilerbutcher.foldericons/Folder Icons"
+        internal const string packageIconsPath = "Packages/com.compilerbutcher.foldericons/Folder Icons";
         internal const string PersistentDataName = "/FolderIconsData.asset";
         internal const string defaultIconSetName = "/Default Icon Sets.json";
-
-
-        // Main package path
-        internal const string packageIconsPath = "Packages/com.compilerbutcher.foldericons/Folder Icons";
-
-        internal const string dataName = "/Data";
-        internal const string iconsFolderName = "/Icons";
+        internal const string dataFolderName = "/Data";
         internal const string defaultIconsName = "/Default Icons";
         internal const string iconSetsName = "/Icon Sets";
-
-        // Editor runtime generated
-        internal const string persistentIconsFolderName = "/Main Icons Folder";
-        internal const string colorFolderStorageName = "/Folder With Color Icons";
-        internal const string loadedIconsFolderName = "/Loaded Icons";
-        internal const string loadedIconSetsName = "/Loaded Icon Sets";
+        internal const string iconsFolderName = "/Icons";
+        // -----------------------------------------------------------------
 
 
+
+        // Icon paths from "/Assets/Plugins/Unity-Folder-Icons"
         internal const string pluginsName = "Plugins";
-        internal const string mainFolderIconName = "Main Icon Folder";
+        internal const string mainFolderIconName = "Unity-Folder-Icons";
+
+        // Names for colorful folders
         internal const string emptyFolderIconsName = "Empty Folder Icons";
         internal const string folderIconsName = "Folder Icons";
 
+        // Names for loaded icons from Tools > Folder Icon Settings
+        internal const string loadedIconSetsName = "Loaded Icon Sets";
+        internal const string loadedIconsFolderName = "Loaded Icons";
+        // -----------------------------------------------------------------
 
 
         // Default icon names
@@ -41,7 +40,6 @@ namespace UnityEditorTools.FolderIcons
 
         internal const string defaultButtonName = "/defaultbutton.png";
         internal const string hoverButtonName = "/hoverButtonName.png";
-
 
 
 
@@ -68,15 +66,11 @@ namespace UnityEditorTools.FolderIcons
 
     internal static class DynamicConstants
     {
-        // Dynamic Paths
-        internal static string persistentDataPath;
-        
+        // Default unity icons path
         internal static string darkEmptyFolderPath;
         internal static string darkFolderPath;
         internal static string lightEmptyFolderPath;
         internal static string lightFolderPath;
-
-
         internal static string defaultButtonPath;
         internal static string hoverButtonPath;
         internal static string defaultButtonAbsolutePath;
@@ -85,19 +79,19 @@ namespace UnityEditorTools.FolderIcons
         internal static string dynamicDefaultFolderPath;
 
 
-
+        // Package paths from "Packages/com.compilerbutcher.foldericons/Folder Icons
+        internal static string persistentDataPath;
         internal static string absolutePackagePath;
+        internal static string defaultIconsPath;
 
 
+        // Icon paths from "/Assets/Plugins/Unity-Folder-Icons"
         internal static string pluginsPath;
         internal static string mainFolderPath;
         internal static string emptyIconFolderPath;
         internal static string iconFolderPath;
-
-
-
-
-        internal static string defaultIconsPath;
+        internal static string loadedIconSetPath;
+        internal static string loadedIconsPath;
 
 
         // Dynamically updated dark theme or light theme variables (Pro skin or not)
@@ -106,30 +100,30 @@ namespace UnityEditorTools.FolderIcons
         internal static Color32 projectBackgroundColor;
         internal static Color32 folderColor;
 
-
         // Default folder path and textures
         internal static Texture2D emptyDefaultFolderIcon;
         internal static Texture2D defaultFolderIcon;
 
         internal static void UpdateDynamicConstants()
         {
-            // Paths
-            persistentDataPath = Constants.packageIconsPath + Constants.dataName + Constants.PersistentDataName;
-
-
+            // Immutable package paths
+            persistentDataPath = Constants.packageIconsPath + Constants.dataFolderName + Constants.PersistentDataName;
+            absolutePackagePath = Path.GetFullPath(Constants.packageIconsPath);
             defaultIconsPath = Constants.packageIconsPath + Constants.iconsFolderName + Constants.defaultIconsName;
 
+
+            // Mutable paths
             pluginsPath = $"Assets/{Constants.pluginsName}";
             mainFolderPath = $"{pluginsPath}/{Constants.mainFolderIconName}";
             emptyIconFolderPath = $"{mainFolderPath}/{Constants.emptyFolderIconsName}";
             iconFolderPath = $"{mainFolderPath}/{Constants.folderIconsName}";
-
-            absolutePackagePath = Path.GetFullPath(Constants.packageIconsPath);
-
-
+            loadedIconSetPath = $"{mainFolderPath}/{Constants.loadedIconSetsName}";
+            loadedIconsPath = $"{mainFolderPath}/{Constants.loadedIconsFolderName}";
 
 
-            // Raw Texture Paths
+
+
+            // Immutable texture paths
             darkEmptyFolderPath = defaultIconsPath + Constants.darkEmptyFolderName;
             darkFolderPath = defaultIconsPath + Constants.darkFolderName;
             lightEmptyFolderPath = defaultIconsPath + Constants.lightEmptyFolderName;
@@ -141,8 +135,6 @@ namespace UnityEditorTools.FolderIcons
 
             dynamicDefaultEmptyFolderPath = EditorGUIUtility.isProSkin ? darkEmptyFolderPath : lightEmptyFolderPath;
             dynamicDefaultFolderPath = EditorGUIUtility.isProSkin ? darkFolderPath : lightFolderPath;
-
-
 
 
 

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using System.IO;
+using Unity.Plastic.Newtonsoft.Json.Linq;
 
 namespace UnityEditorTools.FolderIcons
 {
@@ -128,10 +129,6 @@ namespace UnityEditorTools.FolderIcons
                 previousIconSetSize = IconManager.persistentData.currentIconSetIndex;
             }
 
-            if (GUI.changed)
-            {
-                //IconManager.ExchangeIconSetData(IconManager.persistentData.iconSetDataList, IconManager.tempIconSetDict, DataExchangeType.ListToDict);
-            }
         }
 
 
@@ -223,15 +220,23 @@ namespace UnityEditorTools.FolderIcons
 
                 string selectedFile = EditorUtility.OpenFilePanel("Select a .json file to load!", "", "json");
 
-                IconManager.LoadIconSetsFromJson(selectedFile);
+                if (selectedFile.Length > 0)
+                {
+                    IconManager.LoadIconSetsFromJson(selectedFile);
 
-            }
+                    IconManager.iconSetNames = new string[IconManager.persistentData.iconSetDataList.Count];
 
-            IconManager.iconSetNames = new string[IconManager.persistentData.iconSetDataList.Count];
+                    for (int i = 0; i < IconManager.persistentData.iconSetDataList.Count; i++)
+                    {
+                        IconManager.iconSetNames[i] = IconManager.persistentData.iconSetDataList[i].iconSetName;
+                    }
 
-            for (int i = 0; i < IconManager.persistentData.iconSetDataList.Count; i++)
-            {
-                IconManager.iconSetNames[i] = IconManager.persistentData.iconSetDataList[i].iconSetName;
+                    Debug.Log($"Loaded icon sets from: {selectedFile}");
+                }
+                else
+                {
+                    Debug.LogWarning("You didn't selected a path!");
+                }
             }
         }
         private void SaveIconSetButton()
@@ -240,8 +245,17 @@ namespace UnityEditorTools.FolderIcons
             {
                 string selectedFile = EditorUtility.SaveFilePanel("Select a folder to save!", "", "Icon Set Data.json", "json");
 
-                IconManager.SaveIconSetsFromJson(selectedFile);
-             
+                if (selectedFile.Length > 0)
+                {
+                    IconManager.SaveIconSetsFromJson(selectedFile);
+
+                    Debug.Log($"Saved icon sets to: {selectedFile}");
+                }
+                else
+                {
+                    Debug.LogWarning("You didn't selected a path!");
+                }
+
             }
         }
         private static void LoadIconsButton()
@@ -250,7 +264,16 @@ namespace UnityEditorTools.FolderIcons
             {
                 string selectedFile = EditorUtility.OpenFilePanel("Select a .json file to load!", "", "json");
 
-                IconManager.LoadIconsFromJson(selectedFile);
+                if (selectedFile.Length > 0)
+                {
+                    IconManager.LoadIconsFromJson(selectedFile);
+
+                    Debug.Log($"Loaded icons from: {selectedFile}");
+                }
+                else
+                {
+                    Debug.LogWarning("You didn't selected a path!");
+                }
             }
 
         }
@@ -260,7 +283,16 @@ namespace UnityEditorTools.FolderIcons
             {
                 string selectedFile = EditorUtility.SaveFilePanel("Select a folder to save!", "", "Folder Icons Data.json", "json");
 
-                IconManager.SaveIconsToJson(selectedFile);
+                if (selectedFile.Length > 0)
+                {
+                    IconManager.SaveIconsToJson(selectedFile);
+
+                    Debug.Log($"Saved icons to: {selectedFile}");
+                }
+                else
+                {
+                    Debug.LogWarning("You didn't select a path!");
+                }
             }
         }
         private void ResetAllIconsButton()
@@ -268,14 +300,19 @@ namespace UnityEditorTools.FolderIcons
 
             if (GUILayout.Button("Reset All Icons!", GUILayout.ExpandWidth(false), GUILayout.Width(100)))
             {
-                bool warningReset = EditorUtility.DisplayDialog("WARNING!", "THIS WILL DELETE ALL CURRENT ICONS AND ICON SETS!", "Continue!", "Cancel!");
+                bool warningReset = EditorUtility.DisplayDialog("WARNING!", "THIS WILL DELETE ALL CURRENT ICONS/ICON SETS AND ALL LOADED" +
+                    "ICON SETS/LOADED ICONS!", "Continue!", "Cancel!");
 
                 if (warningReset)
                 {
+                    UtilityFunctions.CheckAndCreateFolderStorage();
+
                     try
                     {
                         selectedOption = 0;
-                        IconManager.persistentData.colorFolderNumber = 0;
+                        IconManager.persistentData.currentIconSetIndex = 0;
+                        if (IconManager.persistentData != null) EditorUtility.SetDirty(IconManager.persistentData);
+
 
                         string[] emptyFolderPaths = Directory.GetFiles(DynamicConstants.emptyIconFolderPath);
                         string[] folderPaths = Directory.GetFiles(DynamicConstants.iconFolderPath);
@@ -289,13 +326,51 @@ namespace UnityEditorTools.FolderIcons
                             File.Delete(folderPath);
                         }
 
+                        string[] loadedIconSetPaths = Directory.GetDirectories(DynamicConstants.loadedIconSetPath);
+                        string[] loadedIconPaths = Directory.GetFiles(DynamicConstants.loadedIconsPath);
+
+                        for (int i = 0; i < loadedIconSetPaths.Length; i++)
+                        {
+                            string loadedIconSetPath = loadedIconSetPaths[i];
+
+                            if (Directory.Exists(loadedIconSetPath))
+                            {
+                                Directory.Delete(loadedIconSetPath, true);
+                                File.Delete($"{loadedIconSetPath}.meta");
+
+                            }
+                            else
+                            {
+                                Debug.Log($"Folder {loadedIconSetPath} does not exist.");
+                            }
+                        }
+
+                        for (int i = 0; i < loadedIconPaths.Length; i++)
+                        {
+                            string loadedIconPath = loadedIconPaths[i];
+
+                            File.Delete(loadedIconPath);
+                        }
+
+                        int iconSetDataIndex = IconManager.persistentData.iconSetDataList.Count - 2;
+
+                        var iconSetList = IconManager.iconSetNames.ToList();
+                        iconSetList.RemoveRange(2, iconSetDataIndex);
+                        IconManager.iconSetNames = iconSetList.ToArray();
+
+                        IconManager.persistentData.iconSetDataList.RemoveRange(2, iconSetDataIndex);
+
+
+
+
                         if (IconManager.persistentData != null) IconManager.persistentData.guidTextureList.Clear();
                         if (IconManager.persistentData != null) EditorUtility.SetDirty(IconManager.persistentData);
+
                         AssetDatabase.Refresh();
 
                         EditorApplication.projectWindowItemOnGUI = null;
                         EditorApplication.RepaintProjectWindow();
-                        Debug.Log("All Icons Are Reset!");
+                        Debug.Log("All icons have been reset!");
                     }
                     catch (Exception e)
                     {

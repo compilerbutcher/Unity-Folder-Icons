@@ -6,12 +6,6 @@ using System.Collections.Generic;
 
 namespace UnityEditorTools.FolderIcons
 {
-    //internal enum DataExchangeType
-    //{
-    //    ListToDict,
-    //    DictToList
-    //}
-
 
     [Serializable]
     internal struct TextureData
@@ -85,12 +79,7 @@ namespace UnityEditorTools.FolderIcons
 
 
 
-
-
-
-
-
-
+    // Icon structure related to saving data with json
     [Serializable]
     internal struct JsonTextureData
     {
@@ -108,6 +97,8 @@ namespace UnityEditorTools.FolderIcons
     }
 
 
+
+    // Icon set structures related to saving data with json
     [Serializable]
     internal struct MainIconSetData
     {

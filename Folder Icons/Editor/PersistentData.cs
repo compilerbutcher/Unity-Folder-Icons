@@ -10,7 +10,7 @@ namespace UnityEditorTools.FolderIcons
     [Serializable]
     internal class PersistentData : ScriptableObject
     {
-        [SerializeField] internal int colorFolderNumber;
+        //[SerializeField] internal int colorFolderNumber;
         [SerializeField] internal List<GUIDTextureData> guidTextureList = new List<GUIDTextureData>();
 
         // Inspector header contents

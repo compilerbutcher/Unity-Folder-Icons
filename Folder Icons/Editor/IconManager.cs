@@ -3,6 +3,10 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
 using System;
+using Unity.VisualScripting;
+using System.Diagnostics.Eventing.Reader;
+using System.CodeDom;
+using System.Linq;
 
 namespace UnityEditorTools.FolderIcons
 {
@@ -49,7 +53,7 @@ namespace UnityEditorTools.FolderIcons
                 EditorApplication.RepaintProjectWindow();
             }
             AssetDatabase.Refresh();
-            EditorApplication.quitting += SaveDataToCollections;
+            EditorApplication.quitting += SavePersistentData;
 
             if (!SessionState.GetBool("OnlyRunWhenEditorStarted", false))
             {
@@ -78,35 +82,39 @@ namespace UnityEditorTools.FolderIcons
         [MenuItem("Tools/Test")]
         static void a()
         {
-            TextureFunctions.CreateDefaultFolderWithColor(IconManager.projectCurrentColor, ref IconManager.projectCurrentEmptyFolderTexture, ref IconManager.projectCurrentFolderTexture);
-            byte[] emptyFolderTextureBytes = IconManager.projectCurrentEmptyFolderTexture.EncodeToPNG();
-            byte[] folderTextureBytes = IconManager.projectCurrentFolderTexture.EncodeToPNG();
+            string path = "Assets/Ha/Deneme2/Merid/DASDAS/EN Ýyi Benim/HAHAHAHA/NiCE/NONONO/SUCKERS/GETDEStroyed";
 
-            string emptyTexturePath = $"{DynamicConstants.emptyIconFolderPath}/{AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(Selection.activeObject))}.png";
-            string texturePath = $"{DynamicConstants.iconFolderPath}/{AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(Selection.activeObject))}.png";
+            string[] pathSegments = path.Split('/');
 
-            File.WriteAllBytes(Path.GetFullPath(emptyTexturePath), emptyFolderTextureBytes);
-            File.WriteAllBytes(Path.GetFullPath(texturePath), folderTextureBytes);
+            string[] resultPathLevels = new string[pathSegments.Length];
 
-            Debug.Log(Path.GetFullPath(emptyTexturePath));
-            TextureImporter importer = TextureImporter.GetAtPath(emptyTexturePath) as TextureImporter;
-            Debug.Log(emptyTexturePath);
-            Debug.Log(importer);
+            for (int i = 0; i < pathSegments.Length; i++)
+            {
+                resultPathLevels[i] = string.Join("/", pathSegments.Take(i + 1));
+
+
+                string currentFolderPath = resultPathLevels[i];
+
+                if (currentFolderPath == "Assets") continue;
+
+                if (!AssetDatabase.IsValidFolder(currentFolderPath))
+                {
+                    AssetDatabase.CreateFolder(Path.GetDirectoryName(currentFolderPath), Path.GetFileName(currentFolderPath));
+                }
+                AssetDatabase.Refresh();
+
+            }
 
         }
 
-        // We need to assign and create data for temporary dictionary and persistentData and load default textures
+
+
+
         private static void AssetOperations()
         {
-
             UtilityFunctions.CheckAndCreateFolderStorage();
 
-
-
-
             folderEmptyDict = new Dictionary<string, bool>();
-            //tempFolderIconDict ??= new Dictionary<string, TextureData>();
-            //tempIconSetDict ??= new Dictionary<string, Dictionary<string, Texture2D>>();
 
 
             persistentData = AssetDatabase.LoadAssetAtPath<PersistentData>(DynamicConstants.persistentDataPath);
@@ -126,97 +134,25 @@ namespace UnityEditorTools.FolderIcons
         }
 
 
-        // We need to save all dictionary elements to persistentData.guidTextureList to persist data between unity sessions
-        internal static void SaveDataToCollections()
+        internal static void SavePersistentData()
         {
-            //if (isMarkedAsResetIcons)
-            //{
-            //    string[] allImmutableFolderIconsPath = Directory.GetFiles(DynamicConstants.folderStoragePath);
-
-            //    for (int i = 0; i < allImmutableFolderIconsPath.Length; i++)
-            //    {
-            //        string currentPath = allImmutableFolderIconsPath[i];
-
-            //        if (Path.GetFileNameWithoutExtension(currentPath) != "keep this folder" && Path.GetFileNameWithoutExtension(currentPath) != "keep this folder.gitkeep")
-            //        {
-            //            File.Delete(currentPath);
-            //        }
-            //    }
-            //    File.WriteAllText("C:\\Users\\CodeParadise\\Desktop\\Hello.txt", "Helloismarkedrun!");
-            //    isMarkedAsResetIcons = false;
-            //}
-
-            //UpdateMainImmutablePackage();
-
-            //ExchangeFolderIconData(persistentData.guidTextureList, tempFolderIconDict, DataExchangeType.DictToList);
-            //ExchangeIconSetData(persistentData.iconSetDataList, tempIconSetDict, DataExchangeType.DictToList);
             if (persistentData != null) EditorUtility.SetDirty(persistentData);
         }
 
 
-        //[MenuItem("Tools/Test")]
-        //private static void UpdateAllFolderIcons()
-        //{
-            //string[] emptyIconsFolderPath = Directory.GetFiles(Path.GetFullPath());
-            //string[] iconsFolderPath = Directory.GetFiles(DynamicConstants.iconsFolderPath);
-
-
-
-            //for (int i = 0; i < emptyIconsFolderPath.Length; i++)
-            //{
-            //    string emptyIconPath = emptyIconsFolderPath[i];
-            //    string iconPath = iconsFolderPath[i];
-
-            //    Texture2D emptyTexture2D = new Texture2D(0, 0);
-            //    Texture2D texture2D = new Texture2D(0, 0);
-
-            //    byte[] emptyImageBytes = File.ReadAllBytes(emptyIconPath);
-            //    byte[] imageBytes = File.ReadAllBytes(iconPath);
-
-            //    emptyTexture2D.LoadImage(emptyImageBytes);
-            //    texture2D.LoadImage(imageBytes);
-
-            //    string currentGUID = Path.GetFileNameWithoutExtension(emptyIconPath);
-
-            //    UtilityFunctions.CreateAndSaveDataToDict(currentGUID, tempFolderIconDict, emptyTexture2D.GetPixel(0, 0), emptyTexture2D, texture2D, null);
-
-            //}
-
-            //string[] getFiles = Directory.GetFiles(DynamicConstants.persistentEditorFolderPath);
-
-            //Dictionary<string, TextureData> textureDataList = new Dictionary<string, TextureData>();
-
-
-            //foreach (var i in tempFolderIconDict)
-            //{
-            //    string folderTexturePath = getFiles.First(x => Path.GetFileNameWithoutExtension(x) == i.Key);
-            //    string emptyFolderTexturePath = getFiles.First(x => Path.GetFileNameWithoutExtension(x)[5..] == i.Key);
-
-            //    Texture2D folderTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(folderTexturePath);
-            //    Texture2D emptyFolderTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(emptyFolderTexturePath);
-
-            //    TextureData createdTextureData = new TextureData();
-
-            //    createdTextureData.color = folderTexture.GetPixel(0, 0);
-            //    createdTextureData.emptyFolderTexture = emptyFolderTexture;
-            //    createdTextureData.folderTexture = folderTexture;
-            //    createdTextureData.customTexture = null;
-
-            //    textureDataList.Add(i.Key, createdTextureData);
-            //}
-            //tempFolderIconDict.Clear();
-            //tempFolderIconDict = textureDataList;
-            //AssetDatabase.Refresh();
-        //}
-
-
-
-
         internal static void LoadIconSetsFromJson(string selectedFile)
         {
+            UtilityFunctions.CheckAndCreateFolderStorage();
+
+
             List<MainIconSetData> jsonDataList;
             JsonHelper.LoadJson<MainIconSetData>(selectedFile, out jsonDataList);
 
+            if (jsonDataList.Count == 0)
+            {
+                Debug.LogWarning("There is no icon sets in the json file to be load! You can create it via: Tools > Folder Icon Settings > Save Icon Sets!");
+                return;
+            }
 
             for (int loadedJsonDataIndex = 0; loadedJsonDataIndex < jsonDataList.Count; loadedJsonDataIndex++)
             {
@@ -225,6 +161,13 @@ namespace UnityEditorTools.FolderIcons
                 IconSetDataListWrapper newIconSetDataListWrapper = new IconSetDataListWrapper();
                 newIconSetDataListWrapper.iconSetData = new List<IconSetData>();
                 newIconSetDataListWrapper.iconSetName = data.iconSetName;
+
+                string iconSetImportPath = $"{DynamicConstants.loadedIconSetPath}/{data.iconSetName}";
+
+                if (!AssetDatabase.IsValidFolder(iconSetImportPath))
+                {
+                    AssetDatabase.CreateFolder(DynamicConstants.loadedIconSetPath, data.iconSetName);
+                }
 
                 IconSetData newIconSetData;
 
@@ -235,16 +178,14 @@ namespace UnityEditorTools.FolderIcons
                     string iconName = data.iconSetData[iconSetIndex].iconName;
                     string base64Texture = data.iconSetData[iconSetIndex].iconBase64;
 
-
-                    string fullPackagePath = DynamicConstants.absolutePackagePath + Constants.iconsFolderName + Constants.loadedIconSetsName;
-                    string unityRelativePackagePath = Constants.packageIconsPath + Constants.iconsFolderName + Constants.loadedIconSetsName;
+                    string fullPackagePath = Path.GetFullPath(iconSetImportPath);
 
                     TextureFunctions.Base64ToTexture2D(base64Texture, fullPackagePath + $"/{iconName}.png");
-                    TextureFunctions.ImportTexture(unityRelativePackagePath + $"/{iconName}.png");
+                    TextureFunctions.ImportTexture($"{iconSetImportPath}/{iconName}.png");
 
 
                     newIconSetData.folderName = folderName;
-                    newIconSetData.icon = AssetDatabase.LoadAssetAtPath<Texture2D>(unityRelativePackagePath + $"/{iconName}.png");
+                    newIconSetData.icon = AssetDatabase.LoadAssetAtPath<Texture2D>($"{iconSetImportPath}/{iconName}.png");
                     newIconSetData.icon.name = iconName;
 
                     newIconSetDataListWrapper.iconSetData.Add(newIconSetData);
@@ -253,14 +194,21 @@ namespace UnityEditorTools.FolderIcons
 
                 IconManager.persistentData.iconSetDataList.Add(newIconSetDataListWrapper);
                 if (IconManager.persistentData != null) EditorUtility.SetDirty(IconManager.persistentData);
-
             }
+            AssetDatabase.Refresh();
+
         }
         internal static void SaveIconSetsFromJson(string selectedFile)
         {
+            if (persistentData.iconSetDataList.Count <= 2)
+            {
+                Debug.LogWarning("There is no created icon sets! You can create it via: Tools/Folder Icon Settings!");
+                return;
+            }
+
             List<MainIconSetData> packedIconSetData = new List<MainIconSetData>();
 
-            for (int i = 0; i < IconManager.persistentData.iconSetDataList.Count; i++)
+            for (int i = 2; i < IconManager.persistentData.iconSetDataList.Count; i++)
             {
                 IconSetDataListWrapper iconSet = IconManager.persistentData.iconSetDataList[i];
 
@@ -272,13 +220,12 @@ namespace UnityEditorTools.FolderIcons
                 {
                     IconSetData iconSetData = iconSet.iconSetData[i2];
 
+                    Base64IconSetData newBase64IconSetData = new Base64IconSetData();
+                    newBase64IconSetData.folderName = iconSetData.folderName;
+                    newBase64IconSetData.iconName = iconSetData.icon.name;
+                    newBase64IconSetData.iconBase64 = Convert.ToBase64String(ImageConversion.EncodeToPNG(iconSetData.icon));
 
-                    Base64IconSetData newIconSetData = new Base64IconSetData();
-                    newIconSetData.folderName = iconSetData.folderName;
-                    newIconSetData.iconName = iconSetData.icon.name;
-                    newIconSetData.iconBase64 = Convert.ToBase64String(ImageConversion.EncodeToPNG(iconSetData.icon));
-
-                    newMainIconSetData.iconSetData.Add(newIconSetData);
+                    newMainIconSetData.iconSetData.Add(newBase64IconSetData);
                 }
                 packedIconSetData.Add(newMainIconSetData);
             }
@@ -288,6 +235,10 @@ namespace UnityEditorTools.FolderIcons
 
         internal static void LoadIconsFromJson(string selectedFile)
         {
+            UtilityFunctions.CheckAndCreateFolderStorage();
+
+
+
             string folderName = "";
             Color color;
             string emptyFolderBase64String;
@@ -297,31 +248,37 @@ namespace UnityEditorTools.FolderIcons
             List<JsonTextureData> jsonDataList;
             JsonHelper.LoadJson<JsonTextureData>(selectedFile, out jsonDataList);
 
+
+            if (jsonDataList.Count == 0)
+            {
+                Debug.LogWarning("There is no icons in the json file to be load! You can create it via: Tools > Folder Icon Settings > Save Icons!");
+                return;
+            }
+
+
             for (int loadedJsonDataIndex = 0; loadedJsonDataIndex < jsonDataList.Count; loadedJsonDataIndex++)
             {
-                JsonTextureData data = jsonDataList[loadedJsonDataIndex];
+                JsonTextureData jsonTextureData = jsonDataList[loadedJsonDataIndex];
+                
+
+                folderName = jsonTextureData.folderName;
+                color = new Color(jsonTextureData.color.x, jsonTextureData.color.y, jsonTextureData.color.z, jsonTextureData.color.w);
 
 
-                folderName = data.folderName;
-                color = new Color(data.color.x, data.color.y, data.color.z, data.color.w);
+                emptyFolderBase64String = jsonTextureData.emptyFolderTextureBase64;
+                folderTextureBase64String = jsonTextureData.folderTextureBase64;
+                customTextureBase64String = jsonTextureData.customTextureBase64;
 
 
-                emptyFolderBase64String = data.emptyFolderTextureBase64;
-                folderTextureBase64String = data.folderTextureBase64;
-                customTextureBase64String = data.customTextureBase64;
+                string emptyFolderTexturePath = $"{DynamicConstants.emptyIconFolderPath}\\{jsonTextureData.emptyFolderTextureName}.png";
+                string folderTexturePath = $"{DynamicConstants.iconFolderPath}\\{jsonTextureData.folderTextureName}.png";
+                string customFolderTexturePath = $"{DynamicConstants.mainFolderPath}\\{Constants.loadedIconsFolderName}\\{jsonTextureData.customTextureName}.png";
 
+                TextureFunctions.Base64ToTexture2D(emptyFolderBase64String, Path.GetFullPath(emptyFolderTexturePath));
+                TextureFunctions.Base64ToTexture2D(folderTextureBase64String, Path.GetFullPath(folderTexturePath));
+                TextureFunctions.Base64ToTexture2D(customTextureBase64String, Path.GetFullPath(customFolderTexturePath));
 
-                string emptyFolderTextureFullPath = $"{DynamicConstants.absolutePackagePath}\\{Constants.iconsFolderName}\\{Constants.loadedIconsFolderName}\\{data.emptyFolderTextureName}.png";
-                string folderTextureFullPath = $"{DynamicConstants.absolutePackagePath}\\{Constants.iconsFolderName}\\{Constants.loadedIconsFolderName}\\{data.folderTextureName}.png";
-                string customFolderTextureFullPath = $"{DynamicConstants.absolutePackagePath}\\{Constants.iconsFolderName}\\{Constants.loadedIconsFolderName}\\{data.customTextureName}.png";
-
-                TextureFunctions.Base64ToTexture2D(emptyFolderBase64String, emptyFolderTextureFullPath);
-                TextureFunctions.Base64ToTexture2D(folderTextureBase64String, folderTextureFullPath);
-                TextureFunctions.Base64ToTexture2D(customTextureBase64String, customFolderTextureFullPath);
-
-                string emptyFolderTexturePath = Constants.packageIconsPath + Constants.iconsFolderName + Constants.loadedIconsFolderName + $"/{data.emptyFolderTextureName}.png";
-                string folderTexturePath = Constants.packageIconsPath + Constants.iconsFolderName + Constants.loadedIconsFolderName + $"/{data.folderTextureName}.png";
-                string customFolderTexturePath = Constants.packageIconsPath + Constants.iconsFolderName + Constants.loadedIconsFolderName + $"/{data.customTextureName}.png";
+                AssetDatabase.Refresh();
 
                 if (emptyFolderBase64String.Length > 0)
                     TextureFunctions.ImportTexture(emptyFolderTexturePath);
@@ -331,23 +288,112 @@ namespace UnityEditorTools.FolderIcons
                     TextureFunctions.ImportTexture(customFolderTexturePath);
 
 
-                string newlyCreatedFolderGUID = AssetDatabase.CreateFolder("Assets", data.folderName);
 
-                Color currentColor = new Color(data.color.x, data.color.y, data.color.z, data.color.w);
-                Texture2D emptyFolder = AssetDatabase.LoadAssetAtPath<Texture2D>(emptyFolderTexturePath);
-                Texture2D colorFolder = AssetDatabase.LoadAssetAtPath<Texture2D>(folderTexturePath);
-                Texture2D customFolder = AssetDatabase.LoadAssetAtPath<Texture2D>(customFolderTexturePath);
-                //UtilityFunctions.CreateAndSaveDataToDict(newlyCreatedFolderGUID, IconManager.tempFolderIconDict, currentColor, emptyFolder, colorFolder, customFolder);
+
+
+                Color currentColor = new Color(jsonTextureData.color.x, jsonTextureData.color.y, jsonTextureData.color.z, jsonTextureData.color.w);
+                Texture2D emptyFolderTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(emptyFolderTexturePath);
+                Texture2D colorFolderTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(folderTexturePath);
+                Texture2D customFolderTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(customFolderTexturePath);
+
+
+
+
+
+                // Creating all folders within json data
+                string[] pathSegments = jsonTextureData.folderName.Split('/');
+
+                string[] resultPathLevels = new string[pathSegments.Length];
+
+                for (int i = 0; i < pathSegments.Length; i++)
+                {
+                    resultPathLevels[i] = string.Join("/", pathSegments.Take(i + 1));
+
+
+                    string currentFolderPath = resultPathLevels[i];
+
+
+
+
+                    if (currentFolderPath == "Assets") continue;
+
+
+                    if (!AssetDatabase.IsValidFolder(currentFolderPath))
+                    {
+                        string currentFolderGUID = AssetDatabase.CreateFolder(Path.GetDirectoryName(currentFolderPath), Path.GetFileName(currentFolderPath));
+
+                        if (currentFolderPath != jsonTextureData.folderName) continue;
+
+                        GUIDTextureData newGuidTextureData = new GUIDTextureData();
+
+                        TextureData newTextureData = new TextureData();
+                        newTextureData.emptyFolderTexture = emptyFolderTexture;
+                        newTextureData.folderTexture = colorFolderTexture;
+                        newTextureData.customTexture = customFolderTexture;
+
+
+                        newGuidTextureData.guid = currentFolderGUID;
+                        newGuidTextureData.textureData = newTextureData;
+
+                        persistentData.guidTextureList.Add(newGuidTextureData);
+                        UtilityFunctions.UpdateFolderEmptyDict(Path.GetFullPath(currentFolderPath), ref IconManager.folderEmptyDict);
+
+                    }
+                    else if (AssetDatabase.IsValidFolder(currentFolderPath))
+                    {
+
+                        if (!persistentData.guidTextureList.Any(textureData => textureData.guid == AssetDatabase.AssetPathToGUID(currentFolderPath)))
+                        {
+                            GUIDTextureData newGuidTextureData = new GUIDTextureData();
+
+                            TextureData textureData = TextureFunctions.CreateTextureData(IconManager.projectCurrentColor, emptyFolderTexture, colorFolderTexture, null);
+
+
+
+                            newGuidTextureData.guid = AssetDatabase.AssetPathToGUID(currentFolderPath);
+                            newGuidTextureData.textureData = textureData;
+
+                            persistentData.guidTextureList.Add(newGuidTextureData);
+                            UtilityFunctions.UpdateFolderEmptyDict(Path.GetFullPath(currentFolderPath), ref IconManager.folderEmptyDict);
+
+                        }
+                        else if (persistentData.guidTextureList.Any(textureData => textureData.guid == AssetDatabase.AssetPathToGUID(currentFolderPath)))
+                        {
+                            GUIDTextureData newGuidTextureData = new GUIDTextureData();
+                            TextureData textureData = TextureFunctions.CreateTextureData(IconManager.projectCurrentColor, emptyFolderTexture, colorFolderTexture, null);
+
+
+                            newGuidTextureData.guid = AssetDatabase.AssetPathToGUID(currentFolderPath);
+                            newGuidTextureData.textureData = textureData;
+
+                            int index = persistentData.guidTextureList.FindIndex(guidData => guidData.guid == AssetDatabase.AssetPathToGUID(currentFolderPath));
+                            persistentData.guidTextureList[index] = newGuidTextureData;
+
+                            UtilityFunctions.UpdateFolderEmptyDict(Path.GetFullPath(currentFolderPath), ref IconManager.folderEmptyDict);
+
+                        }
+                    }
+
+                }
+
             }
+            if (persistentData != null) EditorUtility.SetDirty(persistentData);
 
 
             EditorApplication.projectWindowItemOnGUI = null;
             EditorApplication.projectWindowItemOnGUI += UtilityFunctions.DrawFolders;
             EditorApplication.RepaintProjectWindow();
-            UtilityFunctions.CheckAllFoldersCurrentEmptiness(ref IconManager.folderEmptyDict);
+            AssetDatabase.Refresh();
+
         }
         internal static void SaveIconsToJson(string selectedFile)
         {
+            if (persistentData.iconSetDataList.Count == 0)
+            {
+                Debug.LogWarning("There is no icons assigned to be save! You can create it via: clicking any folder then clicking folder icon in the inspector!");
+                return;
+            }
+
 
             List<JsonTextureData> packedJsonList = new List<JsonTextureData>();
             for (int i = 0; i < persistentData.guidTextureList.Count; i++)
@@ -355,6 +401,30 @@ namespace UnityEditorTools.FolderIcons
                 string guid = persistentData.guidTextureList[i].guid;
                 TextureData textureData = persistentData.guidTextureList[i].textureData;
 
+                if (textureData.emptyFolderTexture != null)
+                {
+                    if (!textureData.emptyFolderTexture.isReadable)
+                    {
+                        Debug.LogWarning($"{textureData.emptyFolderTexture.name} is not readable! Please make sure every texture is readable before saving them!");
+
+                        return;
+                    }
+                    else if (!textureData.folderTexture.isReadable)
+                    {
+                        Debug.LogWarning($"{textureData.folderTexture.name} is not readable! Please make sure every texture is readable before saving them!");
+
+                        return;
+                    }
+                }
+                else if (textureData.customTexture != null)
+                {
+                    if (!textureData.customTexture.isReadable)
+                    {
+                        Debug.LogWarning($"{textureData.customTexture.name} is not readable! Please make sure every texture is readable before saving them!");
+
+                        return;
+                    }
+                }
 
 
                 string emptyFolderBase64String = "";
@@ -363,7 +433,7 @@ namespace UnityEditorTools.FolderIcons
 
 
                 // Guid
-                string folderName = Path.GetFileNameWithoutExtension(AssetDatabase.GUIDToAssetPath(guid));
+                string folderName = AssetDatabase.GUIDToAssetPath(guid);
 
 
                 if (textureData.emptyFolderTexture != null)

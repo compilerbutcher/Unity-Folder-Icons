@@ -112,28 +112,21 @@ namespace UnityEditorTools.FolderIcons
                 IconManager.projectCurrentColor = guidTextureData.textureData.color;
                 IconManager.projectCurrentCustomTexture = guidTextureData.textureData.customTexture;
             }
-
-            //if (IconManager.tempFolderIconDict.ContainsKey(currentAssetGUID))
-            //{
-            //    TextureData textureData = IconManager.tempFolderIconDict[currentAssetGUID];
-
-
-            //}
         }
         private void HandleOnClose()
         {
 
             if (IconManager.projectCurrentEmptyFolderTexture != null)
             {
-                PopupWindowContentFunctions.HandleCreateAndDeleteFoldersOnClose(currentAssetGUID);
+                PopupWindowContentFunctions.HandleColorFoldersTexture(currentAssetGUID);
             }
             else if (IconManager.projectCurrentFolderTexture != null)
             {
-                PopupWindowContentFunctions.HandleCreateAndDeleteFoldersOnClose(currentAssetGUID);
+                PopupWindowContentFunctions.HandleColorFoldersTexture(currentAssetGUID);
             }
-            else if (IconManager.projectCurrentCustomTexture != null)
+            if (IconManager.projectCurrentCustomTexture != null)
             {
-                PopupWindowContentFunctions.HandleCreateCustomTexture(currentAssetGUID);
+                PopupWindowContentFunctions.HandleCustomTexture(currentAssetGUID);
             }
 
 
@@ -146,7 +139,6 @@ namespace UnityEditorTools.FolderIcons
             EditorApplication.projectWindowItemOnGUI += UtilityFunctions.DrawFolders;
             EditorApplication.RepaintProjectWindow();
 
-            //IconManager.ExchangeFolderIconData(IconManager.persistentData.guidTextureList, IconManager.tempFolderIconDict, DataExchangeType.DictToList);
             if (IconManager.persistentData != null) EditorUtility.SetDirty(IconManager.persistentData);
         }
 

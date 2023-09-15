@@ -113,7 +113,7 @@ namespace UnityEditorTools.FolderIcons
 
         }
         // Create default folder with custom color and delete existing ones if it exists (Do not use this in any update function)
-        internal static void HandleCreateAndDeleteFoldersOnClose(string selectedAssetGUID)
+        internal static void HandleColorFoldersTexture(string selectedAssetGUID)
         {
             IconManager.projectCurrentCustomTexture = null;
 
@@ -199,8 +199,11 @@ namespace UnityEditorTools.FolderIcons
 
         }
 
-        internal static void HandleCreateCustomTexture(string selectedAssetGUID)
+        internal static void HandleCustomTexture(string selectedAssetGUID)
         {
+            UtilityFunctions.CheckAndCreateFolderStorage();
+
+
             IconManager.projectCurrentEmptyFolderTexture = null;
             IconManager.projectCurrentFolderTexture = null;
 
@@ -224,34 +227,21 @@ namespace UnityEditorTools.FolderIcons
                     File.Delete($"{Path.GetFullPath(DynamicConstants.iconFolderPath)}\\{selectedAssetGUID}.png");
                     File.Delete($"{Path.GetFullPath(DynamicConstants.emptyIconFolderPath)}\\{selectedAssetGUID}.png.meta");
                     File.Delete($"{Path.GetFullPath(DynamicConstants.iconFolderPath)}\\{selectedAssetGUID}.png.meta");
-
-
-
-                    TextureData textureData = TextureFunctions.CreateTextureData(Color.clear, null, null, IconManager.projectCurrentCustomTexture);
-
-                    GUIDTextureData guidTextureData = new GUIDTextureData();
-                    guidTextureData.guid = selectedAssetGUID;
-                    guidTextureData.textureData = textureData;
-
-                    int index = IconManager.persistentData.guidTextureList.FindIndex(x => x.guid == selectedAssetGUID);
-                    IconManager.persistentData.guidTextureList[index] = guidTextureData;
-                    if (IconManager.persistentData != null) EditorUtility.SetDirty(IconManager.persistentData);
-                    
-
                 }
-            }
-            else
-            {
+
+
+
                 TextureData textureData = TextureFunctions.CreateTextureData(Color.clear, null, null, IconManager.projectCurrentCustomTexture);
 
                 GUIDTextureData guidTextureData = new GUIDTextureData();
                 guidTextureData.guid = selectedAssetGUID;
                 guidTextureData.textureData = textureData;
 
-                IconManager.persistentData.guidTextureList.Add(guidTextureData);
+                int index = IconManager.persistentData.guidTextureList.FindIndex(x => x.guid == selectedAssetGUID);
+                IconManager.persistentData.guidTextureList[index] = guidTextureData;
                 if (IconManager.persistentData != null) EditorUtility.SetDirty(IconManager.persistentData);
-
             }
+
         }
 
 
@@ -263,7 +253,6 @@ namespace UnityEditorTools.FolderIcons
         {
             if (!AssetDatabase.IsValidFolder(DynamicConstants.pluginsPath))
             {
-                Debug.Log("\"Assets/Plugins\" is not valid");
                 AssetDatabase.CreateFolder("Assets", Constants.pluginsName);
                 AssetDatabase.CreateFolder(DynamicConstants.pluginsPath, Constants.mainFolderIconName);
 
@@ -272,24 +261,26 @@ namespace UnityEditorTools.FolderIcons
             }
             else if (!AssetDatabase.IsValidFolder(DynamicConstants.mainFolderPath))
             {
-                Debug.Log("\"Assets/Plugins/Main Icon Folder\" is not valid");
-
                 AssetDatabase.CreateFolder(DynamicConstants.pluginsPath, Constants.mainFolderIconName);
 
                 AssetDatabase.CreateFolder(DynamicConstants.mainFolderPath, Constants.emptyFolderIconsName);
                 AssetDatabase.CreateFolder(DynamicConstants.mainFolderPath, Constants.folderIconsName);
             }
-            else if (!AssetDatabase.IsValidFolder(DynamicConstants.emptyIconFolderPath))
+            if (!AssetDatabase.IsValidFolder(DynamicConstants.emptyIconFolderPath))
             {
-                Debug.Log("\"Assets/Plugins/Main Icon Folder/Empty Folder Icons\" is not valid");
-
                 AssetDatabase.CreateFolder(DynamicConstants.mainFolderPath, DynamicConstants.emptyIconFolderPath);
             }
-            else if (!AssetDatabase.IsValidFolder(DynamicConstants.iconFolderPath))
+            if (!AssetDatabase.IsValidFolder(DynamicConstants.iconFolderPath))
             {
-                Debug.Log("\"Assets/Plugins/Main Icon Folder/Folder Icons\" is not valid");
-
                 AssetDatabase.CreateFolder(DynamicConstants.mainFolderPath, Constants.folderIconsName);
+            }
+            if (!AssetDatabase.IsValidFolder(DynamicConstants.loadedIconSetPath))
+            {
+                AssetDatabase.CreateFolder(DynamicConstants.mainFolderPath, Constants.loadedIconSetsName);
+            }
+            if (!AssetDatabase.IsValidFolder(DynamicConstants.loadedIconsPath))
+            {
+                AssetDatabase.CreateFolder(DynamicConstants.mainFolderPath, Constants.loadedIconsFolderName);
             }
         }
 
@@ -341,33 +332,6 @@ namespace UnityEditorTools.FolderIcons
 
             }
         }
-        // Create and save TextureData to main texture dictionary
-        //internal static void CreateAndSaveDataToDict(string selectedAssetGUID, Dictionary<string, TextureData> dictionary, Color color, Texture2D emptyFolderTexture, Texture2D folderTexture, Texture2D customTexture)
-        //{
-        //    // If there is no texture create and add one
-        //    if (!dictionary.ContainsKey(selectedAssetGUID))
-        //    {
-        //        TextureData textureData;
-
-        //        textureData = TextureFunctions.CreateTextureData(color, emptyFolderTexture, folderTexture, customTexture);
-        //        dictionary.Add(selectedAssetGUID, textureData);
-
-        //        EditorApplication.projectWindowItemOnGUI += DrawFolders;
-        //        EditorApplication.RepaintProjectWindow();
-        //    }
-        //    // If there is already a texture change that texture
-        //    else
-        //    {
-        //        TextureData textureData;
-
-        //        textureData = TextureFunctions.CreateTextureData(color, emptyFolderTexture, folderTexture, customTexture);
-        //        dictionary[selectedAssetGUID] = textureData;
-
-        //        EditorApplication.projectWindowItemOnGUI = null;
-        //        EditorApplication.projectWindowItemOnGUI += DrawFolders;
-        //        EditorApplication.RepaintProjectWindow();
-        //    }
-        //}
         
         // Draw one item in the project window
         internal static void DrawTextures(Rect rect, Texture2D texture2d)
@@ -393,32 +357,7 @@ namespace UnityEditorTools.FolderIcons
         }
 
 
-        //internal static void DrawFolderColor(string guid, Rect selectionRect)
-        //{
-        //    if (guid != AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(Selection.activeInstanceID))) return;
-
-        //    string folderPath = AssetDatabase.GUIDToAssetPath(guid);
-
-        //    if (AssetDatabase.IsValidFolder(folderPath))
-        //    {
-        //        IconManager.folderEmptyDict.TryGetValue(folderPath, out bool outputBool);
-        //        if (outputBool)
-        //            DrawTextures(guid, selectionRect, IconManager.projectCurrentFolderTexture);
-        //        else
-        //            DrawTextures(guid, selectionRect, IconManager.projectCurrentEmptyFolderTexture);
-        //    }
-        //    else
-        //    {
-        //        return;
-        //    }
-        //}
-
-
-
         // Main function for drawing project window items
-
-
-
         internal static void DrawFolders(string guid, Rect selectionRect)
         {
             if (IconManager.persistentData.guidTextureList.Count == 0) return; // If there is not a custom icon return
