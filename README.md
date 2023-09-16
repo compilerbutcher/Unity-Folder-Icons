@@ -1,7 +1,7 @@
 <!----------------------------------------------------Main Header Part------------------------------------------------------------------ -->
-<h1 align="center">Folder Icons</h1>
+<h1 align="center">Unity Folder Icons</h1>
 
-<h4 align="center"> Folder Icons allows you to change the default folder icons in Unity </h4>
+<p align="center"> Folder Icons allows you to change the default folder icons in Unity </p>
 <img src="https://github.com/compilerbutcher/Folder-Icons/assets/97310008/6505017d-5228-43ce-9d02-a574aa1df4ac.png">
 <!-- ------------------------------------------------------------------------------------------------------------------------------- -->
 
@@ -17,7 +17,24 @@
 https://github.com/compilerbutcher/Folder-Icons.git
 ```
 </div>
+
 <div align="center">
-<img src="https://github.com/compilerbutcher/Folder-Icons/assets/97310008/c2e32db2-e1ba-4c49-8476-cc98aa536c37.png">
+<img src="https://github.com/compilerbutcher/Unity-Folder-Icons/assets/97310008/c3033d26-aa95-4143-9a2d-22d0e56b6126.png">
 </div>
+
+<div align="center">
+ <p> <strong>Note: </strong> "To download a package from Git in Unity, you need to have Git installed on your computer."</p>
+</div>
+
+<br>
+<div align="center">
+ <p>"To download a package from Git in Unity, you need to have Git installed on your computer."</p>
+ 
+</div>
+
+x
+
 <!-- ------------------------------------------------------------------------------------------------------------------------------- -->
+
+
+
