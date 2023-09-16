@@ -3,9 +3,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
 using System;
-using Unity.VisualScripting;
-using System.Diagnostics.Eventing.Reader;
-using System.CodeDom;
 using System.Linq;
 
 namespace UnityEditorTools.FolderIcons
@@ -14,6 +11,28 @@ namespace UnityEditorTools.FolderIcons
     [InitializeOnLoad]
     internal sealed class IconManager
     {
+        public static void CheckSource()
+        {
+            string packageName = "com.compilerbutcher.foldericons";
+
+            // Check if the package is installed
+            {
+                // Check if the package is locally installed
+                bool isLocallyInstalled = UnityEditor.PackageManager.PackageInfo.FindForAssetPath("Packages/" + packageName) != null;
+
+                if (isLocallyInstalled)
+                {
+                    Debug.Log(packageName + " is locally installed.");
+                }
+                else
+                {
+                    Debug.Log(packageName + " is installed from Git or another external source.");
+                }
+            }
+        }
+
+
+
         // PersistentData variables
         internal static PersistentData persistentData;
         //internal static Dictionary<string, TextureData> tempFolderIconDict;
@@ -38,12 +57,13 @@ namespace UnityEditorTools.FolderIcons
         // We have to make sure use delayCall with asset operations otherwise, asset operations will sometimes fail or make weird behaviour
         private static void Main()
         {
+            CheckSource();
+
+
             DynamicConstants.UpdateDynamicConstants();
 
             AssetOperations();
             InitHeaderContents();
-            //ExchangeFolderIconData(persistentData.guidTextureList, tempFolderIconDict, DataExchangeType.ListToDict);
-            //ExchangeIconSetData(persistentData.iconSetDataList, tempIconSetDict, DataExchangeType.ListToDict);
 
 
             if (persistentData.guidTextureList.Count > 0)
@@ -259,7 +279,7 @@ namespace UnityEditorTools.FolderIcons
             for (int loadedJsonDataIndex = 0; loadedJsonDataIndex < jsonDataList.Count; loadedJsonDataIndex++)
             {
                 JsonTextureData jsonTextureData = jsonDataList[loadedJsonDataIndex];
-                
+
 
                 folderName = jsonTextureData.folderName;
                 color = new Color(jsonTextureData.color.x, jsonTextureData.color.y, jsonTextureData.color.z, jsonTextureData.color.w);
