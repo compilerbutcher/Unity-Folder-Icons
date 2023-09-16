@@ -93,7 +93,7 @@ MonoBehaviour:
       m_Text: Open
       m_Image: {fileID: 0}
       m_Tooltip: 
-  isHeaderContentsCreated: 1
+  isHeaderContentsCreated: 0
   iconSetDataList:
   - iconSetName: Default
     iconSetData: []
@@ -123,4 +123,4 @@ MonoBehaviour:
       icon: {fileID: 2800000, guid: 251bf28a980ef0043b9f3af8de533f38, type: 3}
     - folderName: Environment
       icon: {fileID: 2800000, guid: a09cd29632a3f66498bc81bf21195551, type: 3}
-  currentIconSetIndex: 1
+  currentIconSetIndex: 0
