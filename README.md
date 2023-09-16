@@ -27,7 +27,12 @@ https://github.com/compilerbutcher/Folder-Icons.git
 </div>
 
 <br>
-<p align="center"> If you want to ensure that there is no file named 'plugins' in your 'Assets' folder and maintain a clean 'Assets' folder, install Unity-Folder-Icons using the 'Add Package From Disk' option </p>
+<div align="center">
+ <p>"To download a package from Git in Unity, you need to have Git installed on your computer."</p>
+ 
+</div>
+
+x
 
 <!-- ------------------------------------------------------------------------------------------------------------------------------- -->
 
