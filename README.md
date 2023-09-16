@@ -1,5 +1,5 @@
 <!----------------------------------------------------Main Header Part------------------------------------------------------------------ -->
-<h1 align="center">Folder Icons</h1>
+<h1 align="center">Unity Folder Icons</h1>
 
 <p align="center"> Folder Icons allows you to change the default folder icons in Unity </p>
 <img src="https://github.com/compilerbutcher/Folder-Icons/assets/97310008/6505017d-5228-43ce-9d02-a574aa1df4ac.png">
