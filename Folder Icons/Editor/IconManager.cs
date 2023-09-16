@@ -18,18 +18,19 @@ namespace UnityEditorTools.FolderIcons
             // Check if the package is installed
             {
                 // Check if the package is locally installed
-                bool isLocallyInstalled = UnityEditor.PackageManager.PackageInfo.FindForAssetPath("Packages/" + packageName) != null;
+                bool isGit = UnityEditor.PackageManager.PackageInfo.FindForAssetPath("Packages/" + packageName).source == UnityEditor.PackageManager.PackageSource.Git;
 
-                if (isLocallyInstalled)
+                if (isGit)
                 {
-                    Debug.Log(packageName + " is locally installed.");
+                    Debug.Log(packageName + " is git installed.");
                 }
                 else
                 {
-                    Debug.Log(packageName + " is installed from Git or another external source.");
+                    Debug.Log(packageName + " is locally installed.");
                 }
             }
         }
+
 
 
 
@@ -102,7 +103,7 @@ namespace UnityEditorTools.FolderIcons
         [MenuItem("Tools/Test")]
         static void a()
         {
-            string path = "Assets/Ha/Deneme2/Merid/DASDAS/EN ›yi Benim/HAHAHAHA/NiCE/NONONO/SUCKERS/GETDEStroyed";
+            string path = "Assets/Ha/Deneme2/Merid/DASDAS/EN √ùyi Benim/HAHAHAHA/NiCE/NONONO/SUCKERS/GETDEStroyed";
 
             string[] pathSegments = path.Split('/');
 
