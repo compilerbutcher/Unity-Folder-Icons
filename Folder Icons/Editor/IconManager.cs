@@ -41,7 +41,7 @@ namespace UnityEditorTools.FolderIcons
         internal static Texture2D projectCurrentCustomTexture;
 
         internal static Dictionary<string, bool> folderEmptyDict;
-        internal static string[] iconSetNames;
+        [SerializeField] internal static string[] iconSetNames;
 
         static IconManager()
         {
@@ -73,12 +73,17 @@ namespace UnityEditorTools.FolderIcons
             }
         }
 
-        // Initialize inspector header contents in the persistentData if it is null
+        // Initialize inspector header contents in the persistentData if any of it fields are null
         private static void InitInspectorHeaderContents()
         {
             if (persistentData != null)
             {
-                if (persistentData.headerContents == null)
+
+                if (persistentData.headerContents.buttonBackgroundTexture == null ||
+                    persistentData.headerContents.buttonHoverTexture == null ||
+                    persistentData.headerContents.headerIconGUIStyle == null ||
+                    persistentData.headerContents.resetButtonGUIContent == null ||
+                    persistentData.headerContents.openButton == null)
                 {
                     persistentData.headerContents = new HeaderContents();
                     HeaderFunctions.CreateInspectorHeaderContents(ref persistentData.headerContents.buttonBackgroundTexture,

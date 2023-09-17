@@ -71,7 +71,7 @@ namespace UnityEditorTools.FolderIcons
 
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            bool removeButton = GUILayout.Button("Delete!", GUILayout.ExpandWidth(false));
+            bool removeButton = GUILayout.Button("Delete Icon!", GUILayout.ExpandWidth(false));
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
 

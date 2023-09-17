@@ -229,6 +229,11 @@ namespace UnityEditorTools.FolderIcons
                         IconManager.iconSetNames[i] = IconManager.persistentData.iconSetDataList[i].iconSetName;
                     }
 
+                    selectedOption = IconManager.persistentData.iconSetDataList.Count - 1;
+
+                    UpdateAllFolderIcons();
+
+
                     Debug.Log($"Loaded icon sets from: {selectedFile}");
                 }
                 else
@@ -409,21 +414,21 @@ namespace UnityEditorTools.FolderIcons
 
             iconSetDataProperty.ClearArray();
 
-            var iconSetDataList = IconManager.persistentData.iconSetDataList[currentListIndex].iconSetData;
+            List<IconSetData> iconSetDataList = IconManager.persistentData.iconSetDataList[currentListIndex].iconSetData;
 
             for (int iconDataIndex = 0; iconDataIndex < iconSetDataList.Count; iconDataIndex++)
             {
+                
                 iconSetDataProperty.InsertArrayElementAtIndex(iconDataIndex);
 
-                // Get the newly added element
                 SerializedProperty newProperty = iconSetDataProperty.GetArrayElementAtIndex(iconDataIndex);
 
                 newProperty.FindPropertyRelative("folderName").stringValue = iconSetDataList[iconDataIndex].folderName;
                 newProperty.FindPropertyRelative("icon").objectReferenceValue = iconSetDataList[iconDataIndex].icon;
             }
 
-
             serializedObject.ApplyModifiedProperties();
+
         }
         private void HandleOnEnable()
         {
@@ -469,6 +474,7 @@ namespace UnityEditorTools.FolderIcons
                 UpdateSerializedPropertyOfIconSetList(serializedObject, IconManager.persistentData.currentIconSetIndex);
 
                 Repaint();
+
             }
         }
 
@@ -479,6 +485,7 @@ namespace UnityEditorTools.FolderIcons
 
             IconManager.persistentData.currentIconSetIndex = selectedOption;
             if (IconManager.persistentData != null) EditorUtility.SetDirty(IconManager.persistentData);
+
             if (selectedOption == 0)
             {
                 isIconSetADefaultIconSet = AreFirstAndSecondDefaultIconSet();
@@ -486,7 +493,10 @@ namespace UnityEditorTools.FolderIcons
                 EditorApplication.projectWindowItemOnGUI = null;
                 EditorApplication.RepaintProjectWindow();
 
+
                 UpdateSerializedPropertyOfIconSetList(serializedObject, IconManager.persistentData.currentIconSetIndex);
+                IconManager.persistentData.guidTextureList.Clear();
+                if (IconManager.persistentData != null) EditorUtility.SetDirty(IconManager.persistentData);
 
                 return;
             }
@@ -497,9 +507,6 @@ namespace UnityEditorTools.FolderIcons
             isIconSetADefaultIconSet = AreFirstAndSecondDefaultIconSet();
 
             UpdateSerializedPropertyOfIconSetList(serializedObject, IconManager.persistentData.currentIconSetIndex);
-
-
-
 
 
             string[] guids = AssetDatabase.FindAssets("");
@@ -519,28 +526,25 @@ namespace UnityEditorTools.FolderIcons
             }
 
 
+
             serializedObject.Update();
+
+            IconSetDataListWrapper selectedIconDataList = IconManager.persistentData.iconSetDataList[IconManager.persistentData.currentIconSetIndex];
             for (int assetNameIndex = 0; assetNameIndex < assetNameList.Count; assetNameIndex++)
             {
-                for (int iconSetIndex = 0; iconSetIndex < iconSetsProperty.FindPropertyRelative("iconSetData").arraySize; iconSetIndex++)
+                for (int iconSetIndex = 0; iconSetIndex < selectedIconDataList.iconSetData.Count; iconSetIndex++)
                 {
 
-                    if (assetNameList[assetNameIndex] == iconSetsProperty.FindPropertyRelative("iconSetData").GetArrayElementAtIndex(iconSetIndex).
-                        FindPropertyRelative("folderName").stringValue)
+                    if (assetNameList[assetNameIndex] == selectedIconDataList.iconSetData[iconSetIndex].folderName)
                     {
-                        if (IconManager.persistentData.guidTextureList.Any(x => x.guid != assetGUIDList[assetNameIndex]))
-                        {
-                            Texture2D icon = iconSetsProperty.FindPropertyRelative("iconSetData").GetArrayElementAtIndex(iconSetIndex).
-                                FindPropertyRelative("icon").objectReferenceValue as Texture2D;
+                        Texture2D icon = selectedIconDataList.iconSetData[iconSetIndex].icon;
 
-                            GUIDTextureData guidTextureData = new GUIDTextureData();
-                            guidTextureData.guid = assetGUIDList[assetNameIndex];
-                            guidTextureData.textureData = TextureFunctions.CreateTextureData(Color.clear, null, null, icon);
+                        GUIDTextureData guidTextureData = new GUIDTextureData();
+                        guidTextureData.guid = assetGUIDList[assetNameIndex];
+                        guidTextureData.textureData = TextureFunctions.CreateTextureData(Color.clear, null, null, icon);
 
-                            IconManager.persistentData.guidTextureList.Add(guidTextureData);
-
-                            if (IconManager.persistentData != null) EditorUtility.SetDirty(IconManager.persistentData);
-                        }    
+                        IconManager.persistentData.guidTextureList.Add(guidTextureData);
+                        if (IconManager.persistentData != null) EditorUtility.SetDirty(IconManager.persistentData);
                     }
                 }
             }

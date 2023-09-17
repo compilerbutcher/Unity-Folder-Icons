@@ -67,11 +67,9 @@ namespace UnityEditorTools.FolderIcons
     internal sealed class HeaderContents
     {
         // Unity inspector header variables
-        [SerializeField] internal FolderPopupWindowContent folderPopupWindowContent;
         [SerializeField] internal Texture2D buttonBackgroundTexture;
         [SerializeField] internal Texture2D buttonHoverTexture;
         [SerializeField] internal GUIStyle headerIconGUIStyle;
-        [SerializeField] internal GenericMenu threeDotGenericMenu;
         [SerializeField] internal GUIContent resetButtonGUIContent;
         [SerializeField] internal GUIContent openButton;
     }

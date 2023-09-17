@@ -12,10 +12,8 @@ namespace UnityEditorTools.FolderIcons
         internal static void CreateInspectorHeaderContents(ref Texture2D buttonBackgroundTexture, ref Texture2D buttonHoverTexture,ref GUIStyle iconGUIStyle,
             ref GUIContent resetGUIContent, ref GUIContent openButton)
         {
-
             buttonBackgroundTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(DynamicConstants.defaultButtonPath);
             buttonHoverTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(DynamicConstants.hoverButtonPath);
-
 
 
             iconGUIStyle = new GUIStyle();
@@ -49,7 +47,7 @@ namespace UnityEditorTools.FolderIcons
         }
 
         // Draw folder icon in the inspector header as a clickable PopupWindow and with the custom icon we created
-        internal static void DrawFolderHeaderIcon(string currentPath, string selectedAssetGUID, GUIStyle headerIconGUIStyle, FolderPopupWindowContent folderIconPopup)
+        internal static void DrawFolderHeaderIcon(string currentPath, string selectedAssetGUID, GUIStyle headerIconGUIStyle)
         {
             Rect lastRect = GUILayoutUtility.GetLastRect();
             Rect r = new Rect(lastRect.x + 0f, lastRect.y, lastRect.width - 0f, lastRect.height);
@@ -66,14 +64,18 @@ namespace UnityEditorTools.FolderIcons
                     {
                         if (GUI.Button(rect, guidTextureData.textureData.folderTexture, headerIconGUIStyle))
                         {
-                            PopupWindow.Show(rect, folderIconPopup);
+                            FolderPopupWindowContent customFolderPopupWindow = new FolderPopupWindowContent();
+
+                            PopupWindow.Show(rect, customFolderPopupWindow);
                         }
                     }
                     else
                     {
                         if (GUI.Button(rect, guidTextureData.textureData.emptyFolderTexture, headerIconGUIStyle))
                         {
-                            PopupWindow.Show(rect, folderIconPopup);
+                            FolderPopupWindowContent customFolderPopupWindow = new FolderPopupWindowContent();
+
+                            PopupWindow.Show(rect, customFolderPopupWindow);
                         }
                     }
                 }
@@ -81,7 +83,9 @@ namespace UnityEditorTools.FolderIcons
                 {
                     if (GUI.Button(rect, guidTextureData.textureData.customTexture, headerIconGUIStyle))
                     {
-                        PopupWindow.Show(rect, folderIconPopup);
+                        FolderPopupWindowContent customFolderPopupWindow = new FolderPopupWindowContent();
+
+                        PopupWindow.Show(rect, customFolderPopupWindow);
                     }
                 }
             }
@@ -93,14 +97,18 @@ namespace UnityEditorTools.FolderIcons
                 {
                     if (GUI.Button(rect, DynamicConstants.defaultFolderIcon, headerIconGUIStyle))
                     {
-                        PopupWindow.Show(rect, folderIconPopup);
+                        FolderPopupWindowContent customFolderPopupWindow = new FolderPopupWindowContent();
+
+                        PopupWindow.Show(rect, customFolderPopupWindow);
                     }
                 }
                 else
                 {
                     if (GUI.Button(rect, DynamicConstants.emptyDefaultFolderIcon, headerIconGUIStyle))
                     {
-                        PopupWindow.Show(rect, folderIconPopup);
+                        FolderPopupWindowContent customFolderPopupWindow = new FolderPopupWindowContent();
+
+                        PopupWindow.Show(rect, customFolderPopupWindow);
                     }
                 }
             }

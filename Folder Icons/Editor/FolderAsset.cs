@@ -43,8 +43,7 @@ namespace UnityEditorTools.FolderIcons
                 GUILayout.EndVertical();
                 GUILayout.EndHorizontal();
 
-                HeaderFunctions.DrawFolderHeaderIcon(currentPath, selectedAssetGUID, IconManager.persistentData.headerContents.headerIconGUIStyle,
-                IconManager.persistentData.headerContents.folderPopupWindowContent);
+                HeaderFunctions.DrawFolderHeaderIcon(currentPath, selectedAssetGUID, IconManager.persistentData.headerContents.headerIconGUIStyle);
                 HeaderFunctions.DrawHeaderTitle(target);
                 HeaderFunctions.DrawHeaderThreeDot(IconManager.persistentData.headerContents.resetButtonGUIContent);
             }

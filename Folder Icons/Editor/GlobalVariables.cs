@@ -1,6 +1,7 @@
 using System.IO;
 using UnityEditor;
 using UnityEngine;
+using static UnityEditorInternal.ReorderableList;
 
 namespace UnityEditorTools.FolderIcons
 {
@@ -42,7 +43,7 @@ namespace UnityEditorTools.FolderIcons
         internal const string lightFolderName = "/d_LightFolder Icon.png";
 
         internal const string defaultButtonName = "/defaultbutton.png";
-        internal const string hoverButtonName = "/hoverButton.png";
+        internal const string hoverButtonName = "/hoverbutton.png";
 
 
 
@@ -76,8 +77,6 @@ namespace UnityEditorTools.FolderIcons
         internal static string lightFolderPath;
         internal static string defaultButtonPath;
         internal static string hoverButtonPath;
-        internal static string defaultButtonAbsolutePath;
-        internal static string hoverButtonAbsolutePath;
         internal static string dynamicDefaultEmptyFolderPath;
         internal static string dynamicDefaultFolderPath;
 
@@ -148,8 +147,6 @@ namespace UnityEditorTools.FolderIcons
             lightFolderPath = defaultIconsPath + Constants.lightFolderName;
             defaultButtonPath = defaultIconsPath + Constants.defaultButtonName;
             hoverButtonPath = defaultIconsPath + Constants.hoverButtonName;
-            defaultButtonAbsolutePath = Path.GetFullPath(defaultButtonPath);
-            hoverButtonAbsolutePath = Path.GetFullPath(hoverButtonPath);
 
             dynamicDefaultEmptyFolderPath = EditorGUIUtility.isProSkin ? darkEmptyFolderPath : lightEmptyFolderPath;
             dynamicDefaultFolderPath = EditorGUIUtility.isProSkin ? darkFolderPath : lightFolderPath;
