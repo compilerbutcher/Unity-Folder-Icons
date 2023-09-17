@@ -11,6 +11,12 @@ namespace UnityEditorTools.FolderIcons
     [InitializeOnLoad]
     internal sealed class IconManager
     {
+        [MenuItem("Tools/AA")]
+        static void A()
+        {
+            AssetDatabase.DeleteAsset(Constants.packageFolderPath + Constants.dataFolderName + Constants.PersistentDataName);
+            AssetDatabase.Refresh();
+        }
 
         // PersistentData variables
         internal static PersistentData persistentData;

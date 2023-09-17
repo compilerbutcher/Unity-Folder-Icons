@@ -12,15 +12,15 @@ namespace UnityEditorTools.FolderIcons
     internal class PersistentData : ScriptableObject
     {
         // Main guidTexture Data
-        [SerializeField, HideInInspector] internal List<GUIDTextureData> guidTextureList = new List<GUIDTextureData>();
+        [SerializeField] internal List<GUIDTextureData> guidTextureList = new List<GUIDTextureData>();
 
         // Inspector header contents
         [SerializeField, HideInInspector] internal HeaderContents headerContents;
 
 
         // Icon sets
-        [SerializeField, HideInInspector] internal List<IconSetDataListWrapper> iconSetDataList = new();
-        [SerializeField, HideInInspector] internal int currentIconSetIndex;
+        [SerializeField] internal List<IconSetDataListWrapper> iconSetDataList = new();
+        [SerializeField] internal int currentIconSetIndex;
 
     }
 }
