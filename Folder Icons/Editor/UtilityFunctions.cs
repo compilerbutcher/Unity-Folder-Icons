@@ -227,6 +227,7 @@ namespace UnityEditorTools.FolderIcons
                     File.Delete($"{Path.GetFullPath(DynamicConstants.iconFolderPath)}\\{selectedAssetGUID}.png");
                     File.Delete($"{Path.GetFullPath(DynamicConstants.emptyIconFolderPath)}\\{selectedAssetGUID}.png.meta");
                     File.Delete($"{Path.GetFullPath(DynamicConstants.iconFolderPath)}\\{selectedAssetGUID}.png.meta");
+                    AssetDatabase.Refresh();
                 }
 
 
@@ -251,40 +252,75 @@ namespace UnityEditorTools.FolderIcons
     {
         internal static void CheckAndCreateFolderStorage()
         {
-            if (!AssetDatabase.IsValidFolder(DynamicConstants.pluginsPath))
+            // Project Installed Git
+            if (IconManager.isProjectInstalledFromGit)
             {
-                AssetDatabase.CreateFolder("Assets", Constants.pluginsName);
-                AssetDatabase.CreateFolder(DynamicConstants.pluginsPath, Constants.mainFolderIconName);
+                if (!AssetDatabase.IsValidFolder(DynamicConstants.pluginsPath))
+                {
+                    AssetDatabase.CreateFolder(Constants.rootAssetsName, Constants.pluginsName);
+                    AssetDatabase.CreateFolder(DynamicConstants.pluginsPath, Constants.mainFolderIconName);
 
-                AssetDatabase.CreateFolder(DynamicConstants.mainFolderPath, Constants.emptyFolderIconsName);
-                AssetDatabase.CreateFolder(DynamicConstants.mainFolderPath, Constants.folderIconsName);
-            }
-            else if (!AssetDatabase.IsValidFolder(DynamicConstants.mainFolderPath))
-            {
-                AssetDatabase.CreateFolder(DynamicConstants.pluginsPath, Constants.mainFolderIconName);
+                    AssetDatabase.CreateFolder(DynamicConstants.mainFolderPath, Constants.emptyFolderIconsName);
+                    AssetDatabase.CreateFolder(DynamicConstants.mainFolderPath, Constants.folderIconsName);
+                }
+                else if (!AssetDatabase.IsValidFolder(DynamicConstants.mainFolderPath))
+                {
+                    AssetDatabase.CreateFolder(DynamicConstants.pluginsPath, Constants.mainFolderIconName);
 
-                AssetDatabase.CreateFolder(DynamicConstants.mainFolderPath, Constants.emptyFolderIconsName);
-                AssetDatabase.CreateFolder(DynamicConstants.mainFolderPath, Constants.folderIconsName);
+                    AssetDatabase.CreateFolder(DynamicConstants.mainFolderPath, Constants.emptyFolderIconsName);
+                    AssetDatabase.CreateFolder(DynamicConstants.mainFolderPath, Constants.folderIconsName);
+                }
+
+                if (!AssetDatabase.IsValidFolder(DynamicConstants.emptyIconFolderPath))
+                {
+                    AssetDatabase.CreateFolder(DynamicConstants.mainFolderPath, DynamicConstants.emptyIconFolderPath);
+                }
+
+                if (!AssetDatabase.IsValidFolder(DynamicConstants.iconFolderPath))
+                {
+                    AssetDatabase.CreateFolder(DynamicConstants.mainFolderPath, Constants.folderIconsName);
+                }
+
+                if (!AssetDatabase.IsValidFolder(DynamicConstants.loadedIconSetPath))
+                {
+                    AssetDatabase.CreateFolder(DynamicConstants.mainFolderPath, Constants.loadedIconSetsName);
+                }
+
+                if (!AssetDatabase.IsValidFolder(DynamicConstants.loadedIconsPath))
+                {
+                    AssetDatabase.CreateFolder(DynamicConstants.mainFolderPath, Constants.loadedIconsFolderName);
+                }
             }
-            if (!AssetDatabase.IsValidFolder(DynamicConstants.emptyIconFolderPath))
+
+            // Project Installed Locally
+            else if(!IconManager.isProjectInstalledFromGit)
             {
-                AssetDatabase.CreateFolder(DynamicConstants.mainFolderPath, DynamicConstants.emptyIconFolderPath);
+                if (AssetDatabase.IsValidFolder(DynamicConstants.mainFolderPath))
+                {
+                    if (!AssetDatabase.IsValidFolder($"{DynamicConstants.mainFolderPath}/{Constants.dataFolderName}"))
+                    {
+                        AssetDatabase.CreateFolder(DynamicConstants.mainFolderPath, $"{DynamicConstants.mainFolderPath}/{Constants.dataFolderName}");
+                    }
+                    if (!AssetDatabase.IsValidFolder(DynamicConstants.emptyIconFolderPath))
+                    {
+                        AssetDatabase.CreateFolder($"{DynamicConstants.mainFolderPath}/{Constants.allIconsFolderName}", Constants.emptyFolderIconsName);
+                    }
+                    if (!AssetDatabase.IsValidFolder(DynamicConstants.iconFolderPath))
+                    {
+                        AssetDatabase.CreateFolder($"{DynamicConstants.mainFolderPath}/{Constants.allIconsFolderName}", Constants.folderIconsName);
+                    }
+                    if (!AssetDatabase.IsValidFolder(DynamicConstants.loadedIconSetPath))
+                    {
+                        AssetDatabase.CreateFolder($"{DynamicConstants.mainFolderPath}/{Constants.allIconsFolderName}", Constants.loadedIconSetsName);
+                    }
+                    if (!AssetDatabase.IsValidFolder(DynamicConstants.loadedIconsPath))
+                    {
+                        AssetDatabase.CreateFolder($"{DynamicConstants.mainFolderPath}/{Constants.allIconsFolderName}", Constants.loadedIconsFolderName);
+                    }
+                }
             }
-            if (!AssetDatabase.IsValidFolder(DynamicConstants.iconFolderPath))
-            {
-                AssetDatabase.CreateFolder(DynamicConstants.mainFolderPath, Constants.folderIconsName);
-            }
-            if (!AssetDatabase.IsValidFolder(DynamicConstants.loadedIconSetPath))
-            {
-                AssetDatabase.CreateFolder(DynamicConstants.mainFolderPath, Constants.loadedIconSetsName);
-            }
-            if (!AssetDatabase.IsValidFolder(DynamicConstants.loadedIconsPath))
-            {
-                AssetDatabase.CreateFolder(DynamicConstants.mainFolderPath, Constants.loadedIconsFolderName);
-            }
+            
         }
-
-
 
         // Handle if is a folder filled or not
         internal static bool IsFolderFilled(string folderPath)

@@ -7,29 +7,32 @@ namespace UnityEditorTools.FolderIcons
     public static class Constants
     {
         // Package paths from "Packages/com.compilerbutcher.foldericons/Folder Icons"
-        internal const string packageIconsPath = "Packages/com.compilerbutcher.foldericons/Folder Icons";
+        internal const string packageFolderPath = "Packages/com.compilerbutcher.foldericons/Folder Icons";
         internal const string PersistentDataName = "/FolderIconsData.asset";
         internal const string defaultIconSetName = "/Default Icon Sets.json";
+        internal const string rootPackageName = "Packages";
         internal const string dataFolderName = "/Data";
-        internal const string defaultIconsName = "/Default Icons";
-        internal const string iconSetsName = "/Icon Sets";
-        internal const string iconsFolderName = "/Icons";
+        internal const string allIconsFolderName = "/Icons";
+        internal const string defaultIconsName = "/Default Unity Icons";
+        internal const string defaultIconSetsName = "/Default Icon Sets";
         // -----------------------------------------------------------------
 
 
 
         // Icon paths from "/Assets/Plugins/Unity-Folder-Icons"
+        internal const string rootAssetsName = "Assets";
         internal const string pluginsName = "Plugins";
         internal const string mainFolderIconName = "Unity-Folder-Icons";
 
         // Names for colorful folders
-        internal const string emptyFolderIconsName = "Empty Folder Icons";
-        internal const string folderIconsName = "Folder Icons";
+        internal const string emptyFolderIconsName = "Empty Color Folder Icons";
+        internal const string folderIconsName = "Color Folder Icons";
 
         // Names for loaded icons from Tools > Folder Icon Settings
         internal const string loadedIconSetsName = "Loaded Icon Sets";
         internal const string loadedIconsFolderName = "Loaded Icons";
         // -----------------------------------------------------------------
+
 
 
         // Default icon names
@@ -79,19 +82,21 @@ namespace UnityEditorTools.FolderIcons
         internal static string dynamicDefaultFolderPath;
 
 
-        // Package paths from "Packages/com.compilerbutcher.foldericons/Folder Icons
+        // Install Dependent Paths
         internal static string persistentDataPath;
-        internal static string absolutePackagePath;
-        internal static string defaultIconsPath;
-
-
-        // Icon paths from "/Assets/Plugins/Unity-Folder-Icons"
-        internal static string pluginsPath;
         internal static string mainFolderPath;
         internal static string emptyIconFolderPath;
         internal static string iconFolderPath;
         internal static string loadedIconSetPath;
         internal static string loadedIconsPath;
+
+        // Package paths from "Packages/com.compilerbutcher.foldericons/Folder Icons"
+        internal static string absolutePackagePath;
+        internal static string defaultIconsPath;
+
+        // Icon paths from "/Assets/Plugins/Unity-Folder-Icons"
+        internal static string pluginsPath;
+
 
 
         // Dynamically updated dark theme or light theme variables (Pro skin or not)
@@ -107,18 +112,31 @@ namespace UnityEditorTools.FolderIcons
         internal static void UpdateDynamicConstants()
         {
             // Immutable package paths
-            persistentDataPath = Constants.packageIconsPath + Constants.dataFolderName + Constants.PersistentDataName;
-            absolutePackagePath = Path.GetFullPath(Constants.packageIconsPath);
-            defaultIconsPath = Constants.packageIconsPath + Constants.iconsFolderName + Constants.defaultIconsName;
+            absolutePackagePath = Path.GetFullPath(Constants.packageFolderPath);
+            defaultIconsPath = Constants.packageFolderPath + Constants.allIconsFolderName + Constants.defaultIconsName;
 
 
-            // Mutable paths
-            pluginsPath = $"Assets/{Constants.pluginsName}";
-            mainFolderPath = $"{pluginsPath}/{Constants.mainFolderIconName}";
-            emptyIconFolderPath = $"{mainFolderPath}/{Constants.emptyFolderIconsName}";
-            iconFolderPath = $"{mainFolderPath}/{Constants.folderIconsName}";
-            loadedIconSetPath = $"{mainFolderPath}/{Constants.loadedIconSetsName}";
-            loadedIconsPath = $"{mainFolderPath}/{Constants.loadedIconsFolderName}";
+            // Dynamic Installation paths
+            if (IconManager.isProjectInstalledFromGit)
+            {
+                pluginsPath = $"{Constants.rootAssetsName}/{Constants.pluginsName}";
+                mainFolderPath = $"{pluginsPath}/{Constants.mainFolderIconName}";
+                persistentDataPath = mainFolderPath + Constants.PersistentDataName;
+                emptyIconFolderPath = $"{mainFolderPath}/{Constants.emptyFolderIconsName}";
+                iconFolderPath = $"{mainFolderPath}/{Constants.folderIconsName}";
+                loadedIconSetPath = $"{mainFolderPath}/{Constants.loadedIconSetsName}";
+                loadedIconsPath = $"{mainFolderPath}/{Constants.loadedIconsFolderName}";
+            }
+            else if (!IconManager.isProjectInstalledFromGit)
+            {
+                mainFolderPath = $"{Constants.packageFolderPath}";
+                persistentDataPath = $"{Constants.packageFolderPath}/{Constants.dataFolderName}/{Constants.PersistentDataName}";
+                emptyIconFolderPath = $"{mainFolderPath}/{Constants.allIconsFolderName}/{Constants.emptyFolderIconsName}";
+                iconFolderPath = $"{mainFolderPath}/{Constants.allIconsFolderName}/{Constants.folderIconsName}";
+                loadedIconSetPath = $"{mainFolderPath}/{Constants.allIconsFolderName}/{Constants.loadedIconSetsName}";
+                loadedIconsPath = $"{mainFolderPath}/{Constants.allIconsFolderName}/{Constants.loadedIconsFolderName}";
+            }
+
 
 
 

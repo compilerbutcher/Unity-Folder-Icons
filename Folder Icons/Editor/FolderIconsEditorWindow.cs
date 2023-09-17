@@ -361,6 +361,8 @@ namespace UnityEditorTools.FolderIcons
                         IconManager.persistentData.iconSetDataList.RemoveRange(2, iconSetDataIndex);
 
 
+                        isIconSetADefaultIconSet = AreFirstAndSecondDefaultIconSet();
+                        UpdateSerializedPropertyOfIconSetList(serializedObject, IconManager.persistentData.currentIconSetIndex);
 
 
                         if (IconManager.persistentData != null) IconManager.persistentData.guidTextureList.Clear();

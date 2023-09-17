@@ -81,11 +81,17 @@ namespace UnityEditorTools.FolderIcons
 
             if (removeButton)
             {
+                if (File.Exists($"{Path.GetFullPath(DynamicConstants.emptyIconFolderPath)}\\{currentAssetGUID}.png") &&
+                    File.Exists($"{Path.GetFullPath(DynamicConstants.iconFolderPath)}\\{currentAssetGUID}.png"))
+                {
+                    File.Delete($"{Path.GetFullPath(DynamicConstants.emptyIconFolderPath)}\\{currentAssetGUID}.png");
+                    File.Delete($"{Path.GetFullPath(DynamicConstants.iconFolderPath)}\\{currentAssetGUID}.png");
+                    File.Delete($"{Path.GetFullPath(DynamicConstants.emptyIconFolderPath)}\\{currentAssetGUID}.png.meta");
+                    File.Delete($"{Path.GetFullPath(DynamicConstants.iconFolderPath)}\\{currentAssetGUID}.png.meta");
+                    AssetDatabase.Refresh();
+                }
                 IconManager.persistentData.guidTextureList.RemoveAll(x => x.guid == currentAssetGUID);
-                EditorUtility.SetDirty(IconManager.persistentData);
-
-
-                //IconManager.tempFolderIconDict.Remove(currentAssetGUID);
+                if (IconManager.persistentData != null) EditorUtility.SetDirty(IconManager.persistentData);
 
                 EditorApplication.projectWindowItemOnGUI = null;
                 EditorApplication.projectWindowItemOnGUI += UtilityFunctions.DrawFolders;
