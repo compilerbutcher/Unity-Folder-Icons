@@ -18,9 +18,9 @@ namespace UnityEditorTools.FolderIcons
             // Check if the package is installed
             {
                 // Check if the package is locally installed
-                isProjectInstalledFromGit = UnityEditor.PackageManager.PackageInfo.FindForAssetPath("Packages/" + packageName).source == UnityEditor.PackageManager.PackageSource.Git;
+                isProjectInstalledExternally = UnityEditor.PackageManager.PackageInfo.FindForAssetPath("Packages/" + packageName).source != UnityEditor.PackageManager.PackageSource.Local;
 
-                if (isProjectInstalledFromGit)
+                if (isProjectInstalledExternally)
                 {
                     Debug.Log(packageName + "project is installed from git.");
                 }
@@ -35,7 +35,7 @@ namespace UnityEditorTools.FolderIcons
 
         // PersistentData variables
         internal static PersistentData persistentData;
-        internal static bool isProjectInstalledFromGit;
+        internal static bool isProjectInstalledExternally;
 
         // Project current values
         internal static Color projectCurrentColor;
@@ -136,14 +136,14 @@ namespace UnityEditorTools.FolderIcons
             persistentData = AssetDatabase.LoadAssetAtPath<PersistentData>(DynamicConstants.persistentDataPath);
             UtilityFunctions.CheckAllFoldersCurrentEmptiness(ref folderEmptyDict);
 
-            if (isProjectInstalledFromGit)
+            if (isProjectInstalledExternally)
             {
                 if (persistentData == null)
                 {
                     throw new NullReferenceException($"Persistent Data is not exist at: {DynamicConstants.persistentDataPath}");
                 }
             }
-            else if (!isProjectInstalledFromGit)
+            else if (!isProjectInstalledExternally)
             {
                 if (persistentData == null)
                 {
@@ -345,9 +345,7 @@ namespace UnityEditorTools.FolderIcons
                     string currentFolderPath = resultPathLevels[i];
 
 
-
-
-                    if (currentFolderPath == "Assets") continue;
+                    if (currentFolderPath == Constants.rootAssetsName) continue;
 
 
                     if (!AssetDatabase.IsValidFolder(currentFolderPath))

@@ -253,7 +253,7 @@ namespace UnityEditorTools.FolderIcons
         internal static void CheckAndCreateFolderStorage()
         {
             // Project Installed Git
-            if (IconManager.isProjectInstalledFromGit)
+            if (IconManager.isProjectInstalledExternally)
             {
                 if (!AssetDatabase.IsValidFolder(DynamicConstants.pluginsPath))
                 {
@@ -293,7 +293,7 @@ namespace UnityEditorTools.FolderIcons
             }
 
             // Project Installed Locally
-            else if(!IconManager.isProjectInstalledFromGit)
+            else if(!IconManager.isProjectInstalledExternally)
             {
                 if (AssetDatabase.IsValidFolder(DynamicConstants.mainFolderPath))
                 {

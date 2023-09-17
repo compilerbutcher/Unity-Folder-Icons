@@ -117,7 +117,7 @@ namespace UnityEditorTools.FolderIcons
 
 
             // Dynamic Installation paths
-            if (IconManager.isProjectInstalledFromGit)
+            if (IconManager.isProjectInstalledExternally)
             {
                 pluginsPath = $"{Constants.rootAssetsName}/{Constants.pluginsName}";
                 mainFolderPath = $"{pluginsPath}/{Constants.mainFolderIconName}";
@@ -127,7 +127,7 @@ namespace UnityEditorTools.FolderIcons
                 loadedIconSetPath = $"{mainFolderPath}/{Constants.loadedIconSetsName}";
                 loadedIconsPath = $"{mainFolderPath}/{Constants.loadedIconsFolderName}";
             }
-            else if (!IconManager.isProjectInstalledFromGit)
+            else if (!IconManager.isProjectInstalledExternally)
             {
                 mainFolderPath = $"{Constants.packageFolderPath}";
                 persistentDataPath = $"{Constants.packageFolderPath}/{Constants.dataFolderName}/{Constants.PersistentDataName}";
