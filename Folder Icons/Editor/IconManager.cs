@@ -98,7 +98,7 @@ namespace UnityEditorTools.FolderIcons
                     AssetDatabase.CreateAsset(persistentData, DynamicConstants.persistentDataPath);
                     AssetDatabase.ImportAsset(DynamicConstants.persistentDataPath);
 
-                    LoadIconSetsFromJson($"{DynamicConstants.absolutePackagePath}\\{Constants.dataFolderName}\\{Constants.PersistentDataName}");
+                    LoadIconSetsFromJson($"{DynamicConstants.absolutePackagePath}\\{Constants.dataFolderName}\\{Constants.defaultIconJsonName}");
 
                     AssetDatabase.SaveAssets();
                     AssetDatabase.Refresh();
