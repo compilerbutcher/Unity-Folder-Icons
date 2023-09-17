@@ -11,23 +11,6 @@ namespace UnityEditorTools.FolderIcons
     [InitializeOnLoad]
     internal sealed class IconManager
     {
-        private static void CheckProjectInstallPlace()
-        {
-            {
-                isProjectInstalledExternally = UnityEditor.PackageManager.PackageInfo.FindForAssetPath("Packages/com.compilerbutcher.foldericons").source != UnityEditor.PackageManager.PackageSource.Local;
-
-                if (isProjectInstalledExternally)
-                {
-                    Debug.Log("project is installed from git.");
-                }
-                else
-                {
-                    Debug.Log("project is installed from local");
-                }
-            }
-        }
-
-
 
         // PersistentData variables
         internal static PersistentData persistentData;
@@ -52,7 +35,8 @@ namespace UnityEditorTools.FolderIcons
         // We have to make sure use delayCall with asset operations otherwise, asset operations will sometimes fail or make weird behaviour
         private static void Main()
         {
-            CheckProjectInstallPlace();
+            isProjectInstalledExternally = UnityEditor.PackageManager.PackageInfo.FindForAssetPath("Packages/com.compilerbutcher.foldericons").source != UnityEditor.PackageManager.PackageSource.Local;
+
             DynamicConstants.UpdateDynamicConstants();
             AssetOperations();
             InitInspectorHeaderContents();
@@ -111,18 +95,19 @@ namespace UnityEditorTools.FolderIcons
             {
                 if (persistentData == null)
                 {
-                    throw new NullReferenceException($"Persistent Data is not exist at: {DynamicConstants.persistentDataPath}");
+                    persistentData = ScriptableObject.CreateInstance<PersistentData>();
+                    AssetDatabase.CreateAsset(persistentData, DynamicConstants.persistentDataPath);
+                    AssetDatabase.ImportAsset(DynamicConstants.persistentDataPath);
+                    AssetDatabase.SaveAssets();
+                    AssetDatabase.Refresh();
                 }
             }
             else if (!isProjectInstalledExternally)
             {
                 if (persistentData == null)
                 {
-                    persistentData = ScriptableObject.CreateInstance<PersistentData>();
-                    AssetDatabase.CreateAsset(persistentData, DynamicConstants.persistentDataPath);
-                    AssetDatabase.ImportAsset(DynamicConstants.persistentDataPath);
-                    AssetDatabase.SaveAssets();
-                    AssetDatabase.Refresh();
+                    throw new NullReferenceException($"Persistent Data is not exist at: {DynamicConstants.persistentDataPath}!" +
+                        $"Please make sure you have PersistentData at: {DynamicConstants.persistentDataPath}");
                 }
             }
 
