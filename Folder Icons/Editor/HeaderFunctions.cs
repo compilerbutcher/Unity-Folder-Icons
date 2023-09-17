@@ -1,51 +1,31 @@
 using UnityEditor;
 using UnityEngine;
-using System.Collections.Generic;
-using System.Text;
 using System.Linq;
-using UnityEngine.Profiling;
 
 namespace UnityEditorTools.FolderIcons
 {
     internal static class HeaderFunctions
     {
 
-        // This is mostly for drawing default folder header in the inspector, we need custom header for clicking effect on the icon in the header
-        internal static void CreateInspectorHeaderContents(ref FolderPopupWindowContent folderIconPopupContent,
-            ref Texture2D buttonBackgroundTexture, ref Texture2D buttonHoverTexture,ref GUIStyle iconGUIStyle,
-            ref GUIContent resetGUIContent, ref GUIContent openButton, Color buttonDefaultColor, Color buttonHoverColor)
+        // This is mostly for drawing default folder header in the inspector, we need custom header for clicking effect on the icon and to have a customized
+        // Icon in the header
+        internal static void CreateInspectorHeaderContents(ref Texture2D buttonBackgroundTexture, ref Texture2D buttonHoverTexture,ref GUIStyle iconGUIStyle,
+            ref GUIContent resetGUIContent, ref GUIContent openButton)
         {
-            folderIconPopupContent = new FolderPopupWindowContent();
-
-
-            // Mini folder Icon in the inspector
-            TextureFunctions.CreateTexture2DWithColor(ref buttonBackgroundTexture, buttonDefaultColor, 33, 33);
-            TextureFunctions.CreateTexture2DWithColor(ref buttonHoverTexture, buttonHoverColor, 33, 33);
-
-            TextureFunctions.CreateTexture(buttonBackgroundTexture, DynamicConstants.defaultButtonAbsolutePath);
-            TextureFunctions.ImportTexture(DynamicConstants.defaultButtonPath);
-
-            TextureFunctions.CreateTexture(buttonHoverTexture, DynamicConstants.hoverButtonAbsolutePath);
-            TextureFunctions.ImportTexture(DynamicConstants.defaultButtonPath);
 
             buttonBackgroundTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(DynamicConstants.defaultButtonPath);
             buttonHoverTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(DynamicConstants.hoverButtonPath);
 
 
+
             iconGUIStyle = new GUIStyle();
             iconGUIStyle.normal.background = buttonBackgroundTexture;
             iconGUIStyle.hover.background = buttonHoverTexture;
-            // ------------------------------------------------------------------------------------------
 
 
-
-            // Generic menu and reset button
             resetGUIContent = new GUIContent("Reset");
-            // ------------------------------------------------------------------------------------------
 
-            // Get open button GUIContent
             openButton = EditorGUIUtility.TrTextContent("Open");
-            // ------------------------------------------------------------------------------------------
         }
 
 
@@ -68,7 +48,7 @@ namespace UnityEditorTools.FolderIcons
             }
         }
 
-        // Draw folder icon in the inspector header as a clickable PopupWindow
+        // Draw folder icon in the inspector header as a clickable PopupWindow and with the custom icon we created
         internal static void DrawFolderHeaderIcon(string currentPath, string selectedAssetGUID, GUIStyle headerIconGUIStyle, FolderPopupWindowContent folderIconPopup)
         {
             Rect lastRect = GUILayoutUtility.GetLastRect();
@@ -150,6 +130,7 @@ namespace UnityEditorTools.FolderIcons
             GUI.Label(rect3, $"{target.name} (Default Asset)", EditorStyles.largeLabel);
         }
 
+        // Draw Three Dot in the header (Three little dot that opens a popup when clicking)
         internal static void DrawHeaderThreeDot(GUIContent resetButtonGUIContent)
         {
             Rect lastRect = GUILayoutUtility.GetLastRect();
@@ -167,6 +148,7 @@ namespace UnityEditorTools.FolderIcons
             }
         }
 
+        // Stolen from unity editor codes, finds style if can't get built-in
         internal static GUIStyle GetStyle(string styleName)
         {
             return GUI.skin.FindStyle(styleName) ?? EditorGUIUtility.GetBuiltinSkin(EditorSkin.Inspector).FindStyle(styleName);

@@ -46,7 +46,7 @@ namespace UnityEditorTools.FolderIcons
 
 
     [Serializable]
-    internal class IconSetData
+    internal sealed class IconSetData
     {
         [SerializeField] internal string folderName;
         [SerializeField] internal Texture2D icon;
@@ -55,7 +55,7 @@ namespace UnityEditorTools.FolderIcons
 
     // This is for serializable list
     [Serializable]
-    internal class IconSetDataListWrapper
+    internal sealed class IconSetDataListWrapper
     {
         [SerializeField] internal string iconSetName;
         [SerializeField] internal List<IconSetData> iconSetData;
@@ -64,7 +64,7 @@ namespace UnityEditorTools.FolderIcons
 
 
     [Serializable]
-    internal class HeaderContents
+    internal sealed class HeaderContents
     {
         // Unity inspector header variables
         [SerializeField] internal FolderPopupWindowContent folderPopupWindowContent;

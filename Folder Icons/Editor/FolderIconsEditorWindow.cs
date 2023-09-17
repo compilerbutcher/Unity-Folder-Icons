@@ -4,11 +4,10 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using System.IO;
-using Unity.Plastic.Newtonsoft.Json.Linq;
 
 namespace UnityEditorTools.FolderIcons
 {
-    public class FolderIconsEditorWindow : EditorWindow
+    internal sealed class FolderIconsEditorWindow : EditorWindow
     {
         private static int selectedOption = 0;
         private SerializedObject serializedObject;
@@ -36,7 +35,6 @@ namespace UnityEditorTools.FolderIcons
 
         private void OnGUI()    
         {
-
             HandleOnEnable();
 
             if (IconManager.persistentData == null || serializedObject == null) return;
@@ -387,6 +385,7 @@ namespace UnityEditorTools.FolderIcons
 
 
         #region General Region
+        // Check if selected dropdown menu is first or second to disable editing
         private bool AreFirstAndSecondDefaultIconSet()
         {
             if (selectedOption == 0 || selectedOption == 1)
@@ -398,11 +397,11 @@ namespace UnityEditorTools.FolderIcons
                 return false;
             }
         }
+        // Update all of the Icon Set List in the persistentData
         private void UpdateSerializedPropertyOfIconSetList(SerializedObject serializedObject, int currentListIndex)
         {
 
             if (IconManager.persistentData.iconSetDataList.Count == 0) return;
-            //if (IconManager.persistentData.iconSetDataList[currentListIndex].iconSetData.Count == 0) return;
 
             serializedObject.Update();
             iconSetsProperty = serializedObject.FindProperty("iconSetDataList").GetArrayElementAtIndex(currentListIndex);
@@ -410,17 +409,15 @@ namespace UnityEditorTools.FolderIcons
 
             iconSetDataProperty.ClearArray();
 
-            // Get the array of icon set data from IconManager.persistentData
             var iconSetDataList = IconManager.persistentData.iconSetDataList[currentListIndex].iconSetData;
 
             for (int iconDataIndex = 0; iconDataIndex < iconSetDataList.Count; iconDataIndex++)
             {
-                // Insert a new element to the iconSetsProperty array
                 iconSetDataProperty.InsertArrayElementAtIndex(iconDataIndex);
 
                 // Get the newly added element
                 SerializedProperty newProperty = iconSetDataProperty.GetArrayElementAtIndex(iconDataIndex);
-                // Set the properties of the newly added element using data from iconSetDataList
+
                 newProperty.FindPropertyRelative("folderName").stringValue = iconSetDataList[iconDataIndex].folderName;
                 newProperty.FindPropertyRelative("icon").objectReferenceValue = iconSetDataList[iconDataIndex].icon;
             }
@@ -474,6 +471,8 @@ namespace UnityEditorTools.FolderIcons
                 Repaint();
             }
         }
+
+        // When selecting a icon set update entire project folder icons according to selected icon set
         private void UpdateAllFolderIcons()
         {
             if (IconManager.persistentData.iconSetDataList.Count == 0) return;
@@ -531,14 +530,12 @@ namespace UnityEditorTools.FolderIcons
                     {
                         if (IconManager.persistentData.guidTextureList.Any(x => x.guid != assetGUIDList[assetNameIndex]))
                         {
-                            TextureData textureData = new TextureData();
-                            textureData.color = Color.clear;
-                            textureData.customTexture = iconSetsProperty.FindPropertyRelative("iconSetData").GetArrayElementAtIndex(iconSetIndex).
+                            Texture2D icon = iconSetsProperty.FindPropertyRelative("iconSetData").GetArrayElementAtIndex(iconSetIndex).
                                 FindPropertyRelative("icon").objectReferenceValue as Texture2D;
 
                             GUIDTextureData guidTextureData = new GUIDTextureData();
                             guidTextureData.guid = assetGUIDList[assetNameIndex];
-                            guidTextureData.textureData = textureData;
+                            guidTextureData.textureData = TextureFunctions.CreateTextureData(Color.clear, null, null, icon);
 
                             IconManager.persistentData.guidTextureList.Add(guidTextureData);
 

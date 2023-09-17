@@ -7,7 +7,7 @@ namespace UnityEditorTools.FolderIcons
 {
     public class FolderPostprocess : AssetPostprocessor
     {
-
+        // Handle updating dictionary that checks if a folder is empty or not. Handle applying icons to the newly created folders with icon sets
         static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths, bool didDomainReload)
         {
             if (importedAssets.Length > 0)
@@ -20,7 +20,7 @@ namespace UnityEditorTools.FolderIcons
 
                         UtilityFunctions.UpdateFolderEmptyDict(currentImportPath, ref IconManager.folderEmptyDict);
 
-                        UpdateIconsForIconSets(currentImportPath);
+                        UpdateCurrentProjectFolderIconsWithIconSets(currentImportPath);
 
                         if (IconManager.folderEmptyDict.Count > 0)
                         {
@@ -41,7 +41,6 @@ namespace UnityEditorTools.FolderIcons
                     {
                         string currentImportPath = deletedAssets[i];
 
-                        //IconManager.tempFolderIconDict.Remove(AssetDatabase.AssetPathToGUID(currentImportPath));
                         IconManager.persistentData.guidTextureList.RemoveAll(x => x.guid == AssetDatabase.AssetPathToGUID(currentImportPath));
                         EditorUtility.SetDirty(IconManager.persistentData);
 
@@ -65,7 +64,7 @@ namespace UnityEditorTools.FolderIcons
 
 
                     UtilityFunctions.UpdateFolderEmptyDict(movedAssetPath, ref IconManager.folderEmptyDict);
-                    UpdateIconsForIconSets(movedAssetPath);
+                    UpdateCurrentProjectFolderIconsWithIconSets(movedAssetPath);
                     if (IconManager.folderEmptyDict.Count > 0)
                     {
                         ReDrawFolders();
@@ -83,8 +82,8 @@ namespace UnityEditorTools.FolderIcons
         
         
         
-        
-        private static void UpdateIconsForIconSets(string assetPath)
+        // When creating a new folder, update its icon to given name to itself. This is for Icon Sets.
+        private static void UpdateCurrentProjectFolderIconsWithIconSets(string assetPath)
         {
             if (IconManager.persistentData == null) return;
             if (IconManager.persistentData.currentIconSetIndex == 0) return;
@@ -110,29 +109,18 @@ namespace UnityEditorTools.FolderIcons
                     if (!IconManager.persistentData.guidTextureList.Contains(currentGUIDTextureData))
                     {
                         GUIDTextureData guidTextureData = new GUIDTextureData();
-                        TextureData textureData = new TextureData();
-                        textureData.emptyFolderTexture = null;
-                        textureData.folderTexture = null;
-                        textureData.color = Color.clear;
-                        textureData.customTexture = icon;
-
                         guidTextureData.guid = currentGUID;
-                        guidTextureData.textureData = textureData;
+                        guidTextureData.textureData = TextureFunctions.CreateTextureData(Color.clear, null, null, icon);
 
                         IconManager.persistentData.guidTextureList.Add(guidTextureData);
                         if (IconManager.persistentData != null) EditorUtility.SetDirty(IconManager.persistentData);
                     }
                     else
-                    {
+                    {   
                         GUIDTextureData guidTextureData = new GUIDTextureData();
-                        TextureData textureData = new TextureData();
-                        textureData.emptyFolderTexture = null;
-                        textureData.folderTexture = null;
-                        textureData.color = Color.clear;
-                        textureData.customTexture = icon;
-
                         guidTextureData.guid = currentGUID;
-                        guidTextureData.textureData = textureData;
+                        guidTextureData.textureData = TextureFunctions.CreateTextureData(Color.clear, null, null, icon);
+
                         int guidTextureDataIndex = IconManager.persistentData.guidTextureList.FindIndex(x => x.guid == currentGUID);
                         IconManager.persistentData.guidTextureList[guidTextureDataIndex] = guidTextureData;
 
@@ -150,6 +138,7 @@ namespace UnityEditorTools.FolderIcons
             }
         }
 
+        // Redraw EveryFolders with DrawFolders Func
         private static void ReDrawFolders()
         {
             EditorApplication.projectWindowItemOnGUI = null;

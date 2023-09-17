@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace UnityEditorTools.FolderIcons
 {
-    public static class Constants
+    internal static class Constants
     {
         // Package paths from "Packages/com.compilerbutcher.foldericons/Folder Icons"
         internal const string packageFolderPath = "Packages/com.compilerbutcher.foldericons/Folder Icons";
@@ -42,7 +42,7 @@ namespace UnityEditorTools.FolderIcons
         internal const string lightFolderName = "/d_LightFolder Icon.png";
 
         internal const string defaultButtonName = "/defaultbutton.png";
-        internal const string hoverButtonName = "/hoverButtonName.png";
+        internal const string hoverButtonName = "/hoverButton.png";
 
 
 

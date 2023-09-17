@@ -173,11 +173,9 @@ namespace UnityEditorTools.FolderIcons
             Texture2D loadedEmptyTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(emptyTexturePath);
             Texture2D loadedTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(texturePath);
 
-            TextureData textureData = TextureFunctions.CreateTextureData(IconManager.projectCurrentColor, loadedEmptyTexture, loadedTexture, null);
-
             GUIDTextureData guidTextureData = new GUIDTextureData();
             guidTextureData.guid = selectedAssetGUID;
-            guidTextureData.textureData = textureData;
+            guidTextureData.textureData = TextureFunctions.CreateTextureData(IconManager.projectCurrentColor, loadedEmptyTexture, loadedTexture, null);
 
             if (IconManager.persistentData.guidTextureList.Any(x => x.guid == selectedAssetGUID))
             {
@@ -209,11 +207,9 @@ namespace UnityEditorTools.FolderIcons
 
             if (!IconManager.persistentData.guidTextureList.Any(x => x.guid == selectedAssetGUID))
             {
-                TextureData textureData = TextureFunctions.CreateTextureData(Color.clear, null, null, IconManager.projectCurrentCustomTexture);
-
                 GUIDTextureData guidTextureData = new GUIDTextureData();
                 guidTextureData.guid = selectedAssetGUID;
-                guidTextureData.textureData = textureData;
+                guidTextureData.textureData = TextureFunctions.CreateTextureData(Color.clear, null, null, IconManager.projectCurrentCustomTexture);
 
                 IconManager.persistentData.guidTextureList.Add(guidTextureData);
                 if (IconManager.persistentData != null) EditorUtility.SetDirty(IconManager.persistentData);
@@ -230,13 +226,9 @@ namespace UnityEditorTools.FolderIcons
                     AssetDatabase.Refresh();
                 }
 
-
-
-                TextureData textureData = TextureFunctions.CreateTextureData(Color.clear, null, null, IconManager.projectCurrentCustomTexture);
-
                 GUIDTextureData guidTextureData = new GUIDTextureData();
                 guidTextureData.guid = selectedAssetGUID;
-                guidTextureData.textureData = textureData;
+                guidTextureData.textureData = TextureFunctions.CreateTextureData(Color.clear, null, null, IconManager.projectCurrentCustomTexture);
 
                 int index = IconManager.persistentData.guidTextureList.FindIndex(x => x.guid == selectedAssetGUID);
                 IconManager.persistentData.guidTextureList[index] = guidTextureData;
@@ -426,8 +418,6 @@ namespace UnityEditorTools.FolderIcons
                     GUIDTextureData textureData = IconManager.persistentData.guidTextureList[i];
 
                     if (textureData.guid != guid) continue;
-
-                    //TextureData textureData = IconManager.tempFolderIconDict[guid];
 
                     if (textureData.textureData.folderTexture != null)
                     {

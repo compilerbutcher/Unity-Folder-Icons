@@ -93,7 +93,6 @@ MonoBehaviour:
       m_Text: Open
       m_Image: {fileID: 0}
       m_Tooltip: 
-  isHeaderContentsCreated: 0
   iconSetDataList:
   - iconSetName: Default
     iconSetData: []
