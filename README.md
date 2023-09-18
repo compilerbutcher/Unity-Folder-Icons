@@ -75,6 +75,12 @@ https://github.com/compilerbutcher/Folder-Icons.git
 <img src="https://github.com/compilerbutcher/Unity-Folder-Icons/assets/97310008/b90aa679-e190-4db1-989c-ef34d07c5d05.gif">
 </div>
 
+<div align="center">
+<p align="center">You can delete an icon:</p>
+<img src="https://github.com/compilerbutcher/Unity-Folder-Icons/assets/97310008/4d7993ac-501e-48ff-9227-71e22f260e9c.gif">
+</div>
+
+
 
 <!-- ------------------------------------------------------------------------------------------------------------------------------- -->
 
