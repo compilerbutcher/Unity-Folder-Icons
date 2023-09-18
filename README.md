@@ -74,6 +74,9 @@ https://github.com/compilerbutcher/Folder-Icons.git
 <br>
 <h2 align= "center">Usage</h2>
 
+<div align="center">
+<img src="https://github.com/compilerbutcher/Unity-Folder-Icons/assets/97310008/b90aa679-e190-4db1-989c-ef34d07c5d05".gif>
+</div>
 
 
 <!-- ------------------------------------------------------------------------------------------------------------------------------- -->
