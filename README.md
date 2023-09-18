@@ -54,7 +54,7 @@ https://github.com/compilerbutcher/Folder-Icons.git
 </div>
 
 <div align="center">
-  When you download it with git link, some project files will be in 'Assets' folder because when installed from git 'Packages' directory is immutable.
+  When you download it with git link, some project files will be in 'Assets' folder because when installed from git, 'Packages' directory is immutable.
   These project files under 'Assets' must remain untouched as they are crucial to the project.
 </div>
 
