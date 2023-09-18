@@ -98,7 +98,7 @@ namespace UnityEditorTools.FolderIcons
                     AssetDatabase.CreateAsset(persistentData, DynamicConstants.persistentDataPath);
                     AssetDatabase.ImportAsset(DynamicConstants.persistentDataPath);
 
-                    LoadIconSetsFromJson($"{DynamicConstants.absolutePackagePath}\\{Constants.dataFolderName}\\{Constants.defaultIconJsonName}");
+                    LoadDefaultIconSetsFromPackages($"{DynamicConstants.absolutePackagePath}\\{Constants.dataFolderName}\\{Constants.defaultIconJsonName}");
 
                     AssetDatabase.SaveAssets();
                     AssetDatabase.Refresh();
@@ -123,11 +123,68 @@ namespace UnityEditorTools.FolderIcons
             }
         }
 
+
+
+
         // Save persistentData when exiting editor
         internal static void SavePersistentData()
         {
             if (persistentData != null) EditorUtility.SetDirty(persistentData);
         }
+
+
+        private static void LoadDefaultIconSetsFromPackages(string selectedFile)
+        {
+            UtilityFunctions.CheckAndCreateFolderStorage();
+
+
+            List<MainIconSetData> jsonDataList;
+            JsonHelper.LoadJson<MainIconSetData>(selectedFile, out jsonDataList);
+
+            if (jsonDataList.Count == 0)
+            {
+                Debug.LogWarning("There is no icon sets in the json file to be load! You can create it via: Tools > Folder Icon Settings > Save Icon Sets!");
+                return;
+            }
+
+            for (int loadedJsonDataIndex = 0; loadedJsonDataIndex < jsonDataList.Count; loadedJsonDataIndex++)
+            {
+                MainIconSetData data = jsonDataList[loadedJsonDataIndex];
+
+                IconSetDataListWrapper newIconSetDataListWrapper = new IconSetDataListWrapper();
+                newIconSetDataListWrapper.iconSetData = new List<IconSetData>();
+                newIconSetDataListWrapper.iconSetName = data.iconSetName;
+
+                string iconSetImportPath = $"{DynamicConstants.mainFolderPath}/{Constants.allIconsFolderName}/{Constants.defaultIconSetsFolderName}/{Constants.ancientLegendsIconSetName}";
+
+                if (!AssetDatabase.IsValidFolder(iconSetImportPath))
+                {
+                    AssetDatabase.CreateFolder(DynamicConstants.loadedIconSetPath, data.iconSetName);
+                }
+
+                IconSetData newIconSetData;
+
+                for (int iconSetIndex = 0; iconSetIndex < data.iconSetData.Count; iconSetIndex++)
+                {
+                    newIconSetData = new();
+                    string folderName = data.iconSetData[iconSetIndex].folderName;
+                    string iconName = data.iconSetData[iconSetIndex].iconName;
+
+                    newIconSetData.folderName = folderName;
+                    newIconSetData.icon = AssetDatabase.LoadAssetAtPath<Texture2D>($"{iconSetImportPath}/{iconName}.png");
+                    newIconSetData.icon.name = iconName;
+
+                    newIconSetDataListWrapper.iconSetData.Add(newIconSetData);
+                }
+
+
+                IconManager.persistentData.iconSetDataList.Add(newIconSetDataListWrapper);
+                if (IconManager.persistentData != null) EditorUtility.SetDirty(IconManager.persistentData);
+            }
+            AssetDatabase.Refresh();
+
+        }
+
 
         // Load icon sets from a json
         internal static void LoadIconSetsFromJson(string selectedFile)

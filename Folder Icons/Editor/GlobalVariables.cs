@@ -15,10 +15,12 @@ namespace UnityEditorTools.FolderIcons
         internal const string dataFolderName = "/Data";
         internal const string allIconsFolderName = "/Icons";
         internal const string defaultIconsName = "/Default Unity Icons";
-        internal const string defaultIconSetsName = "/Default Icon Sets";
+        internal const string defaultIconSetsFolderName = "/Default Icon Sets";
         internal const string defaultIconJsonName = "/Default Icon Set.json";
-        // -----------------------------------------------------------------
 
+        internal const string ancientLegendsIconSetName = "Ancient Legends";
+
+        // -----------------------------------------------------------------
 
 
         // Icon paths from "/Assets/Plugins/Unity-Folder-Icons"
