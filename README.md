@@ -70,8 +70,8 @@ https://github.com/compilerbutcher/Folder-Icons.git
 <br>
 <h2 align= "center">Usage</h2>
 
-<p align="center">You can change icon of a folder by clicking the small icon in the inspector:</p>
 <div align="center">
+<p align="center">You can change icon of a folder by clicking the small icon in the inspector:</p>
 <img src="https://github.com/compilerbutcher/Unity-Folder-Icons/assets/97310008/b90aa679-e190-4db1-989c-ef34d07c5d05.gif">
 </div>
 
