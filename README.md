@@ -20,7 +20,7 @@
 
 
 <div align="center">
-<img src="https://github.com/compilerbutcher/Unity-Folder-Icons/assets/97310008/52171820-af47-4195-9c1c-f29b2ffafb9f.png">
+<img src="https://github.com/compilerbutcher/Unity-Folder-Icons/assets/97310008/e64eceed-0b52-4aea-bec7-7ecfa9895668.gif">
 </div>
 
 <div align="center">
@@ -50,7 +50,7 @@ https://github.com/compilerbutcher/Folder-Icons.git
 </div>
 
 <div align="center">
-<img src="https://github.com/compilerbutcher/Unity-Folder-Icons/assets/97310008/c3033d26-aa95-4143-9a2d-22d0e56b6126.png">
+<img src="https://github.com/compilerbutcher/Unity-Folder-Icons/assets/97310008/bfe6a37b-a648-4f37-81a3-930ccda1416e.gif">
 </div>
 
 <div align="center">
@@ -75,7 +75,7 @@ https://github.com/compilerbutcher/Folder-Icons.git
 <h2 align= "center">Usage</h2>
 
 <div align="center">
-<img src="https://github.com/compilerbutcher/Unity-Folder-Icons/assets/97310008/b90aa679-e190-4db1-989c-ef34d07c5d05".gif>
+<img src="https://github.com/compilerbutcher/Unity-Folder-Icons/assets/97310008/b90aa679-e190-4db1-989c-ef34d07c5d05.gif">
 </div>
 
 
