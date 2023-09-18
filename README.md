@@ -23,7 +23,7 @@
 </div>
 
 <div align="center">
- <p>When you download it locally, Project will be imported into the 'Packages' directory, ensuring that 'Assets' directory remains clean.</p>
+ <p>When you download it locally, Project will be imported into the 'Packages' directory, ensuring that 'Assets' directory remains clean. Aditionally you create folder in "Packages/Folder Icons/Icons/Your Texture Folder" and put your textures into it for keeping 'Assets' clean.</p>
 </div>
 
 
@@ -51,7 +51,7 @@ https://github.com/compilerbutcher/Folder-Icons.git
 
 <div align="center">
   When you download it with git link, some project files will be in 'Assets' folder because when installed from git, 'Packages' directory is immutable.
-  These project files under 'Assets' must remain untouched as they are crucial to the project.
+  These project files under 'Assets' must be remain untouched as they are crucial to the project.
 </div>
 
 <br>
