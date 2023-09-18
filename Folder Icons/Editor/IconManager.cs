@@ -130,7 +130,7 @@ namespace UnityEditorTools.FolderIcons
 
 
       
-        private static void LoadDefaultIconSetsFromPackages(string selectedFile)
+        internal static void LoadDefaultIconSetsFromPackages(string selectedFile)
         {
             UtilityFunctions.CheckAndCreateFolderStorage();
 

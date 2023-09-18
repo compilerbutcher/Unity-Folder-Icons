@@ -259,10 +259,10 @@ namespace UnityEditorTools.FolderIcons
                     if (IconManager.persistentData == null)
                     {
                         IconManager.persistentData = ScriptableObject.CreateInstance<PersistentData>();
-                        AssetDatabase.CreateAsset(persistentData, DynamicConstants.persistentDataPath);
+                        AssetDatabase.CreateAsset(IconManager.persistentData, DynamicConstants.persistentDataPath);
                         AssetDatabase.ImportAsset(DynamicConstants.persistentDataPath);
 
-                        LoadDefaultIconSetsFromPackages($"{DynamicConstants.absolutePackagePath}\\{Constants.dataFolderName}\\{Constants.defaultIconJsonName}");
+                        IconManager.LoadDefaultIconSetsFromPackages($"{DynamicConstants.absolutePackagePath}\\{Constants.dataFolderName}\\{Constants.defaultIconJsonName}");
 
                         AssetDatabase.SaveAssets();
                         AssetDatabase.Refresh();
