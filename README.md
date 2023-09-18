@@ -11,6 +11,11 @@
 <h2 align="center">Installation</h2>
 <p align="center">Folder-Icons can be installed locally with unity package manager:</p>
 
+
+<p align="center">
+  <a href="https://github.com/compilerbutcher/Unity-Folder-Icons/archive/refs/heads/main.zip">Unity-Folder-Icons.zip</a>
+</p>
+
 <div align="center">
 <img src="https://github.com/compilerbutcher/Unity-Folder-Icons/assets/97310008/52171820-af47-4195-9c1c-f29b2ffafb9f.png">
 </div>
@@ -25,6 +30,14 @@
 
 
 <!----------------------------------------------------Git Installation Part------------------------------------------------------------------ -->
+<br>
+<br>
+
+<div align="center">
+ <strong>OR</strong>
+</div>
+
+<br>
 <br>
 
 <p align="center">Folder-Icons can be installed through git link with unity package manager:</p>
