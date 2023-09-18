@@ -9,15 +9,14 @@
 
 
 
-<!----------------------------------------------------Local Installation Part------------------------------------------------------------------ -->
+<!----------------------------------------------------Installation Part------------------------------------------------------------------ -->
 <h2 align="center">Installation</h2>
+
+<!--Local Installation Part-->
 <p align="center">
   Folder-Icons can be installed locally with unity package manager:
 <a href="https://github.com/compilerbutcher/Unity-Folder-Icons/archive/refs/heads/main.zip">Unity-Folder-Icons.zip</a>
 </p>
-
-
-
 
 <div align="center">
 <img src="https://github.com/compilerbutcher/Unity-Folder-Icons/assets/97310008/e64eceed-0b52-4aea-bec7-7ecfa9895668.gif">
@@ -27,12 +26,9 @@
  <p>When you download it locally, Project will be imported into the 'Packages' directory, ensuring that 'Assets' directory remains clean.</p>
 </div>
 
-<!-- ------------------------------------------------------------------------------------------------------------------------------- -->
 
 
-
-
-<!----------------------------------------------------Git Installation Part------------------------------------------------------------------ -->
+<!--Git Installation Part-->
 <br>
 
 <div align="center">
@@ -74,6 +70,7 @@ https://github.com/compilerbutcher/Folder-Icons.git
 <br>
 <h2 align= "center">Usage</h2>
 
+<p align="center">You can change icon of a folder by clicking the small icon in the inspector:</p>
 <div align="center">
 <img src="https://github.com/compilerbutcher/Unity-Folder-Icons/assets/97310008/b90aa679-e190-4db1-989c-ef34d07c5d05.gif">
 </div>
