@@ -34,7 +34,7 @@
 <br>
 
 <div align="center">
- <strong>OR</strong>
+ <p><strong>OR</strong></p>
 </div>
 
 <br>
