@@ -133,6 +133,7 @@ namespace UnityEditorTools.FolderIcons
         }
 
 
+      
         private static void LoadDefaultIconSetsFromPackages(string selectedFile)
         {
             UtilityFunctions.CheckAndCreateFolderStorage();
@@ -155,7 +156,7 @@ namespace UnityEditorTools.FolderIcons
                 newIconSetDataListWrapper.iconSetData = new List<IconSetData>();
                 newIconSetDataListWrapper.iconSetName = data.iconSetName;
 
-                string iconSetImportPath = $"{DynamicConstants.mainFolderPath}/{Constants.allIconsFolderName}/{Constants.defaultIconSetsFolderName}/{Constants.ancientLegendsIconSetName}";
+                string iconSetImportPath = $"{DynamicConstants.absolutePackagePath}/{Constants.allIconsFolderName}/{Constants.defaultIconSetsFolderName}/{Constants.ancientLegendsIconSetName}";
 
                 if (!AssetDatabase.IsValidFolder(iconSetImportPath))
                 {
@@ -173,6 +174,8 @@ namespace UnityEditorTools.FolderIcons
                     newIconSetData.folderName = folderName;
                     newIconSetData.icon = AssetDatabase.LoadAssetAtPath<Texture2D>($"{iconSetImportPath}/{iconName}.png");
                     newIconSetData.icon.name = iconName;
+
+                    Debug.Log(iconName);
 
                     newIconSetDataListWrapper.iconSetData.Add(newIconSetData);
                 }
