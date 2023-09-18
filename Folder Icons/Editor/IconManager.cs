@@ -240,8 +240,9 @@ namespace UnityEditorTools.FolderIcons
             }
             AssetDatabase.Refresh();
 
+            Debug.Log($"Loaded icon sets from: {selectedFile}");
         }
-        
+
         // Save icon sets data to a json
         internal static void SaveIconSetsFromJson(string selectedFile)
         {
@@ -276,6 +277,7 @@ namespace UnityEditorTools.FolderIcons
             }
 
             JsonHelper.SaveJson<MainIconSetData>(selectedFile, packedIconSetData);
+            Debug.Log($"Saved icon sets to: {selectedFile}");
         }
 
         // Load all icon data from a json
@@ -299,6 +301,7 @@ namespace UnityEditorTools.FolderIcons
                 Debug.LogWarning("There is no icons in the json file to be load! You can create it via: Tools > Folder Icon Settings > Save Icons!");
                 return;
             }
+
 
 
             for (int loadedJsonDataIndex = 0; loadedJsonDataIndex < jsonDataList.Count; loadedJsonDataIndex++)
@@ -417,6 +420,7 @@ namespace UnityEditorTools.FolderIcons
             EditorApplication.RepaintProjectWindow();
             AssetDatabase.Refresh();
 
+            Debug.Log($"Loaded icons from: {selectedFile}");
         }
 
         // Save all icon data to a json
@@ -508,6 +512,8 @@ namespace UnityEditorTools.FolderIcons
 
             JsonHelper.SaveJson<JsonTextureData>(selectedFile, packedJsonList);
             AssetDatabase.Refresh();
+
+            Debug.Log($"Saved icons to: {selectedFile}");
         }
     }
 }

@@ -232,9 +232,6 @@ namespace UnityEditorTools.FolderIcons
                     selectedOption = IconManager.persistentData.iconSetDataList.Count - 1;
 
                     UpdateAllFolderIcons();
-
-
-                    Debug.Log($"Loaded icon sets from: {selectedFile}");
                 }
                 else
                 {
@@ -251,8 +248,6 @@ namespace UnityEditorTools.FolderIcons
                 if (selectedFile.Length > 0)
                 {
                     IconManager.SaveIconSetsFromJson(selectedFile);
-
-                    Debug.Log($"Saved icon sets to: {selectedFile}");
                 }
                 else
                 {
@@ -270,8 +265,6 @@ namespace UnityEditorTools.FolderIcons
                 if (selectedFile.Length > 0)
                 {
                     IconManager.LoadIconsFromJson(selectedFile);
-
-                    Debug.Log($"Loaded icons from: {selectedFile}");
                 }
                 else
                 {
@@ -289,8 +282,6 @@ namespace UnityEditorTools.FolderIcons
                 if (selectedFile.Length > 0)
                 {
                     IconManager.SaveIconsToJson(selectedFile);
-
-                    Debug.Log($"Saved icons to: {selectedFile}");
                 }
                 else
                 {
