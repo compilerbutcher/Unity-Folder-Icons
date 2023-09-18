@@ -3,25 +3,28 @@
 
 <p align="center"> Folder Icons allows you to change the default folder icons in Unity </p>
 <img src="https://github.com/compilerbutcher/Folder-Icons/assets/97310008/6505017d-5228-43ce-9d02-a574aa1df4ac.png">
+<br>
+<br>
 <!-- ------------------------------------------------------------------------------------------------------------------------------- -->
 
 
 
 <!----------------------------------------------------Local Installation Part------------------------------------------------------------------ -->
 <h2 align="center">Installation</h2>
-<p align="center">Folder-Icons can be installed locally with unity package manager:</p>
-
-
 <p align="center">
-  <a href="https://github.com/compilerbutcher/Unity-Folder-Icons/archive/refs/heads/main.zip">Unity-Folder-Icons.zip</a>
+  Folder-Icons can be installed locally with unity package manager:
+<a href="https://github.com/compilerbutcher/Unity-Folder-Icons/archive/refs/heads/main.zip">Unity-Folder-Icons.zip</a>
 </p>
+
+
+
 
 <div align="center">
 <img src="https://github.com/compilerbutcher/Unity-Folder-Icons/assets/97310008/52171820-af47-4195-9c1c-f29b2ffafb9f.png">
 </div>
 
 <div align="center">
- <p>When you download folder icons and import them into Unity locally, the folders containing the icons will be imported into the 'Packages' directory, ensuring that your 'Assets' directory remains clean.</p>
+ <p>When you download it locally, Project will be imported into the 'Packages' directory, ensuring that 'Assets' directory remains clean.</p>
 </div>
 
 <!-- ------------------------------------------------------------------------------------------------------------------------------- -->
@@ -31,13 +34,11 @@
 
 <!----------------------------------------------------Git Installation Part------------------------------------------------------------------ -->
 <br>
-<br>
 
 <div align="center">
  <p><strong>OR</strong></p>
 </div>
 
-<br>
 <br>
 
 <p align="center">Folder-Icons can be installed through git link with unity package manager:</p>
@@ -53,12 +54,13 @@ https://github.com/compilerbutcher/Folder-Icons.git
 </div>
 
 <div align="center">
- <p> <strong>Note: </strong> "To download a package from Git in Unity, you need to have Git installed on your computer."</p>
+  When you download it with git link, some project files will be in 'Assets' folder because when installed from git 'Packages' directory is immutable
 </div>
 
 <br>
 <div align="center">
- <p>"To download a package from Git in Unity, you need to have Git installed on your computer."</p>
+ <p>To download a package from Git in Unity, you need to have Git installed on your computer.</p>
+ <p> <strong>Note: </strong>To download a package from Git in Unity, you need to have Git installed on your computer.</p>
  
 </div>
 <!-- ------------------------------------------------------------------------------------------------------------------------------- -->
