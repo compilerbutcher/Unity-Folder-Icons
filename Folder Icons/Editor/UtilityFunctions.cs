@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 
+
 namespace UnityEditorTools.FolderIcons
 {
-
     internal static class TextureFunctions
     {
         internal static TextureData CreateTextureData(Color color, Texture2D emptyFolderTexture, Texture2D folderTexture, Texture2D customTexture)
@@ -61,11 +61,6 @@ namespace UnityEditorTools.FolderIcons
             File.WriteAllBytes(path, textureArray);
             AssetDatabase.Refresh();
 
-
-            //Texture2D newTexture2D = new Texture2D(1, 1);
-            //ImageConversion.LoadImage(newTexture2D, textureArray);
-
-            //return newTexture2D;
         }
         internal static void CreateDefaultFolderWithColor(Color currentColor, ref Texture2D emptyFolderTexture, ref Texture2D defaultFolderTexture)
         {
@@ -144,7 +139,6 @@ namespace UnityEditorTools.FolderIcons
                     }
                 
                 }
-
             }
         }
 
