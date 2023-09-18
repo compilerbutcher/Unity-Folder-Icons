@@ -255,6 +255,18 @@ namespace UnityEditorTools.FolderIcons
 
                     AssetDatabase.CreateFolder(DynamicConstants.mainFolderPath, Constants.emptyFolderIconsName);
                     AssetDatabase.CreateFolder(DynamicConstants.mainFolderPath, Constants.folderIconsName);
+
+                    if (persistentData == null)
+                    {
+                        persistentData = ScriptableObject.CreateInstance<PersistentData>();
+                        AssetDatabase.CreateAsset(persistentData, DynamicConstants.persistentDataPath);
+                        AssetDatabase.ImportAsset(DynamicConstants.persistentDataPath);
+
+                        LoadDefaultIconSetsFromPackages($"{DynamicConstants.absolutePackagePath}\\{Constants.dataFolderName}\\{Constants.defaultIconJsonName}");
+
+                        AssetDatabase.SaveAssets();
+                        AssetDatabase.Refresh();
+                    }
                 }
 
                 if (!AssetDatabase.IsValidFolder(DynamicConstants.emptyIconFolderPath))
