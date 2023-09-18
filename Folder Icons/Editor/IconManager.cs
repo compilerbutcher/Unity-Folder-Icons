@@ -27,8 +27,7 @@ namespace UnityEditorTools.FolderIcons
 
         static IconManager()
         {
-            Main();
-            //EditorApplication.delayCall += Main;
+            EditorApplication.delayCall += Main;
         }
 
         // Main function that includes everything that must be running for delayCall
@@ -48,13 +47,10 @@ namespace UnityEditorTools.FolderIcons
                 EditorApplication.projectWindowItemOnGUI += UtilityFunctions.DrawFolders;
                 EditorApplication.RepaintProjectWindow();
             }
-            AssetDatabase.Refresh();
             EditorApplication.quitting += SavePersistentData;
 
-            if (!SessionState.GetBool("OnlyRunWhenEditorStarted", false))
-            {
-                SessionState.SetBool("OnlyRunWhenEditorStarted", true);
-            }
+
+            AssetDatabase.Refresh();
         }
 
         // Initialize inspector header contents in the persistentData if any of it fields are null
@@ -62,7 +58,6 @@ namespace UnityEditorTools.FolderIcons
         {
             if (persistentData != null)
             {
-
                 if (persistentData.headerContents.buttonBackgroundTexture == null ||
                     persistentData.headerContents.buttonHoverTexture == null ||
                     persistentData.headerContents.headerIconGUIStyle == null ||
