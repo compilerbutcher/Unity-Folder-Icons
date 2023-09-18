@@ -23,7 +23,8 @@
 </div>
 
 <div align="center">
- <p>When you download it locally, Project will be imported into the 'Packages' directory, ensuring that 'Assets' directory remains clean. Aditionally you create folder in "Packages/Folder Icons/Icons/Your Texture Folder" and put your textures into it for keeping 'Assets' clean.</p>
+ <p>When you download it locally, Project will be imported into the 'Packages' directory, ensuring that 'Assets' directory remains clean.</p>
+  <p>Aditionally you can create folder in the "Packages/Folder Icons/Icons/Your Texture Folder" and put your textures into it for keeping 'Assets' clean.</p>
 </div>
 
 
