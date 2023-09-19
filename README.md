@@ -76,12 +76,12 @@ https://github.com/compilerbutcher/Folder-Icons.git
 <img src="https://github.com/compilerbutcher/Unity-Folder-Icons/assets/97310008/fc93bf34-7979-4f89-8861-060b34ffafba.gif">
 </div>
 
-<h4 align="center">Icon Sets</h4> 
+<h4 align="center">Folder Icon Settings</h4> 
 
 
 <div align="center">
 <p align="center">Icon sets are a way to set icons to </p>
-<img align="center" src="https://github.com/compilerbutcher/Unity-Folder-Icons/assets/97310008/db05ca77-4e48-415a-a319-ebbe80aa7b9c.png">
+<img align="center" src="https://github.com/compilerbutcher/Unity-Folder-Icons/assets/97310008/bd63c6d7-10f9-402f-95e6-d7e322415926.png">
 </div>
 <!-- ------------------------------------------------------------------------------------------------------------------------------- -->
 
