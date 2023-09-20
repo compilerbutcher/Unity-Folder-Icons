@@ -120,16 +120,9 @@ namespace UnityEditorTools.FolderIcons
 
             EditorGUILayout.EndScrollView();
             if (IconManager.persistentData.iconSetDataList.Count > 0) serializedObject.ApplyModifiedProperties();
-
-            if (previousIconSetSize != IconManager.persistentData.currentIconSetIndex)
-            {
-                UpdateAllFolderIcons();
-                previousIconSetSize = IconManager.persistentData.currentIconSetIndex;
-            }
-
         }
-
-
+        
+        
         #region GUI Functions
         private void TextField()
         {
@@ -157,6 +150,9 @@ namespace UnityEditorTools.FolderIcons
                     UpdateAllFolderIcons();
 
                     selectedOption = IconManager.persistentData.iconSetDataList.Count - 1;
+
+                    IconManager.persistentData.currentIconSetIndex = selectedOption;
+                    if (IconManager.persistentData != null) EditorUtility.SetDirty(IconManager.persistentData);
                     UpdateSerializedPropertyOfIconSetList(serializedObject, selectedOption);
 
                     Repaint();
@@ -256,7 +252,7 @@ namespace UnityEditorTools.FolderIcons
 
             }
         }
-        private static void LoadIconsButton()
+        private void LoadIconsButton()
         {
             if (GUILayout.Button("Load Icons!"))
             {
@@ -273,7 +269,7 @@ namespace UnityEditorTools.FolderIcons
             }
 
         }
-        private static void SaveIconsButton()
+        private void SaveIconsButton()
         {
             if (GUILayout.Button("Save Icons!"))
             {
@@ -366,6 +362,7 @@ namespace UnityEditorTools.FolderIcons
 
                         EditorApplication.projectWindowItemOnGUI = null;
                         EditorApplication.RepaintProjectWindow();
+
                         Debug.Log("All icons have been reset!");
                     }
                     catch (Exception e)

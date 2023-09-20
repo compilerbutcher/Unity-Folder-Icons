@@ -53,6 +53,8 @@ namespace UnityEditorTools.FolderIcons
             AssetDatabase.Refresh();
         }
 
+
+        #region General Functions
         // Initialize inspector header contents in the persistentData if any of it fields are null
         private static void InitInspectorHeaderContents()
         {
@@ -119,17 +121,20 @@ namespace UnityEditorTools.FolderIcons
             }
         }
 
-
-
-
+        
         // Save persistentData when exiting editor
         internal static void SavePersistentData()
         {
             if (persistentData != null) EditorUtility.SetDirty(persistentData);
         }
 
+        
 
-      
+
+        #endregion
+
+        #region Load Save Functions
+        // Load default icon sets from json in the packages/Folder Icons/Folder Icons/Data/Default Icon Set.json
         internal static void LoadDefaultIconSetsFromPackages(string selectedFile)
         {
             UtilityFunctions.CheckAndCreateFolderStorage();
@@ -515,5 +520,8 @@ namespace UnityEditorTools.FolderIcons
 
             Debug.Log($"Saved icons to: {selectedFile}");
         }
+        #endregion
+
+
     }
 }
