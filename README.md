@@ -105,4 +105,17 @@ https://github.com/compilerbutcher/Folder-Icons.git
 </div>
 <!-- ------------------------------------------------------------------------------------------------------------------------------- -->
 
+<!-- Support -->
+
+<h2 align="center">Support</h2>
+<p align="center">If you encounter any problems or bugs, see the Issues page: <a href=""></a></p>
+
+
+
+<h2 align="center">License</h2>
+<p align="center"></p>
+
+
+
+
 
