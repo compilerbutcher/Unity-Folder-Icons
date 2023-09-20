@@ -108,7 +108,8 @@ https://github.com/compilerbutcher/Folder-Icons.git
 <!-- Support -->
 
 <h2 align="center">Support</h2>
-<p align="center">If you encounter any problems or bugs, see the Issues page: <a href=""></a></p>
+<p align="center">If you encounter any problems or bugs, see the Issues page: <a href="https://github.com/compilerbutcher/Unity-Folder-Icons/issues">Issues</a></p>
+<p align="center">If you want to contribute to the project feel free to make a pull request: <a href="https://github.com/compilerbutcher/Unity-Folder-Icons/issues">Issues</a></p>
 
 
 
