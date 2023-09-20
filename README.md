@@ -109,12 +109,16 @@ https://github.com/compilerbutcher/Folder-Icons.git
 
 <h2 align="center">Support</h2>
 <p align="center">If you encounter any problems or bugs, see the Issues page: <a href="https://github.com/compilerbutcher/Unity-Folder-Icons/issues">Issues</a></p>
-<p align="center">If you want to contribute to the project feel free to make a pull request: <a href="https://github.com/compilerbutcher/Unity-Folder-Icons/issues">Issues</a></p>
+<p align="center">If you want to contribute to the project feel free to make a pull request:
+  <a href="https://github.com/compilerbutcher/Unity-Folder-Icons/issues">Issues</a>
+</p>
 
 
 
 <h2 align="center">License</h2>
-<p align="center"></p>
+<p align="center">GNU GENERAL PUBLIC LICENSE 
+<a href="https://github.com/compilerbutcher/Unity-Folder-Icons/blob/main/LICENSE">LICENSE</a>
+</p>
 
 
 
