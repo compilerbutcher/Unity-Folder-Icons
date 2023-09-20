@@ -83,13 +83,19 @@ https://github.com/compilerbutcher/Folder-Icons.git
 <p align="center">To open Settings, "Tools/Folder Icon Settings":</p>
 <img align="center" src="https://github.com/compilerbutcher/Unity-Folder-Icons/assets/97310008/bd63c6d7-10f9-402f-95e6-d7e322415926.png">
 </div>
+<br>
 
 <div align="center">
-<p align="center">:</p>
-<img align="center" src="https://github.com/compilerbutcher/Unity-Folder-Icons/assets/97310008/bd63c6d7-10f9-402f-95e6-d7e322415926.png">
+<p align="center">You can create icon sets. Icon sets allow you to define icon data, which can later be used to easily assign icons to folders by simply renaming the folders: </p>
+<img align="center" src="https://github.com/compilerbutcher/Unity-Folder-Icons/assets/97310008/f06fd689-fce5-4df9-82f0-5b77990f2da3.gif">
 </div>
 
+<br>
 
+<div align="center">
+<p align="center">You can use predefined default icon set 'Medieval':</p>
+<img align="center" src="https://github.com/compilerbutcher/Unity-Folder-Icons/assets/97310008/ed528cd5-792f-43c8-ae07-04a956b3a7fe.png" width="800" height="332">
+</div>
 <!-- ------------------------------------------------------------------------------------------------------------------------------- -->
 
 
