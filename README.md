@@ -4,6 +4,19 @@
 <p align="center"> Folder Icons allows you to change the default folder icons in Unity </p>
 <img src="https://github.com/compilerbutcher/Folder-Icons/assets/97310008/6505017d-5228-43ce-9d02-a574aa1df4ac.png">
 <br>
+
+
+ <p align="center">
+  <a href="#Installation">Installation</a> •
+  <a href="#Usage">Usage</a> •
+  <a href="#Support">Support</a> •
+  <a href="#LICENSE">License</a>
+</p>
+
+
+
+
+<br>
 <br>
 <!-- ------------------------------------------------------------------------------------------------------------------------------- -->
 
