@@ -94,12 +94,12 @@ https://github.com/compilerbutcher/Folder-Icons.git
 
 <div align="center">
 <p align="center">You can use predefined default icon set 'Medieval':</p>
-<img align="center" src="https://github.com/compilerbutcher/Unity-Folder-Icons/assets/97310008/ed528cd5-792f-43c8-ae07-04a956b3a7fe.png" width="800" height="332">
+<img align="center" src="https://github.com/compilerbutcher/Unity-Folder-Icons/assets/97310008/8019e2e6-4d1a-4bf4-b8a2-3394046a8068.png" width="800" height="332">
 </div>
 <!-- width="800" height="332" -->
 <div align="center">
 <p align="center">You can Load/Save Icon Sets or all current icons and you can reset everything to default:</p>
-<img align="center" src="https://github.com/compilerbutcher/Unity-Folder-Icons/assets/97310008/f8d5e6fe-10c5-4701-b331-8f09609bfe94.png" >
+<img align="center" src="https://github.com/compilerbutcher/Unity-Folder-Icons/assets/97310008/9d754783-a17b-4131-9da8-c4a1fc22bc54.png">
 </div>
 <!-- ------------------------------------------------------------------------------------------------------------------------------- -->
 
