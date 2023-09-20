@@ -87,7 +87,7 @@ https://github.com/compilerbutcher/Folder-Icons.git
 
 <div align="center">
 <p align="center">You can create icon sets. Icon sets allow you to define icon data, which can later be used to easily assign icons to folders by simply renaming the folders: </p>
-<img align="center" src="https://github.com/compilerbutcher/Unity-Folder-Icons/assets/97310008/f06fd689-fce5-4df9-82f0-5b77990f2da3.gif">
+<img align="center" src="https://github.com/compilerbutcher/Unity-Folder-Icons/assets/97310008/1e4a3b09-55d7-429e-b7ef-391a27fcc401.png">
 </div>
 
 <br>
