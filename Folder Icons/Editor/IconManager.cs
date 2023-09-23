@@ -60,20 +60,23 @@ namespace UnityEditorTools.FolderIcons
         {
             if (persistentData != null)
             {
-                if (persistentData.headerContents.buttonBackgroundTexture == null ||
-                    persistentData.headerContents.buttonHoverTexture == null ||
-                    persistentData.headerContents.headerIconGUIStyle == null ||
-                    persistentData.headerContents.resetButtonGUIContent == null ||
-                    persistentData.headerContents.openButton == null)
-                {
-                    persistentData.headerContents = new HeaderContents();
-                    HeaderFunctions.CreateInspectorHeaderContents(ref persistentData.headerContents.buttonBackgroundTexture,
-                        ref persistentData.headerContents.buttonHoverTexture, ref persistentData.headerContents.headerIconGUIStyle,
-                        ref persistentData.headerContents.resetButtonGUIContent, ref persistentData.headerContents.openButton);
 
-                    if (persistentData != null) EditorUtility.SetDirty(persistentData);
-                }
+                Texture2D buttonBackgroundTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(DynamicConstants.defaultButtonPath);
+                Texture2D buttonHoverTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(DynamicConstants.hoverButtonPath);
+
+                persistentData.headerContents.headerIconGUIStyle = new GUIStyle();
+                persistentData.headerContents.headerIconGUIStyle.normal.background = buttonBackgroundTexture;
+                persistentData.headerContents.headerIconGUIStyle.hover.background = buttonHoverTexture;
+
+                persistentData.headerContents = new HeaderContents();
+                persistentData.headerContents.resetButtonGUIContent = new GUIContent("Reset");
+                persistentData.headerContents.openButton = EditorGUIUtility.TrTextContent("Open");
+
+                if (persistentData != null) EditorUtility.SetDirty(persistentData);
             }
+
+
+
         }
 
         // Check folders, create if it is not exist, load persistentData, create if it is not exist check all folders if they are empty or not

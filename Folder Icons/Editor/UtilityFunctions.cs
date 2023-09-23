@@ -349,7 +349,7 @@ namespace UnityEditorTools.FolderIcons
             }
         }
         
-        // Check all folders and assign folder empty dictionary all folders state
+        // Check all folders and assign to empty-filled state of folders to empty folderemptydict
         internal static void CheckAllFoldersCurrentEmptiness(ref Dictionary<string, bool> folderEmptyDict)
         {
             string[] allAssets = AssetDatabase.GetAllAssetPaths();

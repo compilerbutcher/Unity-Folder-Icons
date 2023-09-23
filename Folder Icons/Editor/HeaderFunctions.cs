@@ -9,18 +9,8 @@ namespace UnityEditorTools.FolderIcons
 
         // This is mostly for drawing default folder header in the inspector, we need custom header for clicking effect on the icon and to have a customized
         // Icon in the header
-        internal static void CreateInspectorHeaderContents(ref Texture2D buttonBackgroundTexture, ref Texture2D buttonHoverTexture,ref GUIStyle iconGUIStyle,
-            ref GUIContent resetGUIContent, ref GUIContent openButton)
+        internal static void CreateInspectorHeaderContents(ref GUIContent resetGUIContent, ref GUIContent openButton)
         {
-            buttonBackgroundTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(DynamicConstants.defaultButtonPath);
-            buttonHoverTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(DynamicConstants.hoverButtonPath);
-
-
-            iconGUIStyle = new GUIStyle();
-            iconGUIStyle.normal.background = buttonBackgroundTexture;
-            iconGUIStyle.hover.background = buttonHoverTexture;
-
-
             resetGUIContent = new GUIContent("Reset");
 
             openButton = EditorGUIUtility.TrTextContent("Open");

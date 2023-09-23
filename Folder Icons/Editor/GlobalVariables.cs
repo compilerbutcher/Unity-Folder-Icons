@@ -1,7 +1,6 @@
 using System.IO;
 using UnityEditor;
 using UnityEngine;
-using static UnityEditorInternal.ReorderableList;
 
 namespace UnityEditorTools.FolderIcons
 {
@@ -45,10 +44,11 @@ namespace UnityEditorTools.FolderIcons
         internal const string lightEmptyFolderName = "/d_LightEmptyFolder Icon.png";
         internal const string lightFolderName = "/d_LightFolder Icon.png";
 
-        internal const string defaultButtonName = "/defaultbutton.png";
-        internal const string hoverButtonName = "/hoverbutton.png";
+        internal const string darkDefaultButtonName = "/darkDefaultbutton.png";
+        internal const string darkHoverButtonName = "/darkHoverbutton.png";
 
-
+        internal const string lightDefaultButtonName = "/lightDefaultbutton.png";
+        internal const string lightHoverButtonName = "/lightHoverbutton.png";
 
 
 
@@ -148,8 +148,10 @@ namespace UnityEditorTools.FolderIcons
             darkFolderPath = defaultIconsPath + Constants.darkFolderName;
             lightEmptyFolderPath = defaultIconsPath + Constants.lightEmptyFolderName;
             lightFolderPath = defaultIconsPath + Constants.lightFolderName;
-            defaultButtonPath = defaultIconsPath + Constants.defaultButtonName;
-            hoverButtonPath = defaultIconsPath + Constants.hoverButtonName;
+
+            defaultButtonPath = EditorGUIUtility.isProSkin ? $"{defaultIconsPath}{Constants.darkDefaultButtonName}" : $"{defaultIconsPath}{Constants.lightDefaultButtonName}";
+            hoverButtonPath = EditorGUIUtility.isProSkin ? $"{defaultIconsPath}{Constants.darkHoverButtonName}" : $"{defaultIconsPath}{Constants.lightHoverButtonName}";
+
 
             dynamicDefaultEmptyFolderPath = EditorGUIUtility.isProSkin ? darkEmptyFolderPath : lightEmptyFolderPath;
             dynamicDefaultFolderPath = EditorGUIUtility.isProSkin ? darkFolderPath : lightFolderPath;
