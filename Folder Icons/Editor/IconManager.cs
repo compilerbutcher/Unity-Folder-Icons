@@ -41,16 +41,13 @@ namespace UnityEditorTools.FolderIcons
             InitInspectorHeaderContents();
 
 
-            if (persistentData.guidTextureList.Count > 0)
-            {
-                EditorApplication.projectWindowItemOnGUI = null;
-                EditorApplication.projectWindowItemOnGUI += UtilityFunctions.DrawFolders;
-                EditorApplication.RepaintProjectWindow();
-            }
+            EditorApplication.projectWindowItemOnGUI = null;
+            EditorApplication.projectWindowItemOnGUI += UtilityFunctions.DrawFolders;
+            EditorApplication.RepaintProjectWindow();
+            AssetDatabase.Refresh();
+
             EditorApplication.quitting += SavePersistentData;
 
-
-            AssetDatabase.Refresh();
         }
 
 
@@ -64,11 +61,13 @@ namespace UnityEditorTools.FolderIcons
                 Texture2D buttonBackgroundTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(DynamicConstants.defaultButtonPath);
                 Texture2D buttonHoverTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(DynamicConstants.hoverButtonPath);
 
+                if (persistentData.headerContents == null)
+                    persistentData.headerContents = new HeaderContents();
+
                 persistentData.headerContents.headerIconGUIStyle = new GUIStyle();
                 persistentData.headerContents.headerIconGUIStyle.normal.background = buttonBackgroundTexture;
                 persistentData.headerContents.headerIconGUIStyle.hover.background = buttonHoverTexture;
 
-                persistentData.headerContents = new HeaderContents();
                 persistentData.headerContents.resetButtonGUIContent = new GUIContent("Reset");
                 persistentData.headerContents.openButton = EditorGUIUtility.TrTextContent("Open");
 
