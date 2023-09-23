@@ -18,7 +18,7 @@ namespace UnityEditorTools.FolderIcons
         [SerializeField, HideInInspector] internal HeaderContents headerContents;
 
         // Icon sets
-        [SerializeField] internal List<IconSetDataListWrapper> iconSetDataList = new();
+        [SerializeField, ReadOnly] internal List<IconSetDataListWrapper> iconSetDataList = new();
         [SerializeField, HideInInspector] internal int currentIconSetIndex;
 
     }
