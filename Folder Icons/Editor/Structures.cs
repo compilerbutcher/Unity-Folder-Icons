@@ -1,5 +1,4 @@
 using System;
-using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -67,8 +66,6 @@ namespace UnityEditorTools.FolderIcons
     internal sealed class HeaderContents
     {
         // Unity inspector header variables
-        [SerializeField] internal Texture2D buttonBackgroundTexture;
-        [SerializeField] internal Texture2D buttonHoverTexture;
         [SerializeField] internal GUIStyle headerIconGUIStyle;
         [SerializeField] internal GUIContent resetButtonGUIContent;
         [SerializeField] internal GUIContent openButton;

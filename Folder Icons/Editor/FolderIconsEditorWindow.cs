@@ -19,7 +19,6 @@ namespace UnityEditorTools.FolderIcons
         private string newIconSetNameText;
         private bool isIconSetADefaultIconSet;
         private Vector2 scrollPosition;
-        private int previousIconSetSize;
 
         [MenuItem("Tools/Folder Icon Settings")]
         static void FolderIconsWindow()
@@ -541,7 +540,7 @@ namespace UnityEditorTools.FolderIcons
             EditorApplication.projectWindowItemOnGUI = null;
             EditorApplication.projectWindowItemOnGUI += UtilityFunctions.DrawFolders;
             EditorApplication.RepaintProjectWindow();
-
+            AssetDatabase.Refresh();
 
             IconManager.persistentData.currentIconSetIndex = selectedOption;
             EditorUtility.SetDirty(IconManager.persistentData);
