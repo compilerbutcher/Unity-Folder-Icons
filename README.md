@@ -122,7 +122,7 @@ https://github.com/compilerbutcher/Folder-Icons.git
 
 <h2 align="center">Support</h2>
 <p align="center">If you encounter any problems or bugs, create new issue in Issues page:
-  <a href="https://github.com/compilerbutcher/Unity-Folder-Icons/issues: ">Issues</a>
+  <a href="https://github.com/compilerbutcher/Unity-Folder-Icons/issues">Issues</a>
 </p>
 
 <h2 align="center">License</h2>
